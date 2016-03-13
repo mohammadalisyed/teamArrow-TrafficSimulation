@@ -11,14 +11,16 @@ package CellAutomaton;
  */
 public class Vehicle {
 
-    int length;
-    int speed;
+    private int length;
+    private int speed;
+    private boolean isChecked;
     // behaviour? 
     // type? normal car/van or bus/taxi or emergency services?
 
     public Vehicle(int length, int speed) {
         this.length = length;
         this.speed = speed;
+        isChecked = false;
     }
 
     public int getSpeed() {
@@ -28,7 +30,15 @@ public class Vehicle {
     public int getLength() {
         return length;
     }
+    
+    public boolean getIsChecked(){
+        return isChecked;
+    }
 
+    public void setIsChecked(Boolean isChecked){
+        this.isChecked = isChecked;
+    }
+    
     public void setSpeed(int newSpeed) {
         speed = newSpeed;
     }
