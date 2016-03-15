@@ -24,35 +24,38 @@ public class AutomatonModel {
         road.setRoadCell(0, lane, car);
     }
 
+    public void redLightRoad(OneWayRoad road) {
+        road.setStopLight(true);
+    }
+
+    public void greenLightRoad(OneWayRoad road) {
+        road.setStopLight(false);
+    }
+
     public void updateRoad(OneWayRoad road) {
         int roadYLen = road.getNoOfLanes();
         int roadXLen = road.getRoadLen();
         int maxV = road.getMaxV();
+        boolean stopLight = road.getStopLight();
 
         for (int y = 0; y < roadYLen; y++) {
-            int x = 0;
-            while (x < roadXLen) {
-                if (road.getRoadCell(x, y).getIsEmpty() == false) {// there is a car in this current cell
-                    int currentX = x; // index of current car
-//                    int currentV = road.getRoadCell(x, y).getVehicle().getSpeed(); // current car's velocity
-                    Vehicle currentCar = road.getRoadCell(x, y).getVehicle();
-                    int currentV = currentCar.getSpeed();
-                    
-                    int nextCarX = -1; // index of next car, -1 : no car in front
-                    int nextCarD = -1; // distance to next car, -1 : no car in front
-                    int newX = -1; // current car's new cell
-//                        boolean endOfRoad; // is this cell the last cell?
+            for (int x = 0; x < roadXLen; x++) {
+                if (road.getRoadCell(x, y) != null) {// there is a car in this current cell
 
-                    if (x == roadXLen - 1) { // are we at the last cell?                           
-//                            endOfRoad = true; this is the last cell
-                        road.clearRoadCell(x, y);
-                        break;
+                    int currentX = x; //index of current car
+                    Vehicle currentCar = road.getRoadCell(x, y);
+                    boolean isChecked = currentCar.getIsChecked();
 
-                    } else {
-//                            endOfRoad = false; this isn't the last cell
+                    if (isChecked == false) {
+                        int currentV = currentCar.getSpeed(); // current car's velocity
+                        int dToRoadEnd = roadXLen - x;
+                        int nextCarX = -1; // index of next car, -1 : no car in front
+                        int nextCarD = -1; // distance to next car, -1 : no car in front
+                        int newX = -1; // current car's new cell
+
 //                            find the index of next car in front:
                         for (int i = x + 1; i < roadXLen; i++) {// find the next car in front's location
-                            if (road.getRoadCell(i, y).getIsEmpty() == false) {
+                            if (road.getRoadCell(i, y) != null) {
                                 nextCarX = i; //index of next car
                                 break;
                             }
@@ -60,7 +63,20 @@ public class AutomatonModel {
                         // step 1 + 2: Acceleration and braking
 //                            has a car been found in front of the current car? 
                         if (nextCarX == -1) { // no, the road ahead is clear
-                            currentV = acceleration(currentV, maxV);
+//                            currentV = acceleration(currentV, maxV);
+                            if (stopLight) {
+                                System.out.print("v1:"+currentV);
+                                if (x+currentV > roadXLen-1){
+                                    System.out.print(" clear:"+x+" v:"+currentV);
+                                } 
+                                currentV = acceleration(currentV, maxV);
+                                System.out.print(" v2:"+currentV);
+                                
+                                currentV = braking(currentV, roadXLen - x);
+                                System.out.println(" v3:"+currentV);
+                            } else {
+                                currentV = acceleration(currentV, maxV);
+                            }
 
                         } else { // yes, there's a car in front
                             nextCarD = nextCarX - currentX;
@@ -75,21 +91,26 @@ public class AutomatonModel {
 
                         // step 4: driving
                         newX = driving(currentX, currentV);
-//                        System.out.println(newX);
                         // will the car drive past the end of the road? 
                         if (newX >= roadXLen) { //yes
                             road.clearRoadCell(x, y);
                         } else { //no
                             currentCar.setSpeed(currentV);
-                            road.setRoadCell(newX, y, currentCar);
-                            road.clearRoadCell(x, y);
+                            currentCar.setIsChecked(true);
 
+                            road.clearRoadCell(x, y);
+                            road.setRoadCell(newX, y, currentCar);
                         }
-                        //move the counter to the cell ahead of were the car has been moved to
-                        x = newX + 1;
                     }
-                } else {//no car on this cell, check next cell
-                    x++;
+                }
+            }
+
+
+            for (int x = 0; x < roadXLen; x++) {
+                if (road.getRoadCell(x, y) != null) {
+                    Vehicle currentCar = road.getRoadCell(x, y);
+                    currentCar.setIsChecked(false);
+                    road.setRoadCell(x, y, currentCar);
                 }
             }
 
@@ -98,7 +119,7 @@ public class AutomatonModel {
 
     public int acceleration(int currentV, int maxV) {
         int v = currentV + 1;
-        if (v <= maxV) {
+        if (v < maxV) {
             return v;
         } else {
             return maxV;
@@ -107,7 +128,7 @@ public class AutomatonModel {
 
     public int braking(int currentV, int nextCarD) {
         int d = nextCarD - 1;
-        if (d <= currentV) {
+        if (d < currentV) {
             return d;
         } else {
             return currentV;

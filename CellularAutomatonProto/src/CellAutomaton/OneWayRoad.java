@@ -11,24 +11,33 @@ package CellAutomaton;
  */
 public class OneWayRoad {
 
-    int maxV = 5;
-    int roadLength;
-    int noOfLanes;
-    Cell[][] road;
+    private int maxV = 5;
+    private int roadLength;
+    private int noOfLanes;
+    private Vehicle[][] road;
+    private boolean stopLight = false;
 
     public OneWayRoad(int roadLength, int noOfLanes) {
         this.roadLength = roadLength;
         this.noOfLanes = noOfLanes;
-        road = new Cell[roadLength][noOfLanes];
+        road = new Vehicle[roadLength][noOfLanes];
         resetRoad();
     }
 
     public void resetRoad() {
         for (int y = 0; y < noOfLanes; y++) {
             for (int x = 0; x < roadLength; x++) {
-                road[x][y] = new Cell();
+                road[x][y] = null;
             }
         }
+    }
+    
+    public boolean getStopLight(){
+        return stopLight;
+    }
+    
+    public void setStopLight(boolean stop){
+        stopLight = stop;
     }
 
     public int getRoadLen() {
@@ -47,16 +56,16 @@ public class OneWayRoad {
         this.maxV = maxV;
     }
 
-    public Cell getRoadCell(int x, int y) {
+    public Vehicle getRoadCell(int x, int y) {
         return road[x][y];
     }
 
     public void clearRoadCell(int x, int y) {
-        road[x][y].clearVehicle();
+        road[x][y] = null;
     }
     
     public void setRoadCell(int x, int y, Vehicle newVehicle) {
-        road[x][y].setVehicle(newVehicle);
+        road[x][y] = newVehicle;
     }
 
     public void displayRoad() {
