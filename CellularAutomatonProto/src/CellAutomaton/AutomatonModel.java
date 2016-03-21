@@ -31,6 +31,14 @@ public class AutomatonModel {
     public void greenLightRoad(OneWayRoad road) {
         road.setStopLight(false);
     }
+    
+    public void switchLightRoad(OneWayRoad road){
+        if (road.getStopLight()){
+            road.setStopLight(false);
+        }else{
+            road.setStopLight(true);
+        }
+    }
 
     public void updateRoad(OneWayRoad road) {
         int roadYLen = road.getNoOfLanes();

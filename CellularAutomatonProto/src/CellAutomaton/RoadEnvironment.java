@@ -38,13 +38,46 @@ public class RoadEnvironment implements ActionListener, KeyListener {
     public int direction;
     public int carLength = 2;
 
-    OneWayRoad westRoad = new OneWayRoad(50, 3, 0, 50);
-    OneWayRoad[] roadArray = new OneWayRoad[1];
+    OneWayRoad northRoadL = new OneWayRoad(50, 3, 50, 0, UP);
+    OneWayRoad northRoadR = new OneWayRoad(50, 3, 53, 0, DOWN);
+
+    OneWayRoad eastRoadL = new OneWayRoad(50, 3, 56, 50, LEFT);
+    OneWayRoad eastRoadR = new OneWayRoad(50, 3, 56, 53, RIGHT);
+
+    OneWayRoad southRoadL = new OneWayRoad(50, 3, 50, 56, UP);
+    OneWayRoad southRoadR = new OneWayRoad(50, 3, 53, 56, DOWN);
+
+    OneWayRoad westRoadL = new OneWayRoad(50, 3, 0, 50, LEFT);
+    OneWayRoad westRoadR = new OneWayRoad(50, 3, 0, 53, RIGHT);
+
+//    OneWayRoad[] roadArray = new OneWayRoad[8];
+    ArrayList<OneWayRoad> roadArray = new ArrayList<>();
+    ArrayList<OneWayRoad> entrRoads = new ArrayList<>();
+
     AutomatonModel model = new AutomatonModel();
     private int stopCounter;
 
     public RoadEnvironment() {
-        roadArray[0] = westRoad;
+        northRoadL.setStopLight(true);
+        northRoadR.setStopLight(true);
+        southRoadL.setStopLight(true);
+        southRoadR.setStopLight(true);
+
+        roadArray.add(northRoadL);
+        roadArray.add(northRoadR);
+        roadArray.add(eastRoadL);
+        roadArray.add(eastRoadR);
+
+        roadArray.add(southRoadL);
+        roadArray.add(southRoadR);
+        roadArray.add(westRoadL);
+        roadArray.add(westRoadR);
+
+        entrRoads.add(northRoadR);
+        entrRoads.add(eastRoadR);
+        entrRoads.add(southRoadL);
+        entrRoads.add(westRoadL);
+//        
         stopCounter = 0;
 
         mainFrame = new JFrame("Traffic Simulation App.");
@@ -59,6 +92,7 @@ public class RoadEnvironment implements ActionListener, KeyListener {
 
     public void updateRoads() {
         // To demonstrate stoplights, will be removed later
+
         boolean stopSwitch = false;
         if (stopCounter > 50) {
             stopSwitch = true;
@@ -68,18 +102,20 @@ public class RoadEnvironment implements ActionListener, KeyListener {
         for (OneWayRoad road : roadArray) {
 
             if (stopSwitch) {
-                if (road.getStopLight()) {
-                    model.greenLightRoad(road);
-                } else {
-                    model.redLightRoad(road);
-                }
+                model.switchLightRoad(road);
+//                if (road.getStopLight()) {
+//                    model.greenLightRoad(road);
+//                } else {
+//                    model.redLightRoad(road);
+//                }
             }
+        }
 
+        for (OneWayRoad road : entrRoads) {
             model.addCar(road);
             model.updateRoad(road);
         }
-        
-        
+
     }
 
     public void start() {
@@ -96,7 +132,7 @@ public class RoadEnvironment implements ActionListener, KeyListener {
         updateRoads();
         dw.repaint();
         stopCounter++;
-        
+
         if (skyline != null && veyron != null && !paused) {
             carSet.add(new Point(skyline.x, skyline.y));
             carSet2.add(new Point(veyron.x, veyron.y));

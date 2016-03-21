@@ -17,24 +17,29 @@ public class OneWayRoad {
     private int maxV = 5;
     private int roadLength;
     private int noOfLanes;
-    private int roadX = 0;
-    private int roadY = 0;
+    private int roadX;
+    private int roadY;
+    private int direction = RoadEnvironment.LEFT;
+
     private Vehicle[][] road;
     private boolean stopLight = false;
 
-    public OneWayRoad(int roadLength, int noOfLanes) {
+    public OneWayRoad(int roadLength, int noOfLanes, int roadX, int roadY) {
         this.roadLength = roadLength;
         this.noOfLanes = noOfLanes;
+        this.roadX = roadX;
+        this.roadY = roadY;
         road = new Vehicle[roadLength][noOfLanes];
         resetRoad();
     }
 
-    public OneWayRoad(int roadLength, int noOfLanes, int x, int y) {
+    public OneWayRoad(int roadLength, int noOfLanes, int roadX, int roadY, int direction) {
         this.roadLength = roadLength;
         this.noOfLanes = noOfLanes;
-        roadX = x;
-        roadY = y;
+        this.roadX = roadX;
+        this.roadY = roadY;
         road = new Vehicle[roadLength][noOfLanes];
+        this.direction = direction;
         resetRoad();
     }
 
@@ -46,12 +51,36 @@ public class OneWayRoad {
         }
     }
 
+    public int getDirection() {
+        return direction;
+    }
+
     public ArrayList<Point> getPointList() {
         ArrayList<Point> ptLst = new ArrayList<Point>();
         for (int y = 0; y < noOfLanes; y++) {
             for (int x = 0; x < roadLength; x++) {
                 if (road[x][y] != null) {
-                    ptLst.add(new Point(roadX + x, roadY + y));
+                    int altX;
+                    int altY;
+                    switch (direction) {
+//                      ptLst.add(new Point(length, lanes));
+                        case RoadEnvironment.LEFT:
+                            ptLst.add(new Point(x + roadX, y + roadY));
+                            break;
+                        case RoadEnvironment.RIGHT:
+                            altX = roadX + roadLength;
+                            ptLst.add(new Point(altX - x - 1,y + roadY));
+                            break;
+//                      ptLst.add(new Point(lanes, lengths));
+                        case RoadEnvironment.UP:
+                            altY = roadY + roadLength;
+                            ptLst.add(new Point(y + roadX,altY - x -1));
+                            break;
+                        case RoadEnvironment.DOWN:
+                            ptLst.add(new Point(y + roadX,x + roadY));
+                            break;
+                    }
+
                 }
             }
         }

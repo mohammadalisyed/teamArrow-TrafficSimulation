@@ -22,34 +22,48 @@ public class DisplayWindow extends JPanel {
         super.paintComponent(g);
 
         RoadEnvironment re = RoadEnvironment.re;
-        OneWayRoad[] roadArray = re.roadArray;
-        
+        ArrayList<OneWayRoad> roadArray = re.roadArray;
+
         Graphics2D g2 = (Graphics2D) g.create();
         g2.scale(RoadEnvironment.SCALE, RoadEnvironment.SCALE);
         g2.setStroke(new BasicStroke(0.01f));
 
         for (OneWayRoad road : roadArray) {
-//                    System.out.println("x"+road.getX()+" y"+road.getY()+" w"+road.getRoadLen()*RoadEnvironment.SCALE+" h"+road.getNoOfLanes()*RoadEnvironment.SCALE);
-//                    System.out.println("w:"+road.getNoOfLanes());
+
             g2.setColor(Color.BLACK);
-            g2.drawRect(road.getX(), road.getY(), road.getRoadLen(), road.getNoOfLanes());
-//            g.drawRect(road.getX(), road.getY(), road.getRoadLen() * RoadEnvironment.SCALE, road.getNoOfLanes() * RoadEnvironment.SCALE);
+
+            switch (road.getDirection()) {
+                case RoadEnvironment.LEFT:
+                    g2.drawRect(road.getX(), road.getY(), road.getRoadLen(), road.getNoOfLanes());
+                    break;
+                case RoadEnvironment.RIGHT:
+                    g2.drawRect(road.getX(), road.getY(), road.getRoadLen(), road.getNoOfLanes());
+                    break;
+                case RoadEnvironment.UP:
+                    g2.drawRect(road.getX(), road.getY(), road.getNoOfLanes(), road.getRoadLen());
+                    break;
+                case RoadEnvironment.DOWN:
+                    g2.drawRect(road.getX(), road.getY(), road.getNoOfLanes(), road.getRoadLen());
+                    break;
+            }
 
             ArrayList<Point> ptLst = road.getPointList();
             for (Point car : ptLst) {
-                
-                if (road.getStopLight()){
-                g2.setColor(Color.RED);    
-                }else{
-                g2.setColor(Color.BLUE);    
+                int x = car.x;
+                int y = car.y;
+
+                if (road.getStopLight()) {
+                    g2.setColor(Color.RED);
+                } else {
+                    g2.setColor(Color.BLUE);
                 }
-                
-                g2.fillRect(car.x, car.y, 1, 1);
+
+                g2.fillRect(x,y, 1, 1);
 
             }
 
         }
-        
+
         g2.dispose();
 
 //        g.setColor(Color.WHITE);
