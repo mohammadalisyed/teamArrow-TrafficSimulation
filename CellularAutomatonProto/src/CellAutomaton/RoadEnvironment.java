@@ -22,29 +22,31 @@ import javax.swing.JFrame;
 import javax.swing.Timer;
 
 public class RoadEnvironment implements ActionListener, KeyListener {
-    
+
     public static RoadEnvironment re;
     public JFrame mainFrame;
     public DisplayWindow dw;
     public Timer timer = new Timer(50, this);
-    
+
     public ArrayList<Point> carSet = new ArrayList<Point>();
     public ArrayList<Point> carSet2 = new ArrayList<Point>();
-    
+
     public Point skyline, veyron, ferrari;
-    
+
     public boolean paused = false;
     public static final int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3, SCALE = 5;
     public int direction;
     public int carLength = 2;
-    
-    OneWayRoad westRoad = new OneWayRoad(50, 3, 0, 250);
+
+    OneWayRoad westRoad = new OneWayRoad(50, 3, 0, 50);
     OneWayRoad[] roadArray = new OneWayRoad[1];
     AutomatonModel model = new AutomatonModel();
-    
+    private int stopCounter;
+
     public RoadEnvironment() {
         roadArray[0] = westRoad;
-        
+        stopCounter = 0;
+
         mainFrame = new JFrame("Traffic Simulation App.");
         mainFrame.setVisible(true);
         mainFrame.setSize(800, 800);
@@ -56,10 +58,28 @@ public class RoadEnvironment implements ActionListener, KeyListener {
     }
 
     public void updateRoads() {
+        // To demonstrate stoplights, will be removed later
+        boolean stopSwitch = false;
+        if (stopCounter > 50) {
+            stopSwitch = true;
+            stopCounter = 0;
+        }
+
         for (OneWayRoad road : roadArray) {
+
+            if (stopSwitch) {
+                if (road.getStopLight()) {
+                    model.greenLightRoad(road);
+                } else {
+                    model.redLightRoad(road);
+                }
+            }
+
             model.addCar(road);
             model.updateRoad(road);
         }
+        
+        
     }
 
     public void start() {
@@ -75,15 +95,16 @@ public class RoadEnvironment implements ActionListener, KeyListener {
     public void actionPerformed(ActionEvent arg0) {
         updateRoads();
         dw.repaint();
+        stopCounter++;
         
         if (skyline != null && veyron != null && !paused) {
             carSet.add(new Point(skyline.x, skyline.y));
             carSet2.add(new Point(veyron.x, veyron.y));
-            
+
             if (direction == UP) {
                 skyline = new Point(skyline.x, skyline.y - 1);
                 veyron = new Point(veyron.x, veyron.y - 1);
-                
+
             }
             if (direction == DOWN) {
                 skyline = new Point(skyline.x, skyline.y + 1);
@@ -121,7 +142,7 @@ public class RoadEnvironment implements ActionListener, KeyListener {
     }
 
     public static void main(String[] args) {
-        re = new RoadEnvironment();        
+        re = new RoadEnvironment();
     }
 
     @Override
@@ -145,7 +166,7 @@ public class RoadEnvironment implements ActionListener, KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
     }
-    
+
     @Override
     public void keyTyped(KeyEvent e) {
     }

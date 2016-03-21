@@ -5,8 +5,10 @@
  */
 package CellAutomaton;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import javax.swing.JPanel;
 import java.util.ArrayList;
@@ -21,24 +23,34 @@ public class DisplayWindow extends JPanel {
 
         RoadEnvironment re = RoadEnvironment.re;
         OneWayRoad[] roadArray = re.roadArray;
+        
+        Graphics2D g2 = (Graphics2D) g.create();
+        g2.scale(RoadEnvironment.SCALE, RoadEnvironment.SCALE);
+        g2.setStroke(new BasicStroke(0.01f));
 
         for (OneWayRoad road : roadArray) {
 //                    System.out.println("x"+road.getX()+" y"+road.getY()+" w"+road.getRoadLen()*RoadEnvironment.SCALE+" h"+road.getNoOfLanes()*RoadEnvironment.SCALE);
 //                    System.out.println("w:"+road.getNoOfLanes());
-            g.setColor(Color.BLACK);
-            g.drawRect(road.getX(), road.getY(), road.getRoadLen(), road.getNoOfLanes());
+            g2.setColor(Color.BLACK);
+            g2.drawRect(road.getX(), road.getY(), road.getRoadLen(), road.getNoOfLanes());
 //            g.drawRect(road.getX(), road.getY(), road.getRoadLen() * RoadEnvironment.SCALE, road.getNoOfLanes() * RoadEnvironment.SCALE);
 
             ArrayList<Point> ptLst = road.getPointList();
             for (Point car : ptLst) {
-//                g.setColor(Color.WHITE);
-                g.setColor(Color.BLUE);
+                
+                if (road.getStopLight()){
+                g2.setColor(Color.RED);    
+                }else{
+                g2.setColor(Color.BLUE);    
+                }
+                
+                g2.fillRect(car.x, car.y, 1, 1);
 
-                g.drawRect(car.x, car.y, 1, 1);
-//                g.fillRect(car.x * RoadEnvironment.SCALE, car.y * RoadEnvironment.SCALE, RoadEnvironment.SCALE, RoadEnvironment.SCALE);
             }
 
         }
+        
+        g2.dispose();
 
 //        g.setColor(Color.WHITE);
 //        g.setColor(Color.BLUE);
