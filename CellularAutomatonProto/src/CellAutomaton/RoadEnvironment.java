@@ -34,25 +34,31 @@ public class RoadEnvironment implements ActionListener, KeyListener {
     public Point skyline, veyron, ferrari;
 
     public boolean paused = false;
-    public static final int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3, SCALE = 5;
+    public static final int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3;// do not alter
+    public static final int SCALE = 5; 
     public int direction;
     public int carLength = 2;
 
     OneWayRoad northRoadL = new OneWayRoad(50, 3, 50, 0, UP);
     OneWayRoad northRoadR = new OneWayRoad(50, 3, 53, 0, DOWN);
 
-    OneWayRoad eastRoadL = new OneWayRoad(50, 3, 56, 50, LEFT);
-    OneWayRoad eastRoadR = new OneWayRoad(50, 3, 56, 53, RIGHT);
+    OneWayRoad eastRoadL = new OneWayRoad(50, 3, 56, 50, RIGHT);
+    OneWayRoad eastRoadR = new OneWayRoad(50, 3, 56, 53, LEFT);
 
     OneWayRoad southRoadL = new OneWayRoad(50, 3, 50, 56, UP);
     OneWayRoad southRoadR = new OneWayRoad(50, 3, 53, 56, DOWN);
 
-    OneWayRoad westRoadL = new OneWayRoad(50, 3, 0, 50, LEFT);
-    OneWayRoad westRoadR = new OneWayRoad(50, 3, 0, 53, RIGHT);
+    OneWayRoad westRoadL = new OneWayRoad(50, 3, 0, 50, RIGHT);
+    OneWayRoad westRoadR = new OneWayRoad(50, 3, 0, 53, LEFT);
 
 //    OneWayRoad[] roadArray = new OneWayRoad[8];
     ArrayList<OneWayRoad> roadArray = new ArrayList<>();
     ArrayList<OneWayRoad> entrRoads = new ArrayList<>();
+
+    OneWayRoad[] crossroadEntr = {northRoadL, southRoadL, westRoadL, eastRoadL};
+    OneWayRoad[] crossroadExit = {northRoadR, eastRoadR, southRoadL, westRoadR};
+
+    Crossroad crossroad = new Crossroad(50, 50, crossroadEntr, crossroadExit, 6, 6);
 
     AutomatonModel model = new AutomatonModel();
     private int stopCounter;
@@ -62,12 +68,12 @@ public class RoadEnvironment implements ActionListener, KeyListener {
         northRoadR.setStopLight(true);
         southRoadL.setStopLight(true);
         southRoadR.setStopLight(true);
+        crossroad.setXTravel(true);
 
         roadArray.add(northRoadL);
         roadArray.add(northRoadR);
         roadArray.add(eastRoadL);
         roadArray.add(eastRoadR);
-
         roadArray.add(southRoadL);
         roadArray.add(southRoadR);
         roadArray.add(westRoadL);
@@ -103,6 +109,7 @@ public class RoadEnvironment implements ActionListener, KeyListener {
 
             if (stopSwitch) {
                 model.switchLightRoad(road);
+                crossroad.switchXTravel();
 //                if (road.getStopLight()) {
 //                    model.greenLightRoad(road);
 //                } else {

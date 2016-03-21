@@ -25,7 +25,16 @@ public class Vehicle {
     public Vehicle(int length, int speed) {
         this.length = length;
         this.speed = speed;
+//        this.direction = direction;
         isChecked = false;
+    }
+//    
+    public int getDirection(){
+        return direction;
+    }
+    
+    public void setDirection(int newD){
+        direction = newD;
     }
     
     public int getSpeed() {

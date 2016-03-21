@@ -24,14 +24,14 @@ public class OneWayRoad {
     private Vehicle[][] road;
     private boolean stopLight = false;
 
-    public OneWayRoad(int roadLength, int noOfLanes, int roadX, int roadY) {
-        this.roadLength = roadLength;
-        this.noOfLanes = noOfLanes;
-        this.roadX = roadX;
-        this.roadY = roadY;
-        road = new Vehicle[roadLength][noOfLanes];
-        resetRoad();
-    }
+//    public OneWayRoad(int roadLength, int noOfLanes, int roadX, int roadY) {
+//        this.roadLength = roadLength;
+//        this.noOfLanes = noOfLanes;
+//        this.roadX = roadX;
+//        this.roadY = roadY;
+//        road = new Vehicle[roadLength][noOfLanes];
+//        resetRoad();
+//    }
 
     public OneWayRoad(int roadLength, int noOfLanes, int roadX, int roadY, int direction) {
         this.roadLength = roadLength;
@@ -64,10 +64,10 @@ public class OneWayRoad {
                     int altY;
                     switch (direction) {
 //                      ptLst.add(new Point(length, lanes));
-                        case RoadEnvironment.LEFT:
+                        case RoadEnvironment.RIGHT:
                             ptLst.add(new Point(x + roadX, y + roadY));
                             break;
-                        case RoadEnvironment.RIGHT:
+                        case RoadEnvironment.LEFT:
                             altX = roadX + roadLength;
                             ptLst.add(new Point(altX - x - 1,y + roadY));
                             break;
