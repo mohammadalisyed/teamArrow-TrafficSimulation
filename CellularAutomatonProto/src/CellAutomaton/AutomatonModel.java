@@ -65,15 +65,15 @@ public class AutomatonModel {
                         if (nextCarX == -1) { // no, the road ahead is clear
 //                            currentV = acceleration(currentV, maxV);
                             if (stopLight) {
-                                System.out.print("v1:"+currentV);
+//                                System.out.print("v1:"+currentV);
                                 if (x+currentV > roadXLen-1){
-                                    System.out.print(" clear:"+x+" v:"+currentV);
+//                                    System.out.print(" clear:"+x+" v:"+currentV);
                                 } 
                                 currentV = acceleration(currentV, maxV);
-                                System.out.print(" v2:"+currentV);
+//                                System.out.print(" v2:"+currentV);
                                 
                                 currentV = braking(currentV, roadXLen - x);
-                                System.out.println(" v3:"+currentV);
+//                                System.out.println(" v3:"+currentV);
                             } else {
                                 currentV = acceleration(currentV, maxV);
                             }
