@@ -5,6 +5,7 @@
  */
 package CellAutomaton;
 
+import java.awt.Point;
 /**
  *
  * @author Alexander
@@ -14,6 +15,7 @@ public class Vehicle {
     private int length;
     private int speed;
     private boolean isChecked;
+    private Point location;
     // behaviour? 
     // type? normal car/van or bus/taxi or emergency services?
 

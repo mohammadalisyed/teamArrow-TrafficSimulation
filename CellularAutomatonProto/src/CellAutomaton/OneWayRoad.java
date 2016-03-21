@@ -5,6 +5,9 @@
  */
 package CellAutomaton;
 
+import java.awt.Point;
+import java.util.ArrayList;
+
 /**
  *
  * @author Alexander
@@ -14,12 +17,23 @@ public class OneWayRoad {
     private int maxV = 5;
     private int roadLength;
     private int noOfLanes;
+    private int roadX = 0;
+    private int roadY = 0;
     private Vehicle[][] road;
     private boolean stopLight = false;
 
     public OneWayRoad(int roadLength, int noOfLanes) {
         this.roadLength = roadLength;
         this.noOfLanes = noOfLanes;
+        road = new Vehicle[roadLength][noOfLanes];
+        resetRoad();
+    }
+
+    public OneWayRoad(int roadLength, int noOfLanes, int x, int y) {
+        this.roadLength = roadLength;
+        this.noOfLanes = noOfLanes;
+        roadX = x;
+        roadY = y;
         road = new Vehicle[roadLength][noOfLanes];
         resetRoad();
     }
@@ -31,12 +45,32 @@ public class OneWayRoad {
             }
         }
     }
-    
-    public boolean getStopLight(){
+
+    public ArrayList<Point> getPointList() {
+        ArrayList<Point> ptLst = new ArrayList<Point>();
+        for (int y = 0; y < noOfLanes; y++) {
+            for (int x = 0; x < roadLength; x++) {
+                if (road[x][y] != null) {
+                    ptLst.add(new Point(roadX + x, roadY + y));
+                }
+            }
+        }
+        return ptLst;
+    }
+
+    public int getX() {
+        return roadX;
+    }
+
+    public int getY() {
+        return roadY;
+    }
+
+    public boolean getStopLight() {
         return stopLight;
     }
-    
-    public void setStopLight(boolean stop){
+
+    public void setStopLight(boolean stop) {
         stopLight = stop;
     }
 
@@ -63,7 +97,7 @@ public class OneWayRoad {
     public void clearRoadCell(int x, int y) {
         road[x][y] = null;
     }
-    
+
     public void setRoadCell(int x, int y, Vehicle newVehicle) {
         road[x][y] = newVehicle;
     }
