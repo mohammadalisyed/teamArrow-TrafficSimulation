@@ -39,14 +39,14 @@ public class RoadEnvironment implements ActionListener, KeyListener {
     public int direction;
     public int carLength = 2;
 
-    OneWayRoad northRoadL = new OneWayRoad(50, 3, 50, 0, UP);
-    OneWayRoad northRoadR = new OneWayRoad(50, 3, 53, 0, DOWN);
+    OneWayRoad northRoadL = new OneWayRoad(3, 50, 50, 0, UP);
+    OneWayRoad northRoadR = new OneWayRoad(3, 50, 53, 0, DOWN);
 
     OneWayRoad eastRoadL = new OneWayRoad(50, 3, 56, 50, RIGHT);
     OneWayRoad eastRoadR = new OneWayRoad(50, 3, 56, 53, LEFT);
 
-    OneWayRoad southRoadL = new OneWayRoad(50, 3, 50, 56, UP);
-    OneWayRoad southRoadR = new OneWayRoad(50, 3, 53, 56, DOWN);
+    OneWayRoad southRoadL = new OneWayRoad(3, 50, 50, 56, UP);
+    OneWayRoad southRoadR = new OneWayRoad(3, 50, 53, 56, DOWN);
 
     OneWayRoad westRoadL = new OneWayRoad(50, 3, 0, 50, RIGHT);
     OneWayRoad westRoadR = new OneWayRoad(50, 3, 0, 53, LEFT);
@@ -140,34 +140,34 @@ public class RoadEnvironment implements ActionListener, KeyListener {
         dw.repaint();
         stopCounter++;
 
-        if (skyline != null && veyron != null && !paused) {
-            carSet.add(new Point(skyline.x, skyline.y));
-            carSet2.add(new Point(veyron.x, veyron.y));
-
-            if (direction == UP) {
-                skyline = new Point(skyline.x, skyline.y - 1);
-                veyron = new Point(veyron.x, veyron.y - 1);
-
-            }
-            if (direction == DOWN) {
-                skyline = new Point(skyline.x, skyline.y + 1);
-                veyron = new Point(veyron.x, veyron.y + 1);
-            }
-            if (direction == LEFT) {
-                skyline = new Point(skyline.x - 1, skyline.y);
-                veyron = new Point(veyron.x - 1, veyron.y);
-            }
-            if (direction == RIGHT) {
-                skyline = new Point(skyline.x + 1, skyline.y);
-                veyron = new Point(veyron.x + 1, veyron.y);
-            }
-            if (carSet.size() > carLength) {
-                carSet.remove(0);
-            }
-            if (carSet2.size() > carLength) {
-                carSet2.remove(0);
-            }
-        }
+//        if (skyline != null && veyron != null && !paused) {
+//            carSet.add(new Point(skyline.x, skyline.y));
+//            carSet2.add(new Point(veyron.x, veyron.y));
+//
+//            if (direction == UP) {
+//                skyline = new Point(skyline.x, skyline.y - 1);
+//                veyron = new Point(veyron.x, veyron.y - 1);
+//
+//            }
+//            if (direction == DOWN) {
+//                skyline = new Point(skyline.x, skyline.y + 1);
+//                veyron = new Point(veyron.x, veyron.y + 1);
+//            }
+//            if (direction == LEFT) {
+//                skyline = new Point(skyline.x - 1, skyline.y);
+//                veyron = new Point(veyron.x - 1, veyron.y);
+//            }
+//            if (direction == RIGHT) {
+//                skyline = new Point(skyline.x + 1, skyline.y);
+//                veyron = new Point(veyron.x + 1, veyron.y);
+//            }
+//            if (carSet.size() > carLength) {
+//                carSet.remove(0);
+//            }
+//            if (carSet2.size() > carLength) {
+//                carSet2.remove(0);
+//            }
+//        }
     }
 
     public boolean noTailAt(int x, int y) {

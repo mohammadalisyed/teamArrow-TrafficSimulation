@@ -32,20 +32,22 @@ public class DisplayWindow extends JPanel {
 
             g2.setColor(Color.BLACK);
 
-            switch (road.getDirection()) {
-                case RoadEnvironment.LEFT:
-                    g2.drawRect(road.getX(), road.getY(), road.getRoadLen(), road.getNoOfLanes());
-                    break;
-                case RoadEnvironment.RIGHT:
-                    g2.drawRect(road.getX(), road.getY(), road.getRoadLen(), road.getNoOfLanes());
-                    break;
-                case RoadEnvironment.UP:
-                    g2.drawRect(road.getX(), road.getY(), road.getNoOfLanes(), road.getRoadLen());
-                    break;
-                case RoadEnvironment.DOWN:
-                    g2.drawRect(road.getX(), road.getY(), road.getNoOfLanes(), road.getRoadLen());
-                    break;
-            }
+//            switch (road.getDirection()) {
+//                case RoadEnvironment.LEFT:
+//                    g2.drawRect(road.getX(), road.getY(), road.getRoadLen(), road.getNoOfLanes());
+//                    break;
+//                case RoadEnvironment.RIGHT:
+//                    g2.drawRect(road.getX(), road.getY(), road.getRoadLen(), road.getNoOfLanes());
+//                    break;
+//                case RoadEnvironment.UP:
+//                    g2.drawRect(road.getX(), road.getY(), road.getNoOfLanes(), road.getRoadLen());
+//                    break;
+//                case RoadEnvironment.DOWN:
+//                    g2.drawRect(road.getX(), road.getY(), road.getNoOfLanes(), road.getRoadLen());
+//                    break;
+//            }
+                                g2.drawRect(road.getX(), road.getY(), road.getRoadXLen(), road.getRoadYLen());
+
 
             ArrayList<Point> ptLst = road.getPointList();
             for (Point car : ptLst) {

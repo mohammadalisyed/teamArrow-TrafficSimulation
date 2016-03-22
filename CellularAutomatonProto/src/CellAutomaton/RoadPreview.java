@@ -27,8 +27,8 @@ public class RoadPreview {
 
     public RoadPreview(OneWayRoad road) {
 
-        int x = road.getRoadLen();
-        int y = road.getNoOfLanes();
+        int x = road.getRoadXLen();
+        int y = road.getRoadYLen();
 
         frame = new JFrame();
         table = new JTable(y, x);
@@ -55,8 +55,8 @@ public class RoadPreview {
         } else {
             table.setBackground(Color.green);
         }
-        int roadYLen = road.getNoOfLanes();
-        int roadXLen = road.getRoadLen();
+        int roadYLen = road.getRoadYLen();
+        int roadXLen = road.getRoadXLen();
         for (int y = 0; y < roadYLen; y++) {
             for (int x = 0; x < roadXLen; x++) {
                 if (road.getRoadCell(x, y) == null) {
