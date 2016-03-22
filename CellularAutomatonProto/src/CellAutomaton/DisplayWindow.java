@@ -23,6 +23,7 @@ public class DisplayWindow extends JPanel {
 
         RoadEnvironment re = RoadEnvironment.re;
         ArrayList<OneWayRoad> roadArray = re.roadArray;
+        ArrayList<Junction> junctArray = re.junctArray;
 
         Graphics2D g2 = (Graphics2D) g.create();
         g2.scale(RoadEnvironment.SCALE, RoadEnvironment.SCALE);
@@ -46,8 +47,7 @@ public class DisplayWindow extends JPanel {
 //                    g2.drawRect(road.getX(), road.getY(), road.getNoOfLanes(), road.getRoadLen());
 //                    break;
 //            }
-                                g2.drawRect(road.getX(), road.getY(), road.getRoadXLen(), road.getRoadYLen());
-
+            g2.drawRect(road.getX(), road.getY(), road.getRoadXLen(), road.getRoadYLen());
 
             ArrayList<Point> ptLst = road.getPointList();
             for (Point car : ptLst) {
@@ -57,10 +57,57 @@ public class DisplayWindow extends JPanel {
                 if (road.getStopLight()) {
                     g2.setColor(Color.RED);
                 } else {
-                    g2.setColor(Color.BLUE);
+                    switch (road.getDirection()) {
+                        case RoadEnvironment.LEFT:
+                            g2.setColor(Color.BLUE);
+                            break;
+                        case RoadEnvironment.RIGHT:
+                            g2.setColor(Color.CYAN);
+                            break;
+                        case RoadEnvironment.UP:
+                            g2.setColor(Color.YELLOW);
+                            break;
+                        case RoadEnvironment.DOWN:
+                            g2.setColor(Color.ORANGE);
+                            break;
+                    }
+
                 }
 
-                g2.fillRect(x,y, 1, 1);
+                g2.fillRect(x, y, 1, 1);
+
+            }
+
+        }
+
+        for (Junction junct : junctArray) {
+            g2.setColor(Color.BLACK);
+            g2.drawRect(junct.getX(), junct.getY(), junct.getWidth(), junct.getHeight());
+
+            ArrayList<Vehicle> carLst = junct.getVehicleLst();
+            for (Vehicle car : carLst) {
+                int x = car.getLocation().x;
+                int y = car.getLocation().y;
+                switch (car.getDirection()) {
+                    
+                    case RoadEnvironment.LEFT:
+                        g2.setColor(Color.BLUE);
+                        break;
+                    case RoadEnvironment.RIGHT:
+                        g2.setColor(Color.CYAN);
+                        break;
+                    case RoadEnvironment.UP:
+                        g2.setColor(Color.YELLOW);
+                        break;
+                    case RoadEnvironment.DOWN:
+                        g2.setColor(Color.ORANGE);
+                        break;
+                    default:
+                        g2.setColor(Color.BLACK);
+                        break;
+                }
+
+                g2.fillRect(x, y, 1, 1);
 
             }
 

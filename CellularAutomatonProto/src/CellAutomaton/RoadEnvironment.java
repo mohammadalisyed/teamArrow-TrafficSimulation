@@ -28,61 +28,94 @@ public class RoadEnvironment implements ActionListener, KeyListener {
     public DisplayWindow dw;
     public Timer timer = new Timer(50, this);
 
-    public ArrayList<Point> carSet = new ArrayList<Point>();
-    public ArrayList<Point> carSet2 = new ArrayList<Point>();
-
+//    public ArrayList<Point> carSet = new ArrayList<Point>();
+//    public ArrayList<Point> carSet2 = new ArrayList<Point>();
     public Point skyline, veyron, ferrari;
 
     public boolean paused = false;
     public static final int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3;// do not alter
-    public static final int SCALE = 5; 
+    public static final int SCALE = 5;
     public int direction;
     public int carLength = 2;
 
-    OneWayRoad northRoadL = new OneWayRoad(3, 50, 50, 0, UP);
-    OneWayRoad northRoadR = new OneWayRoad(3, 50, 53, 0, DOWN);
+    OneWayRoad northRoadU = new OneWayRoad(3, 50, 50, 0, UP, null);
+    OneWayRoad northRoadD = new OneWayRoad(3, 50, 53, 0, DOWN, null);
 
-    OneWayRoad eastRoadL = new OneWayRoad(50, 3, 56, 50, RIGHT);
-    OneWayRoad eastRoadR = new OneWayRoad(50, 3, 56, 53, LEFT);
+    OneWayRoad eastRoadR = new OneWayRoad(50, 3, 56, 50, RIGHT, null);
+    OneWayRoad eastRoadL = new OneWayRoad(50, 3, 56, 53, LEFT, null);
 
-    OneWayRoad southRoadL = new OneWayRoad(3, 50, 50, 56, UP);
-    OneWayRoad southRoadR = new OneWayRoad(3, 50, 53, 56, DOWN);
+    OneWayRoad southRoadU = new OneWayRoad(3, 50, 50, 56, UP, null);
+    OneWayRoad southRoadD = new OneWayRoad(3, 50, 53, 56, DOWN, null);
 
-    OneWayRoad westRoadL = new OneWayRoad(50, 3, 0, 50, RIGHT);
-    OneWayRoad westRoadR = new OneWayRoad(50, 3, 0, 53, LEFT);
+    OneWayRoad westRoadR = new OneWayRoad(50, 3, 0, 50, RIGHT, null);
+    OneWayRoad westRoadL = new OneWayRoad(50, 3, 0, 53, LEFT, null);
 
-//    OneWayRoad[] roadArray = new OneWayRoad[8];
-    ArrayList<OneWayRoad> roadArray = new ArrayList<>();
-    ArrayList<OneWayRoad> entrRoads = new ArrayList<>();
+    ArrayList<OneWayRoad> roadArray = new ArrayList<>();//list of all the roads in the network
+    ArrayList<Junction> junctArray = new ArrayList<>();//list of all the junctions in the network
+    ArrayList<OneWayRoad> networkEntr = new ArrayList<>();//list of roads where cars spawn into the network
+    ArrayList<OneWayRoad> networkExit = new ArrayList<>();//list of roads where cars exit from the network
 
-    OneWayRoad[] crossroadEntr = {northRoadL, southRoadL, westRoadL, eastRoadL};
-    OneWayRoad[] crossroadExit = {northRoadR, eastRoadR, southRoadL, westRoadR};
+    OneWayRoad[] crossroadEntr = new OneWayRoad[4];
+    OneWayRoad[] crossroadExit = new OneWayRoad[4];
 
-    Crossroad crossroad = new Crossroad(50, 50, crossroadEntr, crossroadExit, 6, 6);
-
-    AutomatonModel model = new AutomatonModel();
+    Junction crossroad; 
+    AutomatonModel model;
     private int stopCounter;
 
     public RoadEnvironment() {
-        northRoadL.setStopLight(true);
-        northRoadR.setStopLight(true);
-        southRoadL.setStopLight(true);
-        southRoadR.setStopLight(true);
+        crossroad = new Junction(50, 50, crossroadExit, crossroadEntr, 6, 6);
+
+        //set junction exits
+        crossroadExit[UP] = northRoadD;
+        crossroadExit[DOWN] = southRoadD;
+        crossroadExit[LEFT] = westRoadL;
+        crossroadExit[RIGHT] = eastRoadR;
+
+        //set junction entrances
+        crossroadEntr[UP] = southRoadU;
+        crossroadEntr[DOWN] = northRoadD;
+        crossroadEntr[LEFT] = westRoadR;
+        crossroadEntr[RIGHT] = eastRoadL;
+
+        //populate junction list
+        junctArray.add(crossroad);
+
+        //set road-junction connections
+        westRoadR.setExit(crossroad);
+        eastRoadL.setExit(crossroad);
+
+        //set traffic light switches
+        northRoadU.setStopLight(true);
+        northRoadD.setStopLight(true);
+        southRoadU.setStopLight(true);
+        southRoadD.setStopLight(true);
+//        westRoadR.setStopLight(true);
+
         crossroad.setXTravel(true);
 
-        roadArray.add(northRoadL);
-        roadArray.add(northRoadR);
-        roadArray.add(eastRoadL);
+        //populate road list
+        roadArray.add(northRoadU);
+        roadArray.add(northRoadD);
         roadArray.add(eastRoadR);
-        roadArray.add(southRoadL);
-        roadArray.add(southRoadR);
-        roadArray.add(westRoadL);
+        roadArray.add(eastRoadL);
+        roadArray.add(southRoadU);
+        roadArray.add(southRoadD);
         roadArray.add(westRoadR);
+        roadArray.add(westRoadL);
 
-        entrRoads.add(northRoadR);
-        entrRoads.add(eastRoadR);
-        entrRoads.add(southRoadL);
-        entrRoads.add(westRoadL);
+        //populate network entrance list
+        networkEntr.add(northRoadD);
+        networkEntr.add(eastRoadL);
+        networkEntr.add(southRoadU);
+        networkEntr.add(westRoadR);
+
+        //populate network exit list
+        networkExit.add(northRoadU);
+        networkExit.add(eastRoadR);
+        networkExit.add(southRoadD);
+        networkExit.add(westRoadL);
+
+        model = new AutomatonModel(networkExit);
 //        
         stopCounter = 0;
 
@@ -110,27 +143,47 @@ public class RoadEnvironment implements ActionListener, KeyListener {
             if (stopSwitch) {
                 model.switchLightRoad(road);
                 crossroad.switchXTravel();
-//                if (road.getStopLight()) {
-//                    model.greenLightRoad(road);
-//                } else {
-//                    model.redLightRoad(road);
-//                }
             }
         }
+        for (OneWayRoad road : roadArray) {
+            int direction = road.getDirection();
+            model.resetCarsChk(road);
 
-        for (OneWayRoad road : entrRoads) {
-            model.addCar(road);
-            model.updateRoad(road);
+            switch (direction) {
+                case RIGHT:
+                    model.updateCarsRight(road);
+                    break;
+
+                case LEFT:
+                    model.updateCarsLeft(road);
+                    break;
+
+                case UP:
+                    model.updateCarsUp(road);
+                    break;
+
+                case DOWN:
+                    model.updateCarsDown(road);
+                    break;
+            }
+            model.resetCarsChk(road);
         }
 
+        for (OneWayRoad road : networkEntr) {
+            model.addCar(road);
+        }
+
+        for (Junction junct : junctArray) {
+            model.updateJunct(junct);
+        }
     }
 
     public void start() {
-        direction = DOWN;
-        skyline = new Point(0, -1);
-        veyron = new Point(2, -1);
-        ferrari = new Point(3, -1);
-        carSet.clear();
+//        direction = DOWN;
+//        skyline = new Point(0, -1);
+//        veyron = new Point(2, -1);
+//        ferrari = new Point(3, -1);
+//        carSet.clear();
         timer.start();
     }
 
@@ -170,20 +223,19 @@ public class RoadEnvironment implements ActionListener, KeyListener {
 //        }
     }
 
-    public boolean noTailAt(int x, int y) {
-        for (Point point : carSet) {
-            if (point.equals(new Point(x, y))) {
-                return false;
-            }
-        }
-        for (Point point : carSet2) {
-            if (point.equals(new Point(x, y))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
+//    public boolean noTailAt(int x, int y) {
+//        for (Point point : carSet) {
+//            if (point.equals(new Point(x, y))) {
+//                return false;
+//            }
+//        }
+//        for (Point point : carSet2) {
+//            if (point.equals(new Point(x, y))) {
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
     public static void main(String[] args) {
         re = new RoadEnvironment();
     }
