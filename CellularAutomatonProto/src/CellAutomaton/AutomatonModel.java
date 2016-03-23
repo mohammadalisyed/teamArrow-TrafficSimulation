@@ -266,57 +266,97 @@ public class AutomatonModel {
                         // will the car drive past the end of the road? 
                         if (newX < 0) {
                             road.clearRoadCell(x, y);
-//                            System.out.print("/x2:" + newX + "/v2:" + currentV);
-                            //yes
+                            
 //                            if (road.getExit() == null) {//does this road exit the network?
-//                                System.out.println("clear");
 //                                road.clearRoadCell(x, y);//Y: remove car from network
 //
 //                            } else {
 //
 //                                Junction junct = road.getExit();
 //                                int junctCar = chckJunctLeft(junct, y);
-////
+//
 //                                if (junctCar == -1) {// There isn't a car in this car's path
-//                                    if (newX + junct.getWidth() < 0) {//car clear's junction
-//                                        //                                        add car to next road over
-//                                        road.clearRoadCell(x, y);
-////
-//                                    } else {//car lands in junction
-//                                        newX += junct.getWidth();
-////                                        System.out.print(" newX:" + newX);
+//                                    if (newX >= junct.getWidth() + roadXLen) {//car clear's junction
+////                                        add car to next road over
 //                                        road.clearRoadCell(x, y);
 //
-//                                        if (junct.getEntr(direction) == null) {
-//                                            junct.setRoadCell(newX, y, currentCar);
-//                                        } else {
-//                                            int newY = y + junct.getEntr(direction).getRoadYLen();
-//                                            junct.setRoadCell(newX, newY, currentCar);
-//                                        }
+//                                    } else {//car lands in junction
+//                                        newX -= roadXLen;
+//                                        road.clearRoadCell(x, y);
+//                                        junct.setRoadCell(newX, y, currentCar);
 //                                    }
 //                                } else {//There is a car in this car's path
-//                                    nextCarD = currentX - junctCar;
+//                                    nextCarD = (junctCar + roadXLen) - currentX;
 //                                    currentV = braking(currentV, nextCarD);
 //                                    newX = driving(currentX, currentV);
 //
 //                                    currentCar.setSpeed(currentV);
-////
-//                                    if (newX < 0) {//car will still land in junction
-//                                        System.out.println(newX);
 //
-//                                        if (junct.getEntr(direction) == null) {
-//                                            junct.setRoadCell(newX + junct.getWidth(), y, currentCar);
-//                                        } else {
-//                                            int newY = y + junct.getEntr(direction).getRoadYLen();
-//                                            junct.setRoadCell(newX+ junct.getWidth(), newY, currentCar);
-//                                        }
-////
+//                                    if (newX >= roadXLen) {//car will still land in junction
+//
+//                                        road.clearRoadCell(x, y);
+//                                        junct.setRoadCell(newX - roadXLen, y, currentCar);
+//
 //                                    } else {//car stays on road
+//
 //                                        road.clearRoadCell(x, y);
 //                                        road.setRoadCell(newX, y, currentCar);
 //                                    }
 //                                }
 //                            }
+                            
+////////                            System.out.print("/x2:" + newX + "/v2:" + currentV);
+//////                            //yes
+//////                            if (road.getExit() == null) {//does this road exit the network?
+//////                                System.out.println("clear");
+//////                                road.clearRoadCell(x, y);//Y: remove car from network
+//////
+//////                            } else {
+//////
+//////                                Junction junct = road.getExit();
+//////                                int junctCar = chckJunctLeft(junct, y);
+////////
+//////                                if (junctCar == -1) {// There isn't a car in this car's path
+//////                                    if (newX + junct.getWidth() < 0) {//car clear's junction
+//////                                        //                                        add car to next road over
+//////                                        road.clearRoadCell(x, y);
+////////
+//////                                    } else {//car lands in junction
+//////                                        newX += junct.getWidth();
+////////                                        System.out.print(" newX:" + newX);
+//////                                        road.clearRoadCell(x, y);
+//////
+//////                                        if (junct.getEntr(direction) == null) {
+//////                                            junct.setRoadCell(newX, y, currentCar);
+//////                                        } else {
+//////                                            int newY = y + junct.getEntr(direction).getRoadYLen();
+//////                                            junct.setRoadCell(newX, newY, currentCar);
+//////                                        }
+//////                                    }
+//////                                } else {//There is a car in this car's path
+//////                                    nextCarD = currentX - junctCar;
+//////                                    currentV = braking(currentV, nextCarD);
+//////                                    newX = driving(currentX, currentV);
+//////
+//////                                    currentCar.setSpeed(currentV);
+////////
+//////                                    if (newX < 0) {//car will still land in junction
+////////                                        System.out.println(newX);
+//////                                        
+//////road.clearRoadCell(x, y);
+//////                                        if (junct.getEntr(direction) == null) {
+//////                                            junct.setRoadCell(newX + junct.getWidth(), y, currentCar);
+//////                                        } else {
+//////                                            int newY = y + junct.getEntr(direction).getRoadYLen();
+//////                                            junct.setRoadCell(newX+ junct.getWidth(), newY, currentCar);
+//////                                        }
+////////
+//////                                    } else {//car stays on road
+//////                                        road.clearRoadCell(x, y);
+//////                                        road.setRoadCell(newX, y, currentCar);
+//////                                    }
+//////                                }
+//////                            }
                         } else { //no
                             road.clearRoadCell(x, y);
                             road.setRoadCell(newX, y, currentCar);
