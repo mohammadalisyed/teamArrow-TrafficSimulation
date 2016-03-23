@@ -6,9 +6,12 @@
 package CellAutomaton;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
@@ -19,32 +22,49 @@ public class RoadPreview {
     JFrame frame;
     JTable table;
     JButton stepBtn;
+    JButton stopBtn;
+    JPanel buttonPane;
 
     public RoadPreview(OneWayRoad road) {
-        
-        int x = road.getRoadLen();
-        int y = road.getNoOfLanes();
+
+        int x = road.getRoadXLen();
+        int y = road.getRoadYLen();
 
         frame = new JFrame();
         table = new JTable(y, x);
+
         stepBtn = new JButton("next time step");
+        stopBtn = new JButton("traffic light");
+
+        buttonPane = new JPanel();
+        buttonPane.add(stepBtn);
+        buttonPane.add(stopBtn);
 
         table.setEnabled(false);
         frame.add(table, BorderLayout.PAGE_START);
-        frame.add(stepBtn, BorderLayout.CENTER);
+        frame.add(buttonPane, BorderLayout.CENTER);
+
         frame.pack();
         frame.setVisible(true);
     }
 
     public void DisplayRoad(OneWayRoad road) {
-        int roadYLen = road.getNoOfLanes();
-        int roadXLen = road.getRoadLen();
+        boolean stopLight = road.getStopLight();
+        if (stopLight) {
+            table.setBackground(Color.red);
+        } else {
+            table.setBackground(Color.green);
+        }
+        int roadYLen = road.getRoadYLen();
+        int roadXLen = road.getRoadXLen();
         for (int y = 0; y < roadYLen; y++) {
             for (int x = 0; x < roadXLen; x++) {
-                if (road.getRoadCell(x, y).getIsEmpty() == false) {
-                    table.setValueAt(road.getRoadCell(x, y).getVehicle().getSpeed(), y, x);
+                if (road.getRoadCell(x, y) == null) {
+                    table.setValueAt("",y,x);
                 } else {
-                    table.setValueAt("", y, x);
+                    table.setValueAt(road.getRoadCell(x, y).getSpeed(), y, x);
+//                    table.setValueAt("{"+x+"}"+"{"+y+"}", y, x);
+                    
                 }
             }
         }

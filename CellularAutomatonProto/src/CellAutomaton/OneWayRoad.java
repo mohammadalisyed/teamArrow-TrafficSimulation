@@ -5,38 +5,94 @@
  */
 package CellAutomaton;
 
+import java.awt.Point;
+import java.util.ArrayList;
+
 /**
  *
  * @author Alexander
  */
 public class OneWayRoad {
 
-    int maxV = 5;
-    int roadLength;
-    int noOfLanes;
-    Cell[][] road;
+    private int maxV = 5;
+    private int roadXLen;
+    private int roadYLen;
+    private int roadX;
+    private int roadY;
+    private int direction = RoadEnvironment.LEFT;
+    private Junction exit;
 
-    public OneWayRoad(int roadLength, int noOfLanes) {
-        this.roadLength = roadLength;
-        this.noOfLanes = noOfLanes;
-        road = new Cell[roadLength][noOfLanes];
-        resetRoad();
+    private Vehicle[][] road;
+    private boolean stopLight = false;
+
+    public OneWayRoad(int roadXLen, int roadYLen, int roadX, int roadY, int direction, Junction exit) {
+        this.roadXLen = roadXLen;
+        this.roadYLen = roadYLen;
+        this.roadX = roadX;
+        this.roadY = roadY;
+
+        this.direction = direction;
+        road = new Vehicle[roadXLen][roadYLen];
+        this.exit = exit;
     }
 
     public void resetRoad() {
-        for (int y = 0; y < noOfLanes; y++) {
-            for (int x = 0; x < roadLength; x++) {
-                road[x][y] = new Cell();
+
+        for (int y = 0; y < roadYLen; y++) {
+            for (int x = 0; x < roadXLen; x++) {
+                road[x][y] = null;
+
             }
         }
     }
-
-    public int getRoadLen() {
-        return roadLength;
+    
+    public Junction getExit(){
+        return exit;
+    }
+    
+    public void setExit(Junction newExit){
+        exit = newExit;
     }
 
-    public int getNoOfLanes() {
-        return noOfLanes;
+    public int getDirection() {
+        return direction;
+    }
+
+    public ArrayList<Point> getPointList() {
+        ArrayList<Point> ptLst = new ArrayList<Point>();
+
+        for (int y = 0; y < roadYLen; y++) {
+            for (int x = 0; x < roadXLen; x++) {
+                if (road[x][y] != null) {
+                    ptLst.add(new Point(x + roadX, y + roadY));
+                }
+            }
+        }
+        return ptLst;
+    }
+
+    public int getX() {
+        return roadX;
+    }
+
+    public int getY() {
+        return roadY;
+    }
+
+    public boolean getStopLight() {
+        return stopLight;
+    }
+
+    public void setStopLight(boolean stop) {
+        stopLight = stop;
+    }
+
+    public int getRoadXLen() {
+        return roadXLen;
+    }
+
+    public int getRoadYLen() {
+        return roadYLen;
     }
 
     public int getMaxV() {
@@ -47,21 +103,21 @@ public class OneWayRoad {
         this.maxV = maxV;
     }
 
-    public Cell getRoadCell(int x, int y) {
+    public Vehicle getRoadCell(int x, int y) {
         return road[x][y];
     }
 
     public void clearRoadCell(int x, int y) {
-        road[x][y].clearVehicle();
+        road[x][y] = null;
     }
-    
+
     public void setRoadCell(int x, int y, Vehicle newVehicle) {
-        road[x][y].setVehicle(newVehicle);
+        road[x][y] = newVehicle;
     }
 
     public void displayRoad() {
-        for (int y = 0; y < noOfLanes; y++) {
-            for (int x = 0; x < roadLength; x++) {
+        for (int y = 0; y < roadYLen; y++) {
+            for (int x = 0; x < roadXLen; x++) {
                 if (road[x][y] == null) {
                     System.out.print("-");
                 } else {
