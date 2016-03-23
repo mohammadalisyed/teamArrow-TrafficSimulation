@@ -21,7 +21,7 @@ import java.util.Random;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-public class RoadEnvironment implements ActionListener, KeyListener {
+public class RoadEnvironment implements ActionListener {
 
     public static RoadEnvironment re;
     public JFrame mainFrame;
@@ -89,7 +89,7 @@ public class RoadEnvironment implements ActionListener, KeyListener {
         northRoadD.setStopLight(true);
         southRoadU.setStopLight(true);
         southRoadD.setStopLight(true);
-//        westRoadR.setStopLight(true);
+//        eastRoadR.setStopLight(true);
 
         crossroad.setXTravel(true);
 
@@ -125,7 +125,6 @@ public class RoadEnvironment implements ActionListener, KeyListener {
         mainFrame.setResizable(false);
         mainFrame.add(dw = new DisplayWindow());
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.addKeyListener(this);
         start();
     }
 
@@ -151,7 +150,7 @@ public class RoadEnvironment implements ActionListener, KeyListener {
 
             switch (direction) {
                 case RIGHT:
-                    model.updateCarsRight(road);
+                    model.updateRightRoad(road);
                     break;
 
                 case LEFT:
@@ -179,11 +178,6 @@ public class RoadEnvironment implements ActionListener, KeyListener {
     }
 
     public void start() {
-//        direction = DOWN;
-//        skyline = new Point(0, -1);
-//        veyron = new Point(2, -1);
-//        ferrari = new Point(3, -1);
-//        carSet.clear();
         timer.start();
     }
 
@@ -193,76 +187,9 @@ public class RoadEnvironment implements ActionListener, KeyListener {
         dw.repaint();
         stopCounter++;
 
-//        if (skyline != null && veyron != null && !paused) {
-//            carSet.add(new Point(skyline.x, skyline.y));
-//            carSet2.add(new Point(veyron.x, veyron.y));
-//
-//            if (direction == UP) {
-//                skyline = new Point(skyline.x, skyline.y - 1);
-//                veyron = new Point(veyron.x, veyron.y - 1);
-//
-//            }
-//            if (direction == DOWN) {
-//                skyline = new Point(skyline.x, skyline.y + 1);
-//                veyron = new Point(veyron.x, veyron.y + 1);
-//            }
-//            if (direction == LEFT) {
-//                skyline = new Point(skyline.x - 1, skyline.y);
-//                veyron = new Point(veyron.x - 1, veyron.y);
-//            }
-//            if (direction == RIGHT) {
-//                skyline = new Point(skyline.x + 1, skyline.y);
-//                veyron = new Point(veyron.x + 1, veyron.y);
-//            }
-//            if (carSet.size() > carLength) {
-//                carSet.remove(0);
-//            }
-//            if (carSet2.size() > carLength) {
-//                carSet2.remove(0);
-//            }
-//        }
     }
 
-//    public boolean noTailAt(int x, int y) {
-//        for (Point point : carSet) {
-//            if (point.equals(new Point(x, y))) {
-//                return false;
-//            }
-//        }
-//        for (Point point : carSet2) {
-//            if (point.equals(new Point(x, y))) {
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
     public static void main(String[] args) {
         re = new RoadEnvironment();
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-//		int i = e.getKeyCode();
-//
-//		if ((i == KeyEvent.VK_A || i == KeyEvent.VK_LEFT) && direction != RIGHT)
-//			direction = LEFT;
-//		if ((i == KeyEvent.VK_D || i == KeyEvent.VK_RIGHT) && direction != LEFT)
-//			direction = RIGHT;
-//		if ((i == KeyEvent.VK_W || i == KeyEvent.VK_UP) && direction != DOWN)
-//			direction = UP;
-//		if ((i == KeyEvent.VK_S || i == KeyEvent.VK_DOWN) && direction != UP)
-//			direction = DOWN;
-//		if (i == KeyEvent.VK_SPACE)
-//			start();
-//		if(i== KeyEvent.VK_ENTER)
-//			paused = !paused;
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
     }
 }

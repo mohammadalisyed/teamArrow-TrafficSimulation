@@ -16,8 +16,8 @@ public class Vehicle {
     private int length;
     private int speed;
     private boolean isChecked;
-    private int direction;
-    private int exitD;
+    private int direction;// direction of the road the cars is on/ just left
+//    private int exit;
     private Point location;
     // behaviour? 
     // type? normal car/van or bus/taxi or emergency services?
@@ -29,13 +29,13 @@ public class Vehicle {
         isChecked = false;
     }
     
-    public int getExitD(){
-        return exitD;
-    }
-    
-    public int setExitD(){
-        return exitD;
-    }
+//    public int getExitD(){
+//        return exit;
+//    }
+//    
+//    public int setExitD(){
+//        return exit;
+//    }
     
     public Point getLocation(){
         return location;
@@ -51,7 +51,7 @@ public class Vehicle {
     
     public void setDirection(int newD){
         direction = newD;
-        exitD = newD;
+//        exit = newD;
     }
     
     public int getSpeed() {

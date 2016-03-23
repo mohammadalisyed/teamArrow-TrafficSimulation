@@ -84,13 +84,6 @@ public class Junction {
         return carLst;
     }
 
-//    public OneWayRoad getEntr(int entrN){
-//        return entrRoads[entrN];
-//    }
-//    
-//    public OneWayRoad getExit(int exitN){
-//        return entrRoads[exitN];
-//    }
     public int getX() {
         return x;
     }

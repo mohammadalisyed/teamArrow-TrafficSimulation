@@ -33,20 +33,6 @@ public class DisplayWindow extends JPanel {
 
             g2.setColor(Color.BLACK);
 
-//            switch (road.getDirection()) {
-//                case RoadEnvironment.LEFT:
-//                    g2.drawRect(road.getX(), road.getY(), road.getRoadLen(), road.getNoOfLanes());
-//                    break;
-//                case RoadEnvironment.RIGHT:
-//                    g2.drawRect(road.getX(), road.getY(), road.getRoadLen(), road.getNoOfLanes());
-//                    break;
-//                case RoadEnvironment.UP:
-//                    g2.drawRect(road.getX(), road.getY(), road.getNoOfLanes(), road.getRoadLen());
-//                    break;
-//                case RoadEnvironment.DOWN:
-//                    g2.drawRect(road.getX(), road.getY(), road.getNoOfLanes(), road.getRoadLen());
-//                    break;
-//            }
             g2.drawRect(road.getX(), road.getY(), road.getRoadXLen(), road.getRoadYLen());
 
             ArrayList<Point> ptLst = road.getPointList();
@@ -71,13 +57,9 @@ public class DisplayWindow extends JPanel {
                             g2.setColor(Color.ORANGE);
                             break;
                     }
-
                 }
-
                 g2.fillRect(x, y, 1, 1);
-
             }
-
         }
 
         for (Junction junct : junctArray) {
@@ -114,19 +96,5 @@ public class DisplayWindow extends JPanel {
         }
 
         g2.dispose();
-
-//        g.setColor(Color.WHITE);
-//        g.setColor(Color.BLUE);
-//
-//        for (Point point : re.carSet) {
-//            for (int x = 0; x <= 250; x++) {
-//                g.fillRect(point.x + RoadEnvironment.SCALE, point.y + RoadEnvironment.SCALE, RoadEnvironment.SCALE, RoadEnvironment.SCALE);
-//            }
-//        }
-//        for (Point point : re.carSet2) {
-//            g.fillRect(point.x * RoadEnvironment.SCALE, point.y * RoadEnvironment.SCALE, RoadEnvironment.SCALE, RoadEnvironment.SCALE);
-//        }
-//        g.fillRect(re.skyline.x + RoadEnvironment.SCALE, re.skyline.y + RoadEnvironment.SCALE, RoadEnvironment.SCALE, RoadEnvironment.SCALE);
-//        g.fillRect(re.veyron.x * RoadEnvironment.SCALE, re.veyron.y * RoadEnvironment.SCALE, RoadEnvironment.SCALE, RoadEnvironment.SCALE);
     }
 }
