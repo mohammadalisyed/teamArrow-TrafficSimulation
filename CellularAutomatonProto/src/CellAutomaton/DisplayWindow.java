@@ -64,7 +64,7 @@ public class DisplayWindow extends JPanel {
 
         for (Junction junct : junctArray) {
             g2.setColor(Color.BLACK);
-            g2.drawRect(junct.getX(), junct.getY(), junct.getWidth(), junct.getHeight());
+            g2.drawRect(junct.getX(), junct.getY(), junct.getRoadXLen(), junct.getRoadYLen());
 
             ArrayList<Vehicle> carLst = junct.getVehicleLst();
             for (Vehicle car : carLst) {
