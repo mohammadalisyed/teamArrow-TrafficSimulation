@@ -22,34 +22,97 @@ public class DisplayWindow extends JPanel {
         super.paintComponent(g);
 
         RoadEnvironment re = RoadEnvironment.re;
-        OneWayRoad[] roadArray = re.roadArray;
-        
+        ArrayList<OneWayRoad> roadArray = re.roadArray;
+        ArrayList<Junction> junctArray = re.junctArray;
+
         Graphics2D g2 = (Graphics2D) g.create();
         g2.scale(RoadEnvironment.SCALE, RoadEnvironment.SCALE);
         g2.setStroke(new BasicStroke(0.01f));
 
         for (OneWayRoad road : roadArray) {
-//                    System.out.println("x"+road.getX()+" y"+road.getY()+" w"+road.getRoadLen()*RoadEnvironment.SCALE+" h"+road.getNoOfLanes()*RoadEnvironment.SCALE);
-//                    System.out.println("w:"+road.getNoOfLanes());
+
             g2.setColor(Color.BLACK);
-            g2.drawRect(road.getX(), road.getY(), road.getRoadLen(), road.getNoOfLanes());
-//            g.drawRect(road.getX(), road.getY(), road.getRoadLen() * RoadEnvironment.SCALE, road.getNoOfLanes() * RoadEnvironment.SCALE);
+
+//            switch (road.getDirection()) {
+//                case RoadEnvironment.LEFT:
+//                    g2.drawRect(road.getX(), road.getY(), road.getRoadLen(), road.getNoOfLanes());
+//                    break;
+//                case RoadEnvironment.RIGHT:
+//                    g2.drawRect(road.getX(), road.getY(), road.getRoadLen(), road.getNoOfLanes());
+//                    break;
+//                case RoadEnvironment.UP:
+//                    g2.drawRect(road.getX(), road.getY(), road.getNoOfLanes(), road.getRoadLen());
+//                    break;
+//                case RoadEnvironment.DOWN:
+//                    g2.drawRect(road.getX(), road.getY(), road.getNoOfLanes(), road.getRoadLen());
+//                    break;
+//            }
+            g2.drawRect(road.getX(), road.getY(), road.getRoadXLen(), road.getRoadYLen());
 
             ArrayList<Point> ptLst = road.getPointList();
             for (Point car : ptLst) {
-                
-                if (road.getStopLight()){
-                g2.setColor(Color.RED);    
-                }else{
-                g2.setColor(Color.BLUE);    
+                int x = car.x;
+                int y = car.y;
+
+                if (road.getStopLight()) {
+                    g2.setColor(Color.RED);
+                } else {
+                    switch (road.getDirection()) {
+                        case RoadEnvironment.LEFT:
+                            g2.setColor(Color.BLUE);
+                            break;
+                        case RoadEnvironment.RIGHT:
+                            g2.setColor(Color.CYAN);
+                            break;
+                        case RoadEnvironment.UP:
+                            g2.setColor(Color.YELLOW);
+                            break;
+                        case RoadEnvironment.DOWN:
+                            g2.setColor(Color.ORANGE);
+                            break;
+                    }
+
                 }
-                
-                g2.fillRect(car.x, car.y, 1, 1);
+
+                g2.fillRect(x, y, 1, 1);
 
             }
 
         }
-        
+
+        for (Junction junct : junctArray) {
+            g2.setColor(Color.BLACK);
+            g2.drawRect(junct.getX(), junct.getY(), junct.getWidth(), junct.getHeight());
+
+            ArrayList<Vehicle> carLst = junct.getVehicleLst();
+            for (Vehicle car : carLst) {
+                int x = car.getLocation().x;
+                int y = car.getLocation().y;
+                switch (car.getDirection()) {
+                    
+                    case RoadEnvironment.LEFT:
+                        g2.setColor(Color.BLUE);
+                        break;
+                    case RoadEnvironment.RIGHT:
+                        g2.setColor(Color.CYAN);
+                        break;
+                    case RoadEnvironment.UP:
+                        g2.setColor(Color.YELLOW);
+                        break;
+                    case RoadEnvironment.DOWN:
+                        g2.setColor(Color.ORANGE);
+                        break;
+                    default:
+                        g2.setColor(Color.BLACK);
+                        break;
+                }
+
+                g2.fillRect(x, y, 1, 1);
+
+            }
+
+        }
+
         g2.dispose();
 
 //        g.setColor(Color.WHITE);
