@@ -100,6 +100,7 @@ public class AutomatonModel {
                                 driveCar(RoadEnvironment.RIGHT, junct, x, y);
                                 break;
                             case RoadEnvironment.LEFT:
+                                driveCar(RoadEnvironment.LEFT, junct, x, y);
 //                                driveLeft(junct, x, y);
 //                                driveCar(RoadEnvironment.LEFT, junct, x,y);
 //                                System.out.println("left");
@@ -130,77 +131,6 @@ public class AutomatonModel {
     }
 
     //UP-
-    public void driveUp(RoadInt road, int x, int y) {
-        int direct = RoadEnvironment.UP;
-        int roadYLen = road.getRoadYLen();
-        int roadXLen = road.getRoadXLen();
-
-        int maxV = road.getMaxV(direct);
-        boolean stopLight = road.getStopLight();
-
-        if (road.getRoadCell(x, y) != null) {// there is a car in this current cell
-//                    System.out.print(" car");
-            int currentY = y; //index of current car
-            Vehicle currentCar = road.getRoadCell(x, y);
-            boolean isChecked = currentCar.getIsChecked();
-
-            if (isChecked == false) {
-                int currentV = currentCar.getSpeed(); // current car's velocity
-                int dToRoadEnd = y + 1;
-                int nextCarY = -1; // index of next car, -1 : no car in front
-                int nextCarD = -1; // distance to next car, -1 : no car in front
-                int newY = -1; // current car's new cell
-
-//                            find the index of next car in front:
-                nextCarY = chckRoad(y - 1, -1, x, road, direct);
-
-                // step 1 + 2: Acceleration and braking
-//                            has a car been found in front of the current car? 
-                if (nextCarY == -1) { // no, the road ahead is clear
-                    if (stopLight) {
-
-                        currentV = acceleration(currentV, maxV);
-                        currentV = braking(currentV, dToRoadEnd);
-
-                    } else {
-                        currentV = acceleration(currentV, maxV);
-                    }
-//                            System.out.print(" V:"+currentV);
-
-                } else { // yes, there's a car in front
-                    nextCarD = currentY - nextCarY;
-//                    nextCarD = driving(currentY, nextCarY, direct);
-                    currentV = acceleration(currentV, maxV);
-                    currentV = braking(currentV, nextCarD);
-//                            System.out.print(" V:"+currentV);
-                }
-
-                // step 3: speed randomisation (to be add later)
-                if (currentV != 0) {
-                    currentV = randomization(currentV);
-                }
-
-                // step 4: driving
-                newY = currentY - currentV;
-
-                currentCar.setSpeed(currentV);
-                currentCar.setIsChecked(true);
-                currentCar.setDirection(direct);
-//                        System.out.print(" newX:"+newX);
-                // will the car drive past the end of the road? 
-                if (newY < 0) { //yes
-//                            System.out.print(" clear car");
-                    road.clearRoadCell(x, y);
-                } else { //no
-//                            System.out.print(" move car");
-
-                    road.clearRoadCell(x, y);
-                    road.setRoadCell(x, newY, currentCar);
-                }
-            }
-        }
-    }
-
     public void updateCarsUp(RoadInt road) {
         int roadYLen = road.getRoadYLen();
         int roadXLen = road.getRoadXLen();
@@ -214,74 +144,6 @@ public class AutomatonModel {
     //-
 
     //DOWN-
-    public void driveDown(RoadInt road, int x, int y) {
-        int direct = RoadEnvironment.DOWN;
-        int roadYLen = road.getRoadYLen();
-        int roadXLen = road.getRoadXLen();
-
-        int maxV = road.getMaxV(direct);
-        boolean stopLight = road.getStopLight();
-
-        if (road.getRoadCell(x, y) != null) {// there is a car in this current cell
-
-            int currentY = y; //index of current car
-            Vehicle currentCar = road.getRoadCell(x, y);
-            boolean isChecked = currentCar.getIsChecked();
-
-            if (isChecked == false) {
-                int currentV = currentCar.getSpeed(); // current car's velocity
-                int dToRoadEnd = roadYLen - y;
-                int nextCarY = -1; // index of next car, -1 : no car in front
-                int nextCarD = -1; // distance to next car, -1 : no car in front
-                int newY = -1; // current car's new cell
-
-//                            find the index of next car in front:
-                nextCarY = chckRoad(y + 1, roadYLen, x, road, direct);
-
-                // step 1 + 2: Acceleration and braking
-//                            has a car been found in front of the current car? 
-                if (nextCarY == -1) { // no, the road ahead is clear
-//                            currentV = acceleration(currentV, maxV);
-                    if (stopLight) {
-//                                System.out.print("v1:"+currentV);
-                        currentV = acceleration(currentV, maxV);
-//                                System.out.print(" v2:"+currentV);
-                        currentV = braking(currentV, dToRoadEnd);
-//                                System.out.println(" v3:"+currentV);
-                    } else {
-                        currentV = acceleration(currentV, maxV);
-                    }
-
-                } else { // yes, there's a car in front
-                    nextCarD = nextCarY - currentY;
-                    currentV = acceleration(currentV, maxV);
-                    currentV = braking(currentV, nextCarD);
-                }
-
-                // step 3: speed randomisation (to be add later)
-                if (currentV != 0) {
-                    currentV = randomization(currentV);
-                }
-
-                // step 4: driving
-                newY = driving(currentY, currentV);
-
-                currentCar.setSpeed(currentV);
-                currentCar.setIsChecked(true);
-                currentCar.setDirection(direct);
-                // will the car drive past the end of the road? 
-                if (newY >= roadYLen) { //yes
-                    road.clearRoadCell(x, y);
-                } else { //no
-
-                    road.clearRoadCell(x, y);
-                    road.setRoadCell(x, newY, currentCar);
-                }
-            }
-        }
-
-    }
-
     public void updateCarsDown(RoadInt road) {
         int roadYLen = road.getRoadYLen();
         int roadXLen = road.getRoadXLen();
@@ -295,77 +157,6 @@ public class AutomatonModel {
     //-
 
     //LEFT-
-    public void driveLeft(RoadInt road, int x, int y) {
-        int direct = RoadEnvironment.LEFT;
-        int roadYLen = road.getRoadYLen();
-        int roadXLen = road.getRoadXLen();
-
-        int maxV = road.getMaxV(direct);
-        boolean stopLight = road.getStopLight();
-
-        if (road.getRoadCell(x, y) != null) {// there is a car in this current cell
-//                    System.out.print(" car");
-            int currentX = x; //index of current car
-            Vehicle currentCar = road.getRoadCell(x, y);
-            boolean isChecked = currentCar.getIsChecked();
-
-            if (isChecked == false) {
-                int currentV = currentCar.getSpeed(); // current car's velocity
-                int dToRoadEnd = x + 1;
-                int nextCarX = -1; // index of next car, -1 : no car in front
-                int nextCarD = -1; // distance to next car, -1 : no car in front
-                int newX = -1; // current car's new cell
-
-//                            find the index of next car in front:
-                nextCarX = chckRoad(x - 1, -1, y, road, direct);
-//                for (int i = x - 1; i > -1; i--) {// find the next car in front's location
-//                    if (road.getRoadCell(i, y) != null) {
-//                        nextCarX = i; //index of next car
-//                        break;
-//                    }
-//                }
-
-                // step 1 + 2: Acceleration and braking
-//                            has a car been found in front of the current car? 
-                if (nextCarX == -1) { // no, the road ahead is clear
-                    if (stopLight) {
-                        currentV = acceleration(currentV, maxV);
-                        currentV = braking(currentV, dToRoadEnd);
-
-                    } else {
-                        currentV = acceleration(currentV, maxV);
-                    }
-
-                } else { // yes, there's a car in front
-                    nextCarD = currentX - nextCarX;
-                    currentV = acceleration(currentV, maxV);
-                    currentV = braking(currentV, nextCarD);
-                }
-
-                // step 3: speed randomisation (to be add later)
-                if (currentV != 0) {
-                    currentV = randomization(currentV);
-                }
-
-                // step 4: driving
-//                        System.out.print("/x1:" + newX + "/v1:" + currentV);
-                newX = currentX - currentV;
-
-                currentCar.setSpeed(currentV);
-                currentCar.setIsChecked(true);
-                currentCar.setDirection(direct);
-
-                // will the car drive past the end of the road? 
-                if (newX < 0) {
-                    road.clearRoadCell(x, y);
-                } else { //no
-                    road.clearRoadCell(x, y);
-                    road.setRoadCell(newX, y, currentCar);
-                }
-            }
-        }
-    }
-
     public void updateCarsLeft(RoadInt road) {
 
         int roadYLen = road.getRoadYLen();
@@ -380,108 +171,6 @@ public class AutomatonModel {
     //-
 
     //RIGHT-
-    public void driveRight(RoadInt road, int x, int y) {
-
-        if (road.getRoadCell(x, y) != null) {// there is a car in this current cell
-
-            int direct = RoadEnvironment.RIGHT;
-            int roadYLen = road.getRoadYLen();
-            int roadXLen = road.getRoadXLen();
-
-            int maxV = road.getMaxV(direct);
-            boolean stopLight = road.getStopLight();
-
-            int currentX = x; //index of current car
-            Vehicle currentCar = road.getRoadCell(x, y);
-            boolean isChecked = currentCar.getIsChecked();
-
-            if (isChecked == false) {
-
-                int currentV = currentCar.getSpeed(); // current car's velocity
-                int dToRoadEnd = roadXLen - x;
-                int nextCarX = -1; // index of next car, -1 : no car in front
-                int nextCarD = -1; // distance to next car, -1 : no car in front
-                int newX = -1; // current car's new cell
-//                            find the index of next car in front:
-                nextCarX = chckRoad((x + 1), roadXLen, y, road, direct);
-
-                // step 1 + 2: Acceleration and braking
-//                            has a car been found in front of the current car? 
-                if (nextCarX == -1) { // no, the road ahead is clear
-                    if (stopLight) {
-                        currentV = acceleration(currentV, maxV);
-                        currentV = braking(currentV, dToRoadEnd);
-                    } else {
-                        currentV = acceleration(currentV, maxV);
-                    }
-
-                } else { // yes, there's a car in front
-                    nextCarD = nextCarX - currentX;
-                    currentV = acceleration(currentV, maxV);
-                    currentV = braking(currentV, nextCarD);
-                }
-
-                // step 3: speed randomisation (to be add later)
-                if (currentV != 0) {
-                    currentV = randomization(currentV);
-                }
-
-                // step 4: driving
-                newX = driving(currentX, currentV);
-
-                currentCar.setSpeed(currentV);
-                currentCar.setIsChecked(true);
-//                        currentCar.setLocation(new Point(x, y));
-                currentCar.setDirection(direct);
-
-//                      will the car drive past the end of the road? 
-                if (newX >= roadXLen) { //yes
-
-                    if (road.getExit(direct) == null) {//does this road exit the network?
-                        road.clearRoadCell(x, y);//Y: remove car from network
-
-                    } else {
-
-                        RoadInt junct = road.getExit(direct);
-                        int junctCar = chckRoad(0, junct.getRoadXLen(), y, junct, direct);
-
-                        if (junctCar == -1) {// There isn't a car in this car's path
-                            if (newX >= junct.getRoadXLen() + roadXLen) {//car clear's junction
-//                                        add car to next road over
-                                road.clearRoadCell(x, y);
-
-                            } else {//car lands in junction
-                                newX -= roadXLen;
-                                road.clearRoadCell(x, y);
-                                junct.setRoadCell(newX, y, currentCar);
-                            }
-                        } else {//There is a car in this car's path
-                            nextCarD = (junctCar + roadXLen) - currentX;
-                            currentV = braking(currentV, nextCarD);
-                            newX = driving(currentX, currentV);
-
-                            currentCar.setSpeed(currentV);
-
-                            if (newX >= roadXLen) {//car will still land in junction
-
-                                road.clearRoadCell(x, y);
-                                junct.setRoadCell(newX - roadXLen, y, currentCar);
-
-                            } else {//car stays on road
-
-                                road.clearRoadCell(x, y);
-                                road.setRoadCell(newX, y, currentCar);
-                            }
-                        }
-                    }
-                } else { //no
-                    road.clearRoadCell(x, y);
-                    road.setRoadCell(newX, y, currentCar);
-                }
-            }
-        }
-    }
-
     public void updateRightRoad(OneWayRoad road) {
 
         int roadYLen = road.getRoadYLen();
@@ -561,6 +250,7 @@ public class AutomatonModel {
                         case RoadEnvironment.UP:
                         case RoadEnvironment.LEFT:
                             nextCarD = currentCell - nextCarCell;
+//                            System.out.println("/UsualnextCarD:"+nextCarD);
                             break;
                         case RoadEnvironment.DOWN:
                         case RoadEnvironment.RIGHT:
@@ -615,7 +305,10 @@ public class AutomatonModel {
                         currentCar.setDirection(direction);
 
                         if (newCell < 0) {//yes
-                            road.clearRoadCell(x, y);
+//                            road.clearRoadCell(x, y);
+//System.out.println("/Usual cell:"+newCell);
+                            exitNextRoad(direction, road, x, y, currentCell,
+                                    newCell, currentCar, currentV);
                         } else { //no
                             road.clearRoadCell(x, y);
                             road.setRoadCell(newCell, y, currentCar);
@@ -649,13 +342,27 @@ public class AutomatonModel {
         int cCell = currentCell;
         int nCell = newCell;
         int currentV = v;
+        int nextRoadYCoOrd = 0;
 
         if (currentRoad.getExit(direction) == null) {//does this road exit the network?
             currentRoad.clearRoadCell(x, y);//Y: remove car from network
 
         } else {
             RoadInt nextRoad = currentRoad.getExit(direction);
-            int nextCarCell = chckRoad(0, nextRoad.getRoadXLen(), y, nextRoad, direction);
+            int nextCarCell = -1;
+            nextRoadYCoOrd = y + (currentRoad.getY() - nextRoad.getY());
+            switch (direction) {
+                case RoadEnvironment.UP:
+                    break;
+                case RoadEnvironment.DOWN:
+                    break;
+                case RoadEnvironment.LEFT:
+                    nextCarCell = chckRoad(nextRoad.getRoadXLen() - 1, -1, nextRoadYCoOrd, nextRoad, direction);
+                    break;
+                case RoadEnvironment.RIGHT:
+                    nextCarCell = chckRoad(0, nextRoad.getRoadXLen(), nextRoadYCoOrd, nextRoad, direction);
+                    break;
+            }
 
             if (nextCarCell == -1) {// There isn't a car in this car's path
 
@@ -665,6 +372,16 @@ public class AutomatonModel {
                     case RoadEnvironment.DOWN:
                         break;
                     case RoadEnvironment.LEFT:
+                        if (newCell < 0 - nextRoad.getRoadXLen()) {
+                            // add car to next road over
+                            currentRoad.clearRoadCell(x, y);
+                        } else {
+
+//                            System.out.println("a");
+                            newCell += nextRoad.getRoadXLen();
+                            currentRoad.clearRoadCell(x, y);
+                            nextRoad.setRoadCell(newCell, nextRoadYCoOrd, currentCar);
+                        }
                         break;
                     case RoadEnvironment.RIGHT:
                         if (newCell >= nextRoad.getRoadXLen() + roadXLen) {
@@ -683,17 +400,22 @@ public class AutomatonModel {
                 switch (direction) {
                     case RoadEnvironment.UP:
                         break;
-                    case RoadEnvironment.DOWN:
-                        break;
                     case RoadEnvironment.LEFT:
+//                        System.out.print("/nextCar:" + nextCarCell + "/currentCar:" + cCell);
+                        nextCarD = cCell + (nextRoad.getRoadXLen() - nextCarCell);
+//                        System.out.println("/nextCarD:"+nextCarD+"/v:"+currentV);
+                        //nextCarD = currentCell - nextCarCell
+                        break;
+                    case RoadEnvironment.DOWN:
                         break;
                     case RoadEnvironment.RIGHT:
                         nextCarD = (nextCarCell + roadXLen) - cCell;
+                        //nextCarD = nextCarCell - currentCell;
                         break;
                 }
 
                 currentV = braking(currentV, nextCarD);
-                newCell = driving(currentCell, currentV);
+                newCell = driving(currentCell, currentV, direction);
 
                 currentCar.setSpeed(currentV);
 
@@ -703,11 +425,21 @@ public class AutomatonModel {
                     case RoadEnvironment.DOWN:
                         break;
                     case RoadEnvironment.LEFT:
+                        if (newCell < 0) {
+//                            System.out.println("/newCell:" + newCell);
+//                            System.out.println("b");
+                            currentRoad.clearRoadCell(x, y);
+                            nextRoad.setRoadCell(newCell + nextRoad.getRoadXLen(), nextRoadYCoOrd, currentCar);
+                        } else {
+//                            System.out.println("c");
+                            currentRoad.clearRoadCell(x, y);
+                            currentRoad.setRoadCell(newCell, y, currentCar);
+                        }
                         break;
                     case RoadEnvironment.RIGHT:
                         if (newCell >= roadXLen) {//car will still land in junction
                             currentRoad.clearRoadCell(x, y);
-                            nextRoad.setRoadCell(newCell - roadXLen, y, currentCar);
+                            nextRoad.setRoadCell(newCell - roadXLen, nextRoadYCoOrd, currentCar);
                         } else {//car stays on road
                             currentRoad.clearRoadCell(x, y);
                             currentRoad.setRoadCell(newCell, y, currentCar);
