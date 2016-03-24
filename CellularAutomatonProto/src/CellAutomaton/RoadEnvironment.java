@@ -28,10 +28,6 @@ public class RoadEnvironment implements ActionListener {
     public DisplayWindow dw;
     public Timer timer = new Timer(50, this);
 
-//    public ArrayList<Point> carSet = new ArrayList<Point>();
-//    public ArrayList<Point> carSet2 = new ArrayList<Point>();
-    public Point skyline, veyron, ferrari;
-
     public boolean paused = false;
     public static final int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3;// do not alter
     public static final int SCALE = 5;
@@ -66,7 +62,7 @@ public class RoadEnvironment implements ActionListener {
         crossroad = new Junction(50, 50, crossroadExit, crossroadEntr, 6, 6);
 
         //set junction exits
-        crossroadExit[UP] = northRoadD;
+        crossroadExit[UP] = northRoadU;
         crossroadExit[DOWN] = southRoadD;
         crossroadExit[LEFT] = westRoadL;
         crossroadExit[RIGHT] = eastRoadR;
@@ -83,13 +79,16 @@ public class RoadEnvironment implements ActionListener {
         //set road-junction connections
         westRoadR.setExit(crossroad);
         eastRoadL.setExit(crossroad);
+        northRoadD.setExit(crossroad);
+        southRoadU.setExit(crossroad);
 
         //set traffic light switches
-        northRoadU.setStopLight(true);
-        northRoadD.setStopLight(true);
-        southRoadU.setStopLight(true);
-        southRoadD.setStopLight(true);
-//        eastRoadR.setStopLight(true);
+//        northRoadU.setStopLight(true);
+//        northRoadD.setStopLight(true);
+//        southRoadU.setStopLight(true);
+//        southRoadD.setStopLight(true);
+        eastRoadL.setStopLight(true);
+        westRoadR.setStopLight(true);  
 
         crossroad.setXTravel(true);
 
@@ -144,6 +143,7 @@ public class RoadEnvironment implements ActionListener {
                 crossroad.switchXTravel();
             }
         }
+        
         for (OneWayRoad road : roadArray) {
             int direction = road.getDirection();
             model.resetCarsChk(road);
