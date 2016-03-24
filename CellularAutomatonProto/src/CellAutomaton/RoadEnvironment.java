@@ -26,7 +26,7 @@ public class RoadEnvironment implements ActionListener {
     public static RoadEnvironment re;
     public JFrame mainFrame;
     public DisplayWindow dw;
-    public Timer timer = new Timer(50, this);
+    private Timer timer = new Timer(50, this);
 
     public boolean paused = false;
     public static final int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3;// do not alter

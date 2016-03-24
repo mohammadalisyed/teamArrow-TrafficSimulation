@@ -29,25 +29,29 @@ public class AutomatonModel {
         switch (road.getDirection()) {
             case RoadEnvironment.RIGHT:
                 lane = new Random().nextInt(roadYLen);
-                car.setLocation(new Point(0, lane));
+//                car.setLocation(new Point(0, lane));
+                car.setDirection(road.getDirection());
                 road.setRoadCell(0, lane, car);
                 break;
 
             case RoadEnvironment.LEFT:
                 lane = new Random().nextInt(roadYLen);
-                car.setLocation(new Point(roadXLen - 1, lane));
+//                car.setLocation(new Point(roadXLen - 1, lane));
+                car.setDirection(road.getDirection());
                 road.setRoadCell(roadXLen - 1, lane, car);
                 break;
 
             case RoadEnvironment.UP:
                 lane = new Random().nextInt(roadXLen);
-                car.setLocation(new Point(lane, roadYLen - 1));
+//                car.setLocation(new Point(lane, roadYLen - 1));
+                car.setDirection(road.getDirection());
                 road.setRoadCell(lane, roadYLen - 1, car);
                 break;
 
             case RoadEnvironment.DOWN:
                 lane = new Random().nextInt(roadXLen);
-                car.setLocation(new Point(lane, 0));
+//                car.setLocation(new Point(lane, 0));
+                car.setDirection(road.getDirection());
                 road.setRoadCell(lane, 0, car);
                 break;
         }
@@ -257,7 +261,6 @@ public class AutomatonModel {
                         case RoadEnvironment.UP:
                         case RoadEnvironment.LEFT:
                             nextCarD = currentCell - nextCarCell;
-//                            System.out.println("/UsualnextCarD:"+nextCarD);
                             break;
                         case RoadEnvironment.DOWN:
                         case RoadEnvironment.RIGHT:
@@ -274,18 +277,17 @@ public class AutomatonModel {
                 }
 
                 // step 4: driving
-//              // will the car drive past the end of the road? 
                 newCell = driving(currentCell, currentV, direction);
 
                 currentCar.setSpeed(currentV);
                 currentCar.setIsChecked(true);
                 currentCar.setDirection(direction);
-                
+
+                //              // will the car drive past the end of the road? 
                 switch (direction) {
                     case RoadEnvironment.UP:
                         // will the car drive past the end of the road? 
                         if (newCell < 0) { //yes
-//                            road.clearRoadCell(x, y);
                             exitNextRoad(direction, road, x, y, currentCell,
                                     newCell, currentCar, currentV);
                         } else { //no
@@ -331,11 +333,11 @@ public class AutomatonModel {
 
         int roadXLen = currentRoad.getRoadXLen();
         int roadYLen = currentRoad.getRoadYLen();
-        int cCell = currentCell;
-        int nCell = newCell;
+//        int cCell = currentCell;
+//        int nCell = newCell;
         int currentV = v;
-        int nextRoadYCoOrd = 0; //relative y co-ordinates of the next road, for when two roads have different roadYLens 
-        int nextRoadXCoOrd = 0;//relative x co-ordinates of the next road, for when two roads have different roadXLens 
+        int nextRoadYCoOrd; //relative y co-ordinates of the next road, for when two roads have different roadYLens 
+        int nextRoadXCoOrd;//relative x co-ordinates of the next road, for when two roads have different roadXLens 
 
         if (currentRoad.getExit(direction) == null) {//does this road exit the network?
             currentRoad.clearRoadCell(x, y);//Y: remove car from network
@@ -378,6 +380,9 @@ public class AutomatonModel {
                     }
                     break;
             }
+            
+            boolean clearJunction = chckTravesalClearance(nextRoad,direction); 
+                if (clearJunction) {
 
             if (nextCarPt == null) {// There isn't a car in this car's path
 
@@ -432,23 +437,25 @@ public class AutomatonModel {
             } else {//There is a car in this car's path
 
                 int nextCarD = -1;
-                int nextDirect = nextRoad.getRoadCell(nextCarPt.x,
-                        nextCarPt.y).getDirection();
-                boolean sameDirect = (nextDirect == direction);
-
-                if (sameDirect) {
+//                int nextDirect = nextRoad.getRoadCell(nextCarPt.x,
+//                        nextCarPt.y).getDirection();
+//                boolean sameDirect = (nextDirect == direction);
+//                boolean clearJunction = chckTravesalClearance(nextRoad,direction); 
+//                if (clearJunction) {
+                    
+                    System.out.println(" clear/");
                     switch (direction) {
                         case RoadEnvironment.UP:
-                            nextCarD = cCell + (nextRoad.getRoadYLen() - nextCarCell);
+                            nextCarD = currentCell + (nextRoad.getRoadYLen() - nextCarCell);
                             break;
                         case RoadEnvironment.DOWN:
-                            nextCarD = (nextCarCell + roadYLen) - cCell;
+                            nextCarD = (nextCarCell + roadYLen) - currentCell;
                             break;
                         case RoadEnvironment.LEFT:
-                            nextCarD = cCell + (nextRoad.getRoadXLen() - nextCarCell);
+                            nextCarD = currentCell + (nextRoad.getRoadXLen() - nextCarCell);
                             break;
                         case RoadEnvironment.RIGHT:
-                            nextCarD = (nextCarCell + roadXLen) - cCell;
+                            nextCarD = (nextCarCell + roadXLen) - currentCell;
                             break;
                     }
 
@@ -503,7 +510,10 @@ public class AutomatonModel {
                             }
                             break;
                     }
-                } else {
+                  
+            }
+            } else {
+                    System.out.print(" not clear/");
                     int dToRoadEnd = -1;
                     switch (direction) {
                         case RoadEnvironment.UP:
@@ -524,22 +534,59 @@ public class AutomatonModel {
 
                     switch (direction) {
                         case RoadEnvironment.UP:
-
-                            break;
                         case RoadEnvironment.DOWN:
-
+                            System.out.println(" /:newY:"+newCell+ " /"+direction);
+                            currentRoad.clearRoadCell(x, y);
+                            currentRoad.setRoadCell(x, newCell, currentCar);
                             break;
                         case RoadEnvironment.LEFT:
-
-                            break;
                         case RoadEnvironment.RIGHT:
-
+                            System.out.println(" /:newX:"+newCell+ " /"+direction);
+                            currentRoad.clearRoadCell(x, y);
+                            currentRoad.setRoadCell(newCell, y, currentCar);
                             break;
                     }
                 }
+        }
+    }
 
+    public boolean chckTravesalClearance(RoadInt road, int direction) {
+
+        boolean clearance = true;
+        for (int y = 0; y < road.getRoadYLen(); y++) {
+            for (int x = 0; x < road.getRoadXLen(); x++) {
+                switch (direction) {
+                    case RoadEnvironment.UP:
+                    case RoadEnvironment.DOWN:
+
+                        if (road.getRoadCell(x, y) != null) {
+                            int nextDirect = road.getRoadCell(x, y).getDirection();
+                            switch (nextDirect) {
+                                case RoadEnvironment.LEFT:
+                                case RoadEnvironment.RIGHT:
+                                    clearance = false;
+                                    System.out.println("/vfalse");
+                            }
+                        }
+                        break;
+                    case RoadEnvironment.LEFT:
+                    case RoadEnvironment.RIGHT:
+
+                        if (road.getRoadCell(x, y) != null) {
+                            int nextDirect = road.getRoadCell(x, y).getDirection();
+                            switch (nextDirect) {
+                                case RoadEnvironment.UP:
+                                case RoadEnvironment.DOWN:
+                                    clearance = false;
+                                    System.out.println("/hfalse");
+                            }
+                        }
+                        break;
+                }
             }
         }
+        return clearance;
+
     }
 
     public Point chckRoad(int chckStart, int chckEnd, int laneNo,

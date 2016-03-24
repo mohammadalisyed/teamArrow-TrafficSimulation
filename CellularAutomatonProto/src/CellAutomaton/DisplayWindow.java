@@ -40,9 +40,9 @@ public class DisplayWindow extends JPanel {
                 int x = car.x;
                 int y = car.y;
 
-                if (road.getStopLight()) {
-                    g2.setColor(Color.RED);
-                } else {
+//                if (road.getStopLight()) {
+//                    g2.setColor(Color.RED);
+//                } else {
                     switch (road.getDirection()) {
                         case RoadEnvironment.LEFT:
                             g2.setColor(Color.BLUE);
@@ -57,7 +57,7 @@ public class DisplayWindow extends JPanel {
                             g2.setColor(Color.ORANGE);
                             break;
                     }
-                }
+//                }
                 g2.fillRect(x, y, 1, 1);
             }
         }

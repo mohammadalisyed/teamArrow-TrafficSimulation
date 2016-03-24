@@ -23,6 +23,8 @@ public class Junction implements RoadInt {
     private int y;
     private int width;
     private int height;
+    
+//    private int clearanceTime;
 
     public Junction(int x, int y,
             OneWayRoad[] exitRoads, OneWayRoad[] entrRoads, int width, int height) {
