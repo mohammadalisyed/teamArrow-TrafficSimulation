@@ -18,12 +18,16 @@ public class DisplayWindow extends JPanel {
     public DisplayWindow() {
     }
 
+    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         RoadEnvironment re = RoadEnvironment.re;
-        ArrayList<OneWayRoad> roadArray = re.roadArray;
-        ArrayList<Junction> junctArray = re.junctArray;
+//        ArrayList<OneWayRoad> roadArray = re.roadArray;
+//        ArrayList<Junction> junctArray = re.junctArray;
+
+        ArrayList<OneWayRoad> roadArray = re.getRoadNetwork().getRoadArray();
+        ArrayList<Junction> junctArray = re.getRoadNetwork().getJunctArray();
 
         Graphics2D g2 = (Graphics2D) g.create();
         g2.scale(RoadEnvironment.SCALE, RoadEnvironment.SCALE);
@@ -71,7 +75,7 @@ public class DisplayWindow extends JPanel {
                 int x = car.getLocation().x;
                 int y = car.getLocation().y;
                 switch (car.getDirection()) {
-                    
+
                     case RoadEnvironment.LEFT:
                         g2.setColor(Color.BLUE);
                         break;
