@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author Alexander
  */
-public class OneWayRoad {
+public class OneWayRoad implements RoadInt{
 
     private int maxV = 5;
     private int roadXLen;
@@ -46,7 +46,7 @@ public class OneWayRoad {
         }
     }
     
-    public Junction getExit(){
+    public Junction getExit(int direction){
         return exit;
     }
     
@@ -95,7 +95,7 @@ public class OneWayRoad {
         return roadYLen;
     }
 
-    public int getMaxV() {
+    public int getMaxV(int direction) {
         return maxV;
     }
 

@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author Alexander
  */
-public class Junction {
+public class Junction implements RoadInt {
 
     private Vehicle[][] junct;
     private OneWayRoad[] entrRoads;
@@ -23,6 +23,8 @@ public class Junction {
     private int y;
     private int width;
     private int height;
+    
+//    private int clearanceTime;
 
     public Junction(int x, int y,
             OneWayRoad[] exitRoads, OneWayRoad[] entrRoads, int width, int height) {
@@ -38,15 +40,16 @@ public class Junction {
 
     }
 
-    public OneWayRoad getExt(int extDirection) {
-        return exitRoads[extDirection];
+    public OneWayRoad getExit(int direction) {
+        return exitRoads[direction];
     }
 
     public OneWayRoad getEntr(int entrDirection) {
         return entrRoads[entrDirection];
     }
 
-    public void resetJunct() {
+    @Override
+    public void resetRoad() {
 
         for (int h = 0; h < height; h++) {
             for (int w = 0; w < width; w++) {
@@ -56,6 +59,7 @@ public class Junction {
         }
     }
 
+    @Override
     public ArrayList<Point> getPointList() {
         ArrayList<Point> ptLst = new ArrayList<Point>();
 
@@ -83,27 +87,33 @@ public class Junction {
         }
         return carLst;
     }
+    
+    public int getMaxV(int direction){
+        int maxV = 1;
+        RoadInt entRoad = getEntr(direction);
+        if (entRoad != null){
+            maxV = entRoad.getMaxV(direction);
+        }
+        return maxV;
+    }
 
-//    public OneWayRoad getEntr(int entrN){
-//        return entrRoads[entrN];
-//    }
-//    
-//    public OneWayRoad getExit(int exitN){
-//        return entrRoads[exitN];
-//    }
+    @Override
     public int getX() {
         return x;
     }
 
+    @Override
     public int getY() {
         return y;
     }
 
-    public int getWidth() {
+    @Override
+    public int getRoadXLen() {
         return width;
     }
 
-    public int getHeight() {
+    @Override
+    public int getRoadYLen() {
         return height;
     }
 
@@ -126,6 +136,10 @@ public class Junction {
 
     public void setXTravel(boolean newBool) {
         xTravel = newBool;
+    }
+    
+    public boolean getStopLight(){
+        return false;
     }
 
     public void switchXTravel() {
