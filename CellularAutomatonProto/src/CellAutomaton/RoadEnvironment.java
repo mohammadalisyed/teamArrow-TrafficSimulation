@@ -31,7 +31,7 @@ public class RoadEnvironment implements ActionListener {
     public boolean paused = false;
     public static final int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3;// do not alter
     public static final int SCALE = 5;
-    public int direction;
+//    public int direction;
     public int carLength = 2;
 
     OneWayRoad northRoadU = new OneWayRoad(3, 50, 50, 0, UP, null);
@@ -54,9 +54,10 @@ public class RoadEnvironment implements ActionListener {
     OneWayRoad[] crossroadEntr = new OneWayRoad[4];
     OneWayRoad[] crossroadExit = new OneWayRoad[4];
 
-    Junction crossroad; 
+    Junction crossroad;
     AutomatonModel model;
     private int stopCounter;
+    private int inputCounter;
 
     public RoadEnvironment() {
         crossroad = new Junction(50, 50, crossroadExit, crossroadEntr, 6, 6);
@@ -87,9 +88,10 @@ public class RoadEnvironment implements ActionListener {
 //        northRoadD.setStopLight(true);
 //        southRoadU.setStopLight(true);
 //        southRoadD.setStopLight(true);
+
         eastRoadL.setStopLight(true);
         westRoadR.setStopLight(true);  
-
+        
         crossroad.setXTravel(true);
 
         //populate road list
@@ -117,6 +119,7 @@ public class RoadEnvironment implements ActionListener {
         model = new AutomatonModel(networkExit);
 //        
         stopCounter = 0;
+        inputCounter = 0;
 
         mainFrame = new JFrame("Traffic Simulation App.");
         mainFrame.setVisible(true);
@@ -135,6 +138,7 @@ public class RoadEnvironment implements ActionListener {
             stopSwitch = true;
             stopCounter = 0;
         }
+       
 
         for (OneWayRoad road : roadArray) {
 
@@ -169,7 +173,22 @@ public class RoadEnvironment implements ActionListener {
         }
 
         for (OneWayRoad road : networkEntr) {
-            model.addCar(road);
+//            if (inputCounter > 100){
+//                model.addCar(road);
+//                inputCounter = 0;               
+//            }
+            model.addCarToRoad(road);
+
+//            model.addCarJ(crossroad, new Point(1,1), UP);
+//            model.addCarJ(crossroad, new Point(1,0), UP);
+//            model.addCarJ(crossroad, new Point(4, 3), DOWN);
+//            model.addCarJ(crossroad, new Point(4, 4), DOWN);
+
+//            model.addCarJ(crossroad, new Point(4, 2), RIGHT);
+//            model.addCarJ(crossroad, new Point(5, 2), RIGHT);
+            
+//            model.addCarJ(crossroad, new Point(2, 4), LEFT);
+//            model.addCarJ(crossroad, new Point(1, 4), LEFT);
         }
 
         for (Junction junct : junctArray) {
@@ -186,6 +205,7 @@ public class RoadEnvironment implements ActionListener {
         updateRoads();
         dw.repaint();
         stopCounter++;
+        inputCounter++;
 
     }
 
