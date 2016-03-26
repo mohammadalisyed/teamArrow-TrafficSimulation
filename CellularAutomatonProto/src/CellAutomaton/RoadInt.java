@@ -35,6 +35,8 @@ public interface RoadInt {
     Vehicle getRoadCell(int x, int y);
 
     RoadInt getExit(int direction);
+    
+    RoadInt getEntr(int direction);
 
     ArrayList<Point> getPointList();
 

@@ -13,17 +13,17 @@ import java.util.ArrayList;
  */
 public class CrossroadNetwork extends RoadNetworkTemplate {
 
-    OneWayRoad northRoadU = new OneWayRoad(3, 50, 50, 0, UP, null);
-    OneWayRoad northRoadD = new OneWayRoad(3, 50, 53, 0, DOWN, null);
+    OneWayRoad northRoadU = new OneWayRoad(3, 50, 50, 0, UP);
+    OneWayRoad northRoadD = new OneWayRoad(3, 50, 53, 0, DOWN);
 
-    OneWayRoad eastRoadR = new OneWayRoad(50, 3, 56, 50, RIGHT, null);
-    OneWayRoad eastRoadL = new OneWayRoad(50, 3, 56, 53, LEFT, null);
+    OneWayRoad eastRoadR = new OneWayRoad(50, 3, 56, 50, RIGHT);
+    OneWayRoad eastRoadL = new OneWayRoad(50, 3, 56, 53, LEFT);
 
-    OneWayRoad southRoadU = new OneWayRoad(3, 50, 50, 56, UP, null);
-    OneWayRoad southRoadD = new OneWayRoad(3, 50, 53, 56, DOWN, null);
+    OneWayRoad southRoadU = new OneWayRoad(3, 50, 50, 56, UP);
+    OneWayRoad southRoadD = new OneWayRoad(3, 50, 53, 56, DOWN);
 
-    OneWayRoad westRoadR = new OneWayRoad(50, 3, 0, 50, RIGHT, null);
-    OneWayRoad westRoadL = new OneWayRoad(50, 3, 0, 53, LEFT, null);
+    OneWayRoad westRoadR = new OneWayRoad(50, 3, 0, 50, RIGHT);
+    OneWayRoad westRoadL = new OneWayRoad(50, 3, 0, 53, LEFT);
 
     OneWayRoad[] crossroadEntr = new OneWayRoad[4];
     OneWayRoad[] crossroadExit = new OneWayRoad[4];

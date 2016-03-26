@@ -21,11 +21,12 @@ public class OneWayRoad implements RoadInt{
     private int roadY;
     private int direction = RoadEnvironment.LEFT;
     private Junction exit;
+    private Junction entr;
 
     private Vehicle[][] road;
     private boolean stopLight = false;
 
-    public OneWayRoad(int roadXLen, int roadYLen, int roadX, int roadY, int direction, Junction exit) {
+    public OneWayRoad(int roadXLen, int roadYLen, int roadX, int roadY, int direction) {
         this.roadXLen = roadXLen;
         this.roadYLen = roadYLen;
         this.roadX = roadX;
@@ -33,7 +34,7 @@ public class OneWayRoad implements RoadInt{
 
         this.direction = direction;
         road = new Vehicle[roadXLen][roadYLen];
-        this.exit = exit;
+//        this.exit = exit;
     }
 
     public void resetRoad() {
@@ -50,8 +51,16 @@ public class OneWayRoad implements RoadInt{
         return exit;
     }
     
+    public RoadInt getEntr(int direction){
+        return entr;
+    }
+    
     public void setExit(Junction newExit){
         exit = newExit;
+    }
+    
+    public void setEntr(Junction newEntr){
+        entr = newEntr;
     }
 
     public int getDirection() {
