@@ -23,9 +23,8 @@ public class Junction implements RoadInt {
     private int y;
     private int width;
     private int height;
-    
-//    private int clearanceTime;
 
+//    private int clearanceTime;
     public Junction(int x, int y,
             OneWayRoad[] exitRoads, OneWayRoad[] entrRoads, int width, int height) {
         this.x = x;
@@ -40,12 +39,50 @@ public class Junction implements RoadInt {
 
     }
 
-    public OneWayRoad getExit(int direction) {
-        return exitRoads[direction];
+//    public Point getTurningPoint(int currentDirect, int exitDirect, 
+//            int currentLane){
+////            Junction junct, OneWayRoad road, int currentLane) {
+//
+//        Point turningPt = null;
+//        
+//        RoadInt exitRoad = getExit(exitDirect);
+//        RoadInt entrRoad = getEntr(currentDirect);
+////        int exitRoadXLen = exitRoad.getRoadXLen();
+////        int exitRoadYLen = exitRoad.getRoadYLen();
+//
+//        switch (currentDirect) {
+//            case RoadEnvironment.UP:
+//            case RoadEnvironment.DOWN:
+//            case RoadEnvironment.LEFT:
+//            case RoadEnvironment.RIGHT:
+//                int exitXCoOrd = 0;
+//                int exitYCoOrd = currentLane;
+//
+//                switch (exitDirect) {
+//                    case RoadEnvironment.UP:
+//                        if (entrRoad.getRoadYLen() > 1) {
+//                            if (exitRoad.getRoadXLen() > 1) {
+//                                
+//                            }
+//                        }
+//                    case RoadEnvironment.DOWN:
+//
+////                    case RoadEnvironment.LEFT:
+////                    case RoadEnvironment.RIGHT:
+//                        break;
+//                }
+//                break;
+//        }
+//        
+//        return turningPt;
+//    }
+
+    public OneWayRoad getExit(int exitDirect) {
+        return exitRoads[exitDirect];
     }
 
-    public OneWayRoad getEntr(int entrDirection) {
-        return entrRoads[entrDirection];
+    public OneWayRoad getEntr(int entrDirect) {
+        return entrRoads[entrDirect];
     }
 
     @Override
@@ -87,11 +124,11 @@ public class Junction implements RoadInt {
         }
         return carLst;
     }
-    
-    public int getMaxV(int direction){
+
+    public int getMaxV(int direction) {
         int maxV = 1;
         RoadInt entRoad = getEntr(direction);
-        if (entRoad != null){
+        if (entRoad != null) {
             maxV = entRoad.getMaxV(direction);
         }
         return maxV;
@@ -117,15 +154,18 @@ public class Junction implements RoadInt {
         return height;
     }
 
+    @Override
     public Vehicle getRoadCell(int x, int y) {
         return junct[x][y];
 
     }
 
+    @Override
     public void clearRoadCell(int x, int y) {
         junct[x][y] = null;
     }
 
+    @Override
     public void setRoadCell(int x, int y, Vehicle newV) {
         junct[x][y] = newV;
     }
@@ -137,8 +177,9 @@ public class Junction implements RoadInt {
     public void setXTravel(boolean newBool) {
         xTravel = newBool;
     }
-    
-    public boolean getStopLight(){
+
+    @Override
+    public boolean getStopLight() {
         return false;
     }
 

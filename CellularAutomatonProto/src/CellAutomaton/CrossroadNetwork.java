@@ -40,8 +40,8 @@ public class CrossroadNetwork extends RoadNetworkTemplate {
         //set junction entrances
         crossroadEntr[UP] = southRoadU;
         crossroadEntr[DOWN] = northRoadD;
-        crossroadEntr[LEFT] = westRoadR;
-        crossroadEntr[RIGHT] = eastRoadL;
+        crossroadEntr[LEFT] = eastRoadL;
+        crossroadEntr[RIGHT] = westRoadR;
         
         //create junctions
         crossroad = new Junction(50, 50, crossroadExit, crossroadEntr, 6, 6);

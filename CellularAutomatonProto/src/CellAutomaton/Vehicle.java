@@ -17,7 +17,7 @@ public class Vehicle {
     private int speed;
     private boolean isChecked;
     private int direction;// direction of the road the cars is on/ just left
-//    private int exit;
+    private int exit;
     private Point location;
     // behaviour? 
     // type? normal car/van or bus/taxi or emergency services?
@@ -25,17 +25,16 @@ public class Vehicle {
     public Vehicle(int length, int speed) {
         this.length = length;
         this.speed = speed;
-//        this.direction = direction;
         isChecked = false;
     }
     
-//    public int getExitD(){
-//        return exit;
-//    }
-//    
-//    public int setExitD(){
-//        return exit;
-//    }
+    public int getExit() {
+        return exit;
+    }
+
+    public void setExit(int exit) {
+        this.exit = exit;
+    }
     
     public Point getLocation(){
         return location;
