@@ -39,52 +39,6 @@ public class Junction implements RoadInt {
 
     }
 
-//    public Point getTurningPoint(int currentDirect, int exitDirect,
-//            int currentLane) {
-////            Junction junct, OneWayRoad road, int currentLane) {
-//
-//        Point turningPt = null;
-//
-//        RoadInt exitRoad = getExit(exitDirect);
-//        RoadInt entrRoad = getEntr(currentDirect);
-////        int exitRoadXLen = exitRoad.getRoadXLen();
-////        int exitRoadYLen = exitRoad.getRoadYLen();
-//
-//        switch (currentDirect) {
-//            case RoadEnvironment.UP:
-//            case RoadEnvironment.DOWN:
-//            case RoadEnvironment.LEFT:
-//            case RoadEnvironment.RIGHT:
-//                int exitXCoOrd = 0;
-//                int exitYCoOrd = currentLane;
-//
-//                switch (exitDirect) {
-//                    case RoadEnvironment.UP:
-//                        if (entrRoad.getRoadYLen() > 1) {
-//                            if (exitRoad.getRoadXLen() > 1) {
-//
-//                                for (int i = 0; i < exitRoad.getRoadXLen(); i++) {
-//                                    if (i > entrRoad.getRoadYLen()) {
-//                                        exitXCoOrd = entrRoad.getRoadYLen()-1;
-//                                    } else {
-//                                        exitXCoOrd = i;
-//                                    }
-//                                }
-//
-//                            }
-//                        }
-//                    case RoadEnvironment.DOWN:
-//
-////                    case RoadEnvironment.LEFT:
-////                    case RoadEnvironment.RIGHT:
-//                        break;
-//                }
-//                break;
-//        }
-//
-//        return turningPt;
-//    }
-
     public OneWayRoad getExit(int exitDirect) {
         return exitRoads[exitDirect];
     }

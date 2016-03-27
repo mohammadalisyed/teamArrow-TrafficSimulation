@@ -18,6 +18,7 @@ public class Vehicle {
     private boolean isChecked;
     private int direction;// direction of the road the cars is on/ just left
     private int exit;
+    private boolean turning;
     private Point location;
     // behaviour? 
     // type? normal car/van or bus/taxi or emergency services?
@@ -26,6 +27,15 @@ public class Vehicle {
         this.length = length;
         this.speed = speed;
         isChecked = false;
+        turning = false;
+    }
+    
+    public boolean getTurning(){
+        return turning; 
+    }
+    
+    public void setTurning(boolean newBool){
+        turning = newBool;
     }
     
     public int getExit() {

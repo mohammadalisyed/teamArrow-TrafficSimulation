@@ -31,6 +31,19 @@ public class AutomatonModel {
                 lane = new Random().nextInt(roadYLen);
 //                car.setLocation(new Point(0, lane));
                 car.setDirection(road.getDirection());
+//--TESTING TURNING--
+//                if (lane == 0) {
+//                    car.setExit(RoadEnvironment.UP);
+//                } else if (lane < roadYLen - 1) {
+//                    car.setExit(RoadEnvironment.RIGHT);
+//                } else {
+//                    car.setExit(RoadEnvironment.DOWN);
+//                }
+                
+//                car.setExit(RoadEnvironment.UP);
+//--TESTING 
+//                car.setExit(RoadEnvironment.UP);
+////                car.setExit(RoadEnvironment.RIGHT);
                 road.setRoadCell(0, lane, car);
                 break;
 
@@ -95,21 +108,31 @@ public class AutomatonModel {
 
                     if (isChecked == false) {
                         int direction = currentCar.getDirection();
+                        int exitDirect = currentCar.getExit();
+                        boolean turning = currentCar.getTurning();//
 
-                        switch (direction) {
-                            case RoadEnvironment.RIGHT:
-                                driveCar(RoadEnvironment.RIGHT, junct, x, y);
-                                break;
-                            case RoadEnvironment.LEFT:
-                                driveCar(RoadEnvironment.LEFT, junct, x, y);
-                                break;
-                            case RoadEnvironment.UP:
-                                driveCar(RoadEnvironment.UP, junct, x, y);
-                                break;
-                            case RoadEnvironment.DOWN:
-                                driveCar(RoadEnvironment.DOWN, junct, x, y);
-                                break;
+                        if (direction == exitDirect) {
 
+                            switch (direction) {
+                                case RoadEnvironment.UP:
+                                    driveCar(RoadEnvironment.UP, junct, x, y);
+                                    break;
+                                case RoadEnvironment.DOWN:
+                                    if (turning == false){
+                                    driveCar(RoadEnvironment.DOWN, junct, x, y);
+                                    } else {}
+                                    break;
+                                case RoadEnvironment.LEFT:
+                                    driveCar(RoadEnvironment.LEFT, junct, x, y);
+                                    break;
+                                case RoadEnvironment.RIGHT:
+                                    driveCar(RoadEnvironment.RIGHT, junct, x, y);
+                                    break;
+
+                            }
+                        } else {
+                            Point turningPt = getTurningPt(direction, exitDirect, y, junct);
+                            driveCarToPoint(direction, junct, x, y, turningPt);
                         }
                     }
                 }
@@ -287,9 +310,8 @@ public class AutomatonModel {
 
                 currentCar.setSpeed(currentV);
                 currentCar.setIsChecked(true);
-                currentCar.setDirection(direction);
-                currentCar.setExit(direction);
-                currentCar.setExit(direction);
+//                currentCar.setDirection(direction);
+//                currentCar.setExit(direction);
 
                 //              // will the car drive past the end of the road? 
                 switch (direction) {
@@ -336,12 +358,176 @@ public class AutomatonModel {
         }
     }
 
+    public void driveCarToPoint(int direction, RoadInt road, int x, int y, Point turningPt) {
+        int roadYLen = road.getRoadYLen();
+        int roadXLen = road.getRoadXLen();
+
+        int maxV = road.getMaxV(direction);
+//        boolean stopLight = road.getStopLight();
+
+        if (road.getRoadCell(x, y) != null) {
+
+            int currentCell = -1; //index of current car
+            Vehicle currentCar = road.getRoadCell(x, y);
+            int exitDirect = currentCar.getExit();
+            boolean isChecked = currentCar.getIsChecked();
+            int dToTurnPt = -1;
+
+            switch (direction) {
+                case RoadEnvironment.UP:
+                case RoadEnvironment.DOWN:
+                    currentCell = y;
+                    dToTurnPt = turningPt.y;
+                    break;
+                case RoadEnvironment.LEFT:
+                case RoadEnvironment.RIGHT:
+                    currentCell = x;
+                    dToTurnPt = turningPt.x;
+                    break;
+            }
+
+            if (isChecked == false) {
+
+                int currentV = currentCar.getSpeed(); // current car's velocity
+                // distance to the end of the road
+                int nextCarCell = -1; // index of next car, -1 : no car in front
+                Point nextCarPt = null;
+                int nextCarD = -1; // distance to next car, -1 : no car in front
+                int newCell; // current car's new cell
+
+                switch (direction) {// find next car infront
+                    case RoadEnvironment.UP:
+                        nextCarPt = chckRoad(y - 1, -1, x, road, direction);
+
+                        if (nextCarPt != null) {
+                            nextCarCell = nextCarPt.y;
+                        }
+                        break;
+                    case RoadEnvironment.DOWN:
+                        nextCarPt = chckRoad(y + 1, roadYLen, x, road, direction);
+
+                        if (nextCarPt != null) {
+                            nextCarCell = nextCarPt.y;
+                        }
+                        break;
+                    case RoadEnvironment.LEFT:
+                        nextCarPt = chckRoad(x - 1, -1, y, road, direction);
+
+                        if (nextCarPt != null) {
+                            nextCarCell = nextCarPt.x;
+                        }
+                        break;
+                    case RoadEnvironment.RIGHT:
+                        nextCarPt = chckRoad((x + 1), roadXLen, y, road, direction);
+
+                        if (nextCarPt != null) {
+                            nextCarCell = nextCarPt.x;
+                        }
+                        break;
+                }
+
+                // step 1 + 2: Acceleration and braking
+//                            has a car been found in front of the current car? 
+                if (nextCarPt == null) { // no, the road ahead is clear
+//                    if (stopLight) {
+//                        currentV = acceleration(currentV, maxV);
+//                        currentV = braking(currentV, dToRoadEnd);
+//                    } else {
+                    currentV = acceleration(currentV, maxV);
+                    currentV = braking(currentV, dToTurnPt);
+//                    }
+
+                } else { // yes, there's a car in front
+                    switch (direction) {
+                        case RoadEnvironment.UP:
+                        case RoadEnvironment.LEFT:
+                            nextCarD = currentCell - nextCarCell;
+                            break;
+                        case RoadEnvironment.DOWN:
+                        case RoadEnvironment.RIGHT:
+                            nextCarD = nextCarCell - currentCell;
+                            break;
+                    }
+                    currentV = acceleration(currentV, maxV);
+                    currentV = braking(currentV, nextCarD);
+                }
+
+                // step 3: speed randomisation (to be add later)
+                if (currentV != 0) {
+                    currentV = randomization(currentV);
+                }
+
+                // step 4: driving
+                newCell = driving(currentCell, currentV, direction);
+
+                currentCar.setSpeed(currentV);
+                currentCar.setIsChecked(true);
+//                currentCar.setDirection(direction);
+//                currentCar.setExit(direction);
+
+                //              // will the car drive past the end of the road? 
+                switch (direction) {
+                    case RoadEnvironment.UP:
+//                        // will the car drive past the end of the road? 
+//                        if (newCell < 0) { //yes
+//                            exitNextRoad(road, x, y, currentCell,
+//                                    newCell, currentCar, currentV);
+//                        } else { //no
+//                            road.clearRoadCell(x, y);
+//                            road.setRoadCell(x, newCell, currentCar);
+//                        }
+                        break;
+                    case RoadEnvironment.DOWN:
+                        // will the car drive past the end of the road? 
+//                        if (newCell >= roadYLen) { //yes
+//                            exitNextRoad(road, x, y, currentCell,
+//                                    newCell, currentCar, currentV);
+//                        } else { //no
+//                            road.clearRoadCell(x, y);
+//                            road.setRoadCell(x, newCell, currentCar);
+//                        }
+                        break;
+                    case RoadEnvironment.LEFT:
+//                        if (newCell < 0) {//yes
+//                            exitNextRoad(road, x, y, currentCell,
+//                                    newCell, currentCar, currentV);
+//                        } else { //no
+//                            road.clearRoadCell(x, y);
+//                            road.setRoadCell(newCell, y, currentCar);
+//                        }
+                        break;
+                    case RoadEnvironment.RIGHT:
+//                        turningPt = getTurningPt(direction, exitDirect, y, nextRoad);
+//                        System.out.println("RIGHT");
+                        if (newCell < turningPt.x) {
+                            road.clearRoadCell(x, y);
+                            road.setRoadCell(newCell, y, currentCar);
+                        } else {
+                            currentCar.setTurning(true);
+                            
+                            currentCar.setDirection(exitDirect);
+                            road.clearRoadCell(x, y);
+                            road.setRoadCell(turningPt.x, y, currentCar);
+                        }
+//                        if (newCell >= roadXLen) {//yes
+//                            exitNextRoad(road, x, y, currentCell,
+//                                    newCell, currentCar, currentV);
+//                        } else { //no
+//                            road.clearRoadCell(x, y);
+//                            road.setRoadCell(newCell, y, currentCar);
+//                        }                        
+                        break;
+                }
+            }
+        }
+    }
+
     public void exitNextRoad(RoadInt currentRoad, int x, int y,
             int currentCell, int newCell, Vehicle currentCar, int v) {
 
-        int roadXLen = currentRoad.getRoadXLen();
-        int roadYLen = currentRoad.getRoadYLen();
-        int currentV = v;
+        int roadXLen = currentRoad.getRoadXLen();// Width of the current road
+        int roadYLen = currentRoad.getRoadYLen();// Height of the current road
+        int currentV = v;// Vehicle's current velocity
         int nextRoadYCoOrd; //relative y co-ordinates of the next road, for when two roads have different roadYLens 
         int nextRoadXCoOrd;//relative x co-ordinates of the next road, for when two roads have different roadXLens 
         int direction = currentCar.getDirection();
@@ -357,6 +543,7 @@ public class AutomatonModel {
             nextRoadYCoOrd = y + (currentRoad.getY() - nextRoad.getY());
             nextRoadXCoOrd = x + (currentRoad.getX() - nextRoad.getX());
 
+            // find next car infront
             switch (direction) {
                 case RoadEnvironment.UP:
                     nextCarPt = chckRoad(nextRoad.getRoadYLen() - 1, -1, nextRoadXCoOrd, nextRoad, direction);
@@ -389,8 +576,11 @@ public class AutomatonModel {
             }
 
             boolean clearJunction = chckTravesalClearance(nextRoad, currentRoad, direction);
+//            clearJunction = true;
+
             if (clearJunction) {// junction is clear for travesal
                 int exitDirect = currentCar.getExit();
+//                System.out.println("exit:" + exitDirect);
                 Point turningPt;
 //                if (exitDirect == direction) {// car isn't turning
                 if (nextCarPt == null) {// There isn't a car in this car's path
@@ -404,7 +594,6 @@ public class AutomatonModel {
                             } else {
                                 newCell += nextRoad.getRoadYLen();
                                 currentRoad.clearRoadCell(x, y);
-
                                 nextRoad.setRoadCell(nextRoadXCoOrd, newCell, currentCar);
                             }
 //                            } else {
@@ -432,26 +621,46 @@ public class AutomatonModel {
                             }
                             break;
                         case RoadEnvironment.RIGHT:
-                            if (direction == exitDirect) {
+                            if (direction == exitDirect) {// not making a turn
+//                                currentCar.setTurning(false);
                                 if (newCell >= nextRoad.getRoadXLen() + roadXLen) {
-                                    // add car to next road over
+                                    // TO ADD: add car to next road over because crossed junction
                                     currentRoad.clearRoadCell(x, y);
                                 } else {//car lands in junction
                                     newCell -= roadXLen;
                                     currentRoad.clearRoadCell(x, y);
-                                    
-                                    nextRoad.setRoadCell(newCell, y, currentCar);
-//                            currentCar.setLocation(new Point(newCell, y));
+
+                                    nextRoad.setRoadCell(newCell, nextRoadYCoOrd, currentCar);
                                 }
-                            } else {
-                                turningPt = getTurningPt(direction, exitDirect, currentCell, nextRoad);
-                                
-                                
-//                                if (newCell >= turningPt.x) {
-//                                    
-//                                }else{
-//                                    
-//                                }
+                            } else {// turning 
+
+                                turningPt = getTurningPt(direction, exitDirect, y, nextRoad);
+//                                System.out.print("turn x:" + turningPt.x);
+
+                                int dToTurnPt = turningPt.x + currentRoad.getRoadXLen();
+//                                System.out.print("dTurn:" + dToTurnPt);
+
+                                currentV = braking(currentV, dToTurnPt);
+                                newCell = driving(currentCell, currentV, direction);
+//                                System.out.println(" /newCell:" + newCell);
+                                newCell -= roadXLen;
+
+                                currentCar.setSpeed(currentV);
+//                                currentCar.setTurning(true);
+
+                                if (newCell < turningPt.x) {
+//                                    currentCar.setTurning(true);
+//                                    newCell -= roadXLen;
+                                    currentRoad.clearRoadCell(x, y);
+                                    nextRoad.setRoadCell(newCell, nextRoadYCoOrd, currentCar);
+                                } else {
+                                    currentCar.setTurning(true);
+
+                                    currentCar.setDirection(exitDirect);
+                                    currentRoad.clearRoadCell(x, y);
+                                    nextRoad.setRoadCell(turningPt.x, nextRoadYCoOrd, currentCar);
+//                                    nextRoad.setRoadCell(newCell, nextRoadYCoOrd, currentCar);
+                                }
                             }
                             break;
                     }
@@ -482,12 +691,12 @@ public class AutomatonModel {
 
                     switch (direction) {
                         case RoadEnvironment.UP:
-                            if (newCell < 0) {
+                            if (newCell < 0) {//car will still land in junction
                                 newCell += nextRoad.getRoadYLen();
 
                                 currentRoad.clearRoadCell(x, y);
-                                nextRoad.setRoadCell(nextRoadXCoOrd, newCell, currentCar);
-                            } else {
+                                nextRoad.setRoadCell(x, newCell, currentCar);
+                            } else {//car stays on road
                                 currentRoad.clearRoadCell(x, y);
                                 currentRoad.setRoadCell(x, newCell, currentCar);
                             }
@@ -504,19 +713,8 @@ public class AutomatonModel {
                             }
                             break;
                         case RoadEnvironment.LEFT:
-                            if (newCell < 0) {
+                            if (newCell < 0) {//car will still land in junction
                                 newCell += nextRoad.getRoadXLen();
-
-                                currentRoad.clearRoadCell(x, y);
-                                nextRoad.setRoadCell(newCell, nextRoadYCoOrd, currentCar);
-                            } else {
-                                currentRoad.clearRoadCell(x, y);
-                                currentRoad.setRoadCell(newCell, y, currentCar);
-                            }
-                            break;
-                        case RoadEnvironment.RIGHT:
-                            if (newCell >= roadXLen) {//car will still land in junction
-                                newCell -= roadXLen;
 
                                 currentRoad.clearRoadCell(x, y);
                                 nextRoad.setRoadCell(newCell, nextRoadYCoOrd, currentCar);
@@ -524,6 +722,36 @@ public class AutomatonModel {
                                 currentRoad.clearRoadCell(x, y);
                                 currentRoad.setRoadCell(newCell, y, currentCar);
                             }
+                            break;
+                        case RoadEnvironment.RIGHT:
+
+                            if (newCell >= roadXLen) {//car will still land in junction
+                                newCell -= roadXLen;
+                                if (direction == exitDirect) {
+//                                    currentCar.setTurning(false);
+                                    currentRoad.clearRoadCell(x, y);
+                                    nextRoad.setRoadCell(newCell, nextRoadYCoOrd, currentCar);
+                                } else {
+                                    turningPt = getTurningPt(direction, exitDirect, y, nextRoad);
+//                                    currentCar.setTurning(true);
+
+                                    if (newCell < turningPt.x) {
+                                        currentRoad.clearRoadCell(x, y);
+                                        nextRoad.setRoadCell(newCell, nextRoadYCoOrd, currentCar);
+                                    } else {
+                                        currentCar.setTurning(true);
+                                        
+                                        currentCar.setDirection(exitDirect);
+                                        currentRoad.clearRoadCell(x, y);
+
+                                        nextRoad.setRoadCell(turningPt.x, nextRoadYCoOrd, currentCar);
+                                    }
+                                }
+                            } else {//car stays on road
+                                currentRoad.clearRoadCell(x, y);
+                                currentRoad.setRoadCell(newCell, y, currentCar);
+                            }
+
                             break;
                     }
                 }
@@ -592,52 +820,30 @@ public class AutomatonModel {
 
                 switch (exitDirect) {
                     case RoadEnvironment.UP:
-                        if (entrRoad.getRoadYLen() > 1) {
-                            if (exitRoad.getRoadXLen() > 1) {
-                                for (int i = 0; i < exitRoad.getRoadXLen(); i++) {
-                                    if (i > entrRoad.getRoadYLen()) {
-                                        exitXCoOrd = entrRoad.getRoadYLen() - 1;
-                                    } else {
-                                        exitXCoOrd = i;
-                                    }
-                                }
-
-                            }
+                        if (currentLane < exitRoad.getRoadXLen()) {
+                            exitXCoOrd = currentLane;
+                        } else {
+//                            System.out.println("x");
+                            exitXCoOrd = exitRoad.getRoadXLen() - 1;
                         }
                         turningPt = new Point(exitXCoOrd, exitYCoOrd);
                         break;
                     case RoadEnvironment.DOWN:
-
-//                    case RoadEnvironment.LEFT:
-//                    case RoadEnvironment.RIGHT:
+                        int xBound = junct.getRoadXLen() - exitRoad.getRoadXLen();
+//                        System.out.print("/xBound:" + xBound);
+                        if (currentLane < exitRoad.getRoadXLen()) {
+                            exitXCoOrd = junct.getEntr(RoadEnvironment.UP).getRoadXLen() + (exitRoad.getRoadXLen() - currentLane - 1);
+                        } else {
+                            exitXCoOrd = xBound;
+//                            System.out.println("x");
+                        }
+                        turningPt = new Point(exitXCoOrd, exitYCoOrd);
                         break;
                 }
                 break;
         }
 
         return turningPt;
-    }
-
-    public void addToJunction(Vehicle currentCar) {
-        int currentDirect = currentCar.getDirection();
-        int exitDirect = currentCar.getExit();
-        if (exitDirect == currentDirect) {// car isn't turning
-            switch (exitDirect) {
-                case RoadEnvironment.UP:
-                case RoadEnvironment.DOWN:
-                case RoadEnvironment.LEFT:
-                case RoadEnvironment.RIGHT:
-                    break;
-            }
-        } else {
-            switch (exitDirect) {
-                case RoadEnvironment.UP:
-                case RoadEnvironment.DOWN:
-                case RoadEnvironment.LEFT:
-                case RoadEnvironment.RIGHT:
-                    break;
-            }
-        }
     }
 
     public boolean chckTravesalClearance(RoadInt nextRoad, RoadInt currentRoad, int direction) {
@@ -651,18 +857,19 @@ public class AutomatonModel {
                     for (int y = nextRoad.getRoadYLen() - 1; y > -1; y--) {
                         if (nextRoad.getRoadCell(x, y) != null) {
                             int nextDirect = nextRoad.getRoadCell(x, y).getDirection();
-//                            int nextRoadXCoOrd = nextRoad.getRoadXLen() - currentRoad.getRoadXLen();
-
-                            if (nextDirect == RoadEnvironment.LEFT) {
-                                clearance = false;
-                            }
-
-                            if (x < currentRoad.getRoadXLen()) {
-                                if (nextDirect == RoadEnvironment.RIGHT) {
+//                            boolean turning = nextRoad.getRoadCell(x, y).getTurning();
+//                            if (turning == false) {
+                                if (nextDirect == RoadEnvironment.LEFT) {
                                     clearance = false;
                                 }
+
+                                if (x < currentRoad.getRoadXLen()) {
+                                    if (nextDirect == RoadEnvironment.RIGHT) {
+                                        clearance = false;
+                                    }
+                                }
                             }
-                        }
+//                        }
                     }
                 }
 
@@ -674,16 +881,18 @@ public class AutomatonModel {
                         if (nextRoad.getRoadCell(x, y) != null) {
                             int nextDirect = nextRoad.getRoadCell(x, y).getDirection();
                             int nextRoadXCoOrd = nextRoad.getRoadXLen() - currentRoad.getRoadXLen();
-
-                            if (nextDirect == RoadEnvironment.RIGHT) {
-                                clearance = false;
-                            }
-
-                            if (x > nextRoadXCoOrd) {
-                                if (nextDirect == RoadEnvironment.LEFT) {
+//                            boolean turning = nextRoad.getRoadCell(x, y).getTurning();
+//                            if (turning == false) {
+                                if (nextDirect == RoadEnvironment.RIGHT) {
                                     clearance = false;
                                 }
-                            }
+
+                                if (x > nextRoadXCoOrd) {
+                                    if (nextDirect == RoadEnvironment.LEFT) {
+                                        clearance = false;
+                                    }
+                                }
+//                            }
                         }
                     }
                 }
@@ -696,14 +905,17 @@ public class AutomatonModel {
                         if (nextRoad.getRoadCell(x, y) != null) {
                             int nextDirect = nextRoad.getRoadCell(x, y).getDirection();
                             int nextRoadYCoOrd = nextRoad.getRoadYLen() - currentRoad.getRoadYLen();
-
-                            if (nextDirect == RoadEnvironment.DOWN) {
-                                clearance = false;
-                            }
-                            if (y > nextRoadYCoOrd) {
-                                System.out.println(nextRoadYCoOrd);
-                                if (nextDirect == RoadEnvironment.UP) {
+                            boolean turning = nextRoad.getRoadCell(x, y).getTurning();
+                            
+                            if (turning == false) {
+                                if (nextDirect == RoadEnvironment.DOWN){// && turning == false) {
                                     clearance = false;
+                                }
+                                if (y >= nextRoadYCoOrd) {
+//                                System.out.println(nextRoadYCoOrd);
+                                    if (nextDirect == RoadEnvironment.UP){// && turning == false) {
+                                        clearance = false;
+                                    }
                                 }
                             }
                         }
@@ -717,16 +929,22 @@ public class AutomatonModel {
                     for (int x = 0; x < nextRoad.getRoadXLen(); x++) {
                         if (nextRoad.getRoadCell(x, y) != null) {
                             int nextDirect = nextRoad.getRoadCell(x, y).getDirection();
-                            //  up: all cells
-                            if (nextDirect == RoadEnvironment.UP) {
-                                clearance = false;
-                            }
-                            // down: from y = 0 to y = end of this road 
-                            if (y < currentRoad.getRoadYLen()) {
-                                if (nextDirect == RoadEnvironment.DOWN) {
+//                            Point turningPt = getTurningPt(RoadEnvironment.RIGHT,RoadEnvironment.DOWN,y,nextRoad);
+//                            System.out.println(turningPt);
+//                            boolean turning = nextRoad.getRoadCell(x, y).getTurning();
+//                            if (turning == false) {
+                                //  up: all cells
+                                if (nextDirect == RoadEnvironment.UP){// && turning == false) {
                                     clearance = false;
                                 }
-                            }
+                                // down: from y = 0 to y = end of this road 
+                                // the point isn't the turning point
+                                if (y < currentRoad.getRoadYLen() -1) {
+                                    if (nextDirect == RoadEnvironment.DOWN){// && turning == false) {
+                                        clearance = false;
+                                    }
+                                }
+//                            }
                         }
                     }
                 }
