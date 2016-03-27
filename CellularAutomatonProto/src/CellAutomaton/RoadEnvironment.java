@@ -71,21 +71,21 @@ public class RoadEnvironment implements ActionListener {
     public void updateRoads() {
         // To demonstrate stoplights, will be removed later
 
-//        boolean stopSwitch = false;
-//        if (stopCounter > 50) {
-//            stopSwitch = true;
-//            stopCounter = 0;
-//        }
-//
-//        for (OneWayRoad road : roadArray) {
-//
-//            if (stopSwitch) {
-//                model.switchLightRoad(road);
-//                for (Junction junct: junctArray){
-//                    junct.switchXTravel();
-//                }
-//            }
-//        }
+        boolean stopSwitch = false;
+        if (stopCounter > 50) {
+            stopSwitch = true;
+            stopCounter = 0;
+        }
+
+        for (OneWayRoad road : roadArray) {
+
+            if (stopSwitch) {
+                model.switchLightRoad(road);
+                for (Junction junct: junctArray){
+                    junct.switchXTravel();
+                }
+            }
+        }
 
         for (OneWayRoad road : roadArray) {
             int direction = road.getDirection();
