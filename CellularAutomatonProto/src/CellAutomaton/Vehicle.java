@@ -16,8 +16,9 @@ public class Vehicle {
     private int length;
     private int speed;
     private boolean isChecked;
-    private int direction;// direction of the road the cars is on/ just left
-    private int exit;
+    private int direction;// direction the car is currently travelling in 
+    private int exit;// exit the car wants to take at the next junction
+    private int previousDirect;// direction the cars was travelling in before turning
     private boolean turning;
     private Point location;
     // behaviour? 
@@ -28,6 +29,14 @@ public class Vehicle {
         this.speed = speed;
         isChecked = false;
         turning = false;
+    }
+    
+    public int getPreviousDirect(){
+        return previousDirect;
+    }
+    
+    public void setPreviousDirect(int newDirect){
+        previousDirect = newDirect;
     }
     
     public boolean getTurning(){
