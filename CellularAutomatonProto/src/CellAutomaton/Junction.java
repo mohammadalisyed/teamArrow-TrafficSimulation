@@ -18,14 +18,13 @@ public class Junction implements RoadInt {
     private OneWayRoad[] entrRoads;
     private OneWayRoad[] exitRoads;
 
-    private Boolean xTravel;// junction is open to cars entering from horizontally
+//    private Boolean xTravel;// junction is open to cars entering from horizontally
     private int x;
     private int y;
     private int width;
     private int height;
-    
-//    private int clearanceTime;
 
+//    private int clearanceTime;
     public Junction(int x, int y,
             OneWayRoad[] exitRoads, OneWayRoad[] entrRoads, int width, int height) {
         this.x = x;
@@ -40,12 +39,12 @@ public class Junction implements RoadInt {
 
     }
 
-    public OneWayRoad getExit(int direction) {
-        return exitRoads[direction];
+    public OneWayRoad getExit(int exitDirect) {
+        return exitRoads[exitDirect];
     }
 
-    public OneWayRoad getEntr(int entrDirection) {
-        return entrRoads[entrDirection];
+    public OneWayRoad getEntr(int entrDirect) {
+        return entrRoads[entrDirect];
     }
 
     @Override
@@ -87,11 +86,11 @@ public class Junction implements RoadInt {
         }
         return carLst;
     }
-    
-    public int getMaxV(int direction){
+
+    public int getMaxV(int direction) {
         int maxV = 1;
         RoadInt entRoad = getEntr(direction);
-        if (entRoad != null){
+        if (entRoad != null) {
             maxV = entRoad.getMaxV(direction);
         }
         return maxV;
@@ -117,37 +116,48 @@ public class Junction implements RoadInt {
         return height;
     }
 
+    @Override
     public Vehicle getRoadCell(int x, int y) {
         return junct[x][y];
 
     }
 
+    @Override
     public void clearRoadCell(int x, int y) {
         junct[x][y] = null;
     }
 
+    @Override
     public void setRoadCell(int x, int y, Vehicle newV) {
         junct[x][y] = newV;
     }
 
-    public boolean getXTravel() {
-        return xTravel;
-    }
+//    public boolean getXTravel() {
+//        return xTravel;
+//    }
+//
+//    public void setXTravel(boolean newBool) {
+//        xTravel = newBool;
+//    }
 
-    public void setXTravel(boolean newBool) {
-        xTravel = newBool;
-    }
-    
-    public boolean getStopLight(){
+    @Override
+    public boolean getStopLight() {
         return false;
     }
-
-    public void switchXTravel() {
-        if (xTravel) {
-            xTravel = false;
-        } else {
-            xTravel = true;
+    
+    public void switchStopLights(){
+        for (OneWayRoad road : entrRoads) {
+            road.switchLightRoad();
         }
+        
     }
+
+//    public void switchXTravel() {
+//        if (xTravel) {
+//            xTravel = false;
+//        } else {
+//            xTravel = true;
+//        }
+//    }
 
 }
