@@ -21,6 +21,7 @@ public class Vehicle {
     private int previousDirect;// direction the cars was travelling in before turning
     private boolean turning;
     private Point location;
+    private Point exitTurningPt;
     // behaviour? 
     // type? normal car/van or bus/taxi or emergency services?
 
@@ -29,6 +30,14 @@ public class Vehicle {
         this.speed = speed;
         isChecked = false;
         turning = false;
+    }
+    
+    public Point getExitTurningPt(){
+        return exitTurningPt;
+    }
+    
+    public void setExitTuringPt(Point newPt){
+        exitTurningPt = newPt;
     }
     
     public int getPreviousDirect(){
