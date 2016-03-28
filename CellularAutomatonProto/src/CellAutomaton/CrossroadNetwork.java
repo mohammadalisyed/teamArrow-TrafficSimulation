@@ -63,7 +63,7 @@ public class CrossroadNetwork extends RoadNetworkTemplate {
 //        eastRoadL.setStopLight(true);
 //        westRoadR.setStopLight(true);
 
-        crossroad.setXTravel(true);
+//        crossroad.setXTravel(true);
 
         //populate road list
         roadArray.add(northRoadU);

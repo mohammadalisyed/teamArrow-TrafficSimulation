@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author Alexander
  */
-public class OneWayRoad implements RoadInt{
+public class OneWayRoad implements RoadInt {
 
     private int maxV = 5;
     private int roadXLen;
@@ -46,25 +46,41 @@ public class OneWayRoad implements RoadInt{
             }
         }
     }
-    
-    public Junction getExit(int direction){
+
+    public Junction getExit(int direction) {
         return exit;
     }
-    
-    public RoadInt getEntr(int direction){
+
+    public RoadInt getEntr(int direction) {
         return entr;
     }
-    
-    public void setExit(Junction newExit){
+
+    public void setExit(Junction newExit) {
         exit = newExit;
     }
-    
-    public void setEntr(Junction newEntr){
+
+    public void setEntr(Junction newEntr) {
         entr = newEntr;
     }
 
     public int getDirection() {
         return direction;
+    }
+
+    public ArrayList<Vehicle> getVehicleLst() {
+        ArrayList<Vehicle> carLst = new ArrayList<Vehicle>();
+
+
+        for (int y = 0; y < roadYLen; y++) {
+            for (int x = 0; x < roadXLen; x++) {
+                if (road[x][y] != null) {
+                    Vehicle newCar = getRoadCell(x, y);
+                    newCar.setLocation(new Point(x + roadX, y + roadY));
+                    carLst.add(newCar);
+                }
+            }
+        }
+        return carLst;
     }
 
     public ArrayList<Point> getPointList() {
@@ -94,6 +110,14 @@ public class OneWayRoad implements RoadInt{
 
     public void setStopLight(boolean stop) {
         stopLight = stop;
+    }
+
+    public void switchLightRoad() {
+        if (getStopLight()) {
+            setStopLight(false);
+        } else {
+            setStopLight(true);
+        }
     }
 
     public int getRoadXLen() {

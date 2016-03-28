@@ -18,7 +18,7 @@ public class Junction implements RoadInt {
     private OneWayRoad[] entrRoads;
     private OneWayRoad[] exitRoads;
 
-    private Boolean xTravel;// junction is open to cars entering from horizontally
+//    private Boolean xTravel;// junction is open to cars entering from horizontally
     private int x;
     private int y;
     private int width;
@@ -132,25 +132,32 @@ public class Junction implements RoadInt {
         junct[x][y] = newV;
     }
 
-    public boolean getXTravel() {
-        return xTravel;
-    }
-
-    public void setXTravel(boolean newBool) {
-        xTravel = newBool;
-    }
+//    public boolean getXTravel() {
+//        return xTravel;
+//    }
+//
+//    public void setXTravel(boolean newBool) {
+//        xTravel = newBool;
+//    }
 
     @Override
     public boolean getStopLight() {
         return false;
     }
-
-    public void switchXTravel() {
-        if (xTravel) {
-            xTravel = false;
-        } else {
-            xTravel = true;
+    
+    public void switchStopLights(){
+        for (OneWayRoad road : entrRoads) {
+            road.switchLightRoad();
         }
+        
     }
+
+//    public void switchXTravel() {
+//        if (xTravel) {
+//            xTravel = false;
+//        } else {
+//            xTravel = true;
+//        }
+//    }
 
 }

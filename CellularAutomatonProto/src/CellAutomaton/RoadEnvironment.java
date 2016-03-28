@@ -77,14 +77,14 @@ public class RoadEnvironment implements ActionListener {
             stopCounter = 0;
         }
 
-        for (OneWayRoad road : roadArray) {
+//        for (OneWayRoad road : roadArray) {
 
             if (stopSwitch) {
-                model.switchLightRoad(road);
+//                model.switchLightRoad(road);
                 for (Junction junct: junctArray){
-                    junct.switchXTravel();
+                    junct.switchStopLights();
                 }
-            }
+//            }
         }
 
         for (OneWayRoad road : roadArray) {
@@ -112,9 +112,9 @@ public class RoadEnvironment implements ActionListener {
         }
 
         for (OneWayRoad road : networkEntr) {
-//            if (inputCounter > 100){
-//                model.addCar(road);
-//                inputCounter = 0;               
+//            if (inputCounter > 3){
+//                model.addCarToRoad(road);
+//                              
 //            }
             model.addCarToRoad(road);
 
@@ -127,6 +127,9 @@ public class RoadEnvironment implements ActionListener {
 //            model.addCarJ(crossroad, new Point(2, 4), LEFT);
 //            model.addCarJ(crossroad, new Point(1, 4), LEFT);
         }
+//        if (inputCounter > 3){
+//            inputCounter = 0;
+//        }
 
         for (Junction junct : junctArray) {
             model.updateJunct(junct);

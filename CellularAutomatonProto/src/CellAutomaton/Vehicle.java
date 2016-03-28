@@ -17,7 +17,7 @@ public class Vehicle {
     private int speed;
     private boolean isChecked;
     private int direction;// direction of the road the cars is on/ just left
-//    private int exit;
+    private int exit;
     private boolean turning;
     private Point location;
     // behaviour? 
@@ -38,13 +38,13 @@ public class Vehicle {
         turning = newBool;
     }
     
-//    public int getExit() {
-//        return exit;
-//    }
-//
-//    public void setExit(int exit) {
-//        this.exit = exit;
-//    }
+    public int getExit() {
+        return exit;
+    }
+
+    public void setExit(int exit) {
+        this.exit = exit;
+    }
     
     public Point getLocation(){
         return location;
