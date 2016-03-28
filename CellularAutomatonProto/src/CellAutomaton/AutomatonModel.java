@@ -123,12 +123,23 @@ public class AutomatonModel {
 
                             switch (direction) {
                                 case RoadEnvironment.UP:
-                                    driveCar(RoadEnvironment.UP, junct, x, y);
+                                    if (turning == false) {
+                                        driveCar(RoadEnvironment.UP, junct, x, y);
+                                    } else //RIGHT to UP? 
+                                    {
+                                        if (currentCar.getPreviousDirect() == RoadEnvironment.LEFT) {
+
+                                        } else {
+                                            driveCar(RoadEnvironment.UP, junct, x, y);
+                                        } //LEFT to UP}
+                                    }
                                     break;
                                 case RoadEnvironment.DOWN:
                                     if (turning == false) {
                                         driveCar(RoadEnvironment.DOWN, junct, x, y);
-                                    } else {
+                                    } else if (currentCar.getPreviousDirect() == RoadEnvironment.RIGHT) {
+                                        //RIGHT to DOWN
+                                        //LEFT to DOWN
 //                                        is there enough time to pass without interrupting LEFT traffic if it exists?
 //                                        Point currentPt = new Point(x, y);
 //                                        Point turningPt = getTurningPt(direction, exitDirect, x, junct);
@@ -171,13 +182,21 @@ public class AutomatonModel {
                                         if (leftIncoming == false) {
                                             driveCar(RoadEnvironment.DOWN, junct, x, y);
                                         }
+                                    } else {
+                                        driveCar(RoadEnvironment.DOWN, junct, x, y);
                                     }
                                     break;
                                 case RoadEnvironment.LEFT:
-                                    driveCar(RoadEnvironment.LEFT, junct, x, y);
+                                    if (turning == false) {
+                                        driveCar(RoadEnvironment.LEFT, junct, x, y);
+                                    } else {
+                                    }
                                     break;
                                 case RoadEnvironment.RIGHT:
-                                    driveCar(RoadEnvironment.RIGHT, junct, x, y);
+                                    if (turning == false) {
+                                        driveCar(RoadEnvironment.RIGHT, junct, x, y);
+                                    } else {
+                                    }
                                     break;
 
                             }
@@ -374,6 +393,7 @@ public class AutomatonModel {
                 currentCar.setSpeed(currentV);
                 currentCar.setIsChecked(true);
 //                currentCar.setDirection(direction);
+//                currentCar.setPreviousDirect(direction);
 //                currentCar.setExit(direction);
 
                 //              // will the car drive past the end of the road? 
@@ -968,6 +988,7 @@ public class AutomatonModel {
                                             x, y, currentCell, newCell, currentCar,
                                             currentV, nextCarCell);
                                 }
+//                                currentCar.setTurning(false);
                                 break;
                             case RoadEnvironment.DOWN:// cars turning DOWN from RIGHT may have to cross moving traffic
                                 if (nextRoad.getEntr(RoadEnvironment.UP) != null) {//DOWN turning traffic crosses an UP road
@@ -982,10 +1003,10 @@ public class AutomatonModel {
                                             if (nextCarPt == null) {// There isn't a car in this car's path
                                                 crossWithNoBlockAhead(currentRoad, nextRoad, direction, x, y,
                                                         currentCell, newCell, currentCar, currentV);
-                                            } else {// car in the way
-                                                crossWithBlockAhead(currentRoad, nextRoad, direction,
-                                                        x, y, currentCell, newCell, currentCar,
-                                                        currentV, nextCarCell);
+//                                            } else {// car in the way
+//                                                crossWithBlockAhead(currentRoad, nextRoad, direction,
+//                                                        x, y, currentCell, newCell, currentCar,
+//                                                        currentV, nextCarCell);
                                             }
 //                                            }
                                         }
@@ -1016,6 +1037,7 @@ public class AutomatonModel {
                 //RIGHT: turning down
                 //} else {}
                 //y//n
+                currentCar.setPreviousDirect(direction);
             }
 
 //            if (clearJunction) {// junction is clear for travesal
