@@ -71,14 +71,14 @@ public class AutomatonModel {
 //                car.setLocation(new Point(lane, roadYLen - 1));
                 car.setDirection(road.getDirection());
 //                car.setExit(RoadEnvironment.UP);
-//                if (lane == 0) {
-//                    car.setExit(RoadEnvironment.LEFT);
-//                } else if (lane < roadXLen - 1) {
-//                    car.setExit(RoadEnvironment.UP);
-//                } else {
-//                    car.setExit(RoadEnvironment.RIGHT);
-//                }
-                car.setExit(RoadEnvironment.LEFT);
+                if (lane == 0) {
+                    car.setExit(RoadEnvironment.LEFT);
+                } else if (lane < roadXLen - 1) {
+                    car.setExit(RoadEnvironment.UP);
+                } else {
+                    car.setExit(RoadEnvironment.RIGHT);
+                }
+//                car.setExit(RoadEnvironment.RIGHT);
 
                 road.setRoadCell(lane, roadYLen - 1, car);
                 break;
@@ -167,7 +167,8 @@ public class AutomatonModel {
                                         junctionTurning(direction, junct, x, y, turningPt);
                                     } else if (currentCar.getPreviousDirect() == RoadEnvironment.LEFT) {//LEFT to DOWN
                                         driveCar(RoadEnvironment.DOWN, junct, x, y);
-                                    } else {} 
+                                    } else {
+                                    }
 //                                    else {
 //                                    } else (currentCar.getPreviousDirect() == RoadEnvironment.DOWN){
 //                                        System.out.println("came from DOWN");
@@ -179,7 +180,7 @@ public class AutomatonModel {
                                     } else if (currentCar.getPreviousDirect() == RoadEnvironment.DOWN) {
                                         junctionTurning(direction, junct, x, y, turningPt);
                                     } else if (currentCar.getPreviousDirect() == RoadEnvironment.UP) {
-                                        System.out.println("/x:"+x+"/y:"+y);
+                                        System.out.println("/x:" + x + "/y:" + y);
                                         driveCar(RoadEnvironment.LEFT, junct, x, y);
                                     }
                                     break;
@@ -196,7 +197,7 @@ public class AutomatonModel {
 
                             }
                         } else {
-                            
+
 //                            Point turningPt = currentCar.getExitTurningPt();
                             switch (direction) {
 
@@ -281,6 +282,23 @@ public class AutomatonModel {
                 }
                 break;
             case RoadEnvironment.RIGHT:
+                boolean downIncoming = false;
+                boolean downStopped;
+
+                if (junct.getEntr(RoadEnvironment.DOWN) != null) {//road outputting UP traffic into this junction exists
+                    RoadInt downRoad = junct.getEntr(RoadEnvironment.DOWN);
+                    downStopped = downRoad.getStopLight();
+
+                    if (x == (turningPt.x)) {//waiting to cross UP traffic
+
+                        if (downStopped == false) {
+                            downIncoming = !downRoad.getPointList().isEmpty();
+                        }
+                    }
+                }
+                if (downIncoming == false) {
+                    driveCar(RoadEnvironment.RIGHT, junct, x, y);
+                }
                 break;
         }
     }
@@ -712,13 +730,13 @@ public class AutomatonModel {
         switch (direction) {//move car
             case RoadEnvironment.UP:
                 if (direction == exitDirect) {
-                if (newCell < 0 - nextRoad.getRoadYLen()) {
-                    currentRoad.clearRoadCell(x, y);
-                } else {
-                    newCell += nextRoad.getRoadYLen();
-                    currentRoad.clearRoadCell(x, y);
-                    nextRoad.setRoadCell(nextRoadXCoOrd, newCell, currentCar);
-                }
+                    if (newCell < 0 - nextRoad.getRoadYLen()) {
+                        currentRoad.clearRoadCell(x, y);
+                    } else {
+                        newCell += nextRoad.getRoadYLen();
+                        currentRoad.clearRoadCell(x, y);
+                        nextRoad.setRoadCell(nextRoadXCoOrd, newCell, currentCar);
+                    }
                 } else {
                     turningPt = getTurningPt(direction, exitDirect, x, nextRoad);
 
@@ -755,7 +773,7 @@ public class AutomatonModel {
                     currentV = braking(currentV, dToTurnPt);
                     newCell = driving(currentCell, currentV, direction);
                     newCell -= roadYLen;
-                    System.out.println("/new cell:"+newCell);
+                    System.out.println("/new cell:" + newCell);
 
                     currentCar.setSpeed(currentV);
                     currentCar.setTurning(true);
@@ -869,14 +887,14 @@ public class AutomatonModel {
 
                     if (direction == exitDirect) {
 
-                    currentRoad.clearRoadCell(x, y);
-                    nextRoad.setRoadCell(x, newCell, currentCar);
+                        currentRoad.clearRoadCell(x, y);
+                        nextRoad.setRoadCell(x, newCell, currentCar);
                     } else {
                         //
                         turningPt = getTurningPt(direction, exitDirect, x, nextRoad);
                         currentCar.setTurning(true);
                         currentCar.setExitTuringPt(turningPt);
-                        System.out.println("/new :"+newCell);
+                        System.out.println("/new :" + newCell);
 
                         moveIntoTurningPt((newCell > turningPt.y),
                                 currentRoad, nextRoad, x, y, nextRoadXCoOrd, newCell, currentCar, turningPt);
@@ -1090,6 +1108,27 @@ public class AutomatonModel {
                         turningPt = getTurningPt(direction, exitDirect, x, nextRoad);
                         switch (exitDirect) {
                             case RoadEnvironment.RIGHT: //cars turning right from UP cross down traffic
+                                if (nextRoad.getEntr(RoadEnvironment.LEFT) != null) {
+                                    turningPt = getTurningPt(direction, exitDirect, x, nextRoad);
+                                    Vehicle turningCell = nextRoad.getRoadCell(turningPt.x, turningPt.y);
+                                    boolean crossIntoJunct = ((clearJunction) && (turningCell == null) && (nextCarPt == null));
+
+                                    if (crossIntoJunct) {
+                                        crossWithNoBlockAhead(currentRoad, nextRoad, direction, x, y,
+                                                currentCell, newCell, currentCar, currentV);
+                                    } else {
+                                        travesalBlocked(currentRoad, direction,
+                                                x, y, currentCell, newCell, currentCar, currentV);
+                                    }
+
+                                } else if (nextCarPt == null) {// There isn't a car in this car's path
+                                    crossWithNoBlockAhead(currentRoad, nextRoad, direction, x, y,
+                                            currentCell, newCell, currentCar, currentV);
+                                } else {// car in the way
+                                    crossWithBlockAhead(currentRoad, nextRoad, direction,
+                                            x, y, currentCell, newCell, currentCar,
+                                            currentV, nextCarCell);
+                                }
                                 break;
                             case RoadEnvironment.LEFT:
                                 if (nextCarPt == null) {// There isn't a car in this car's path
@@ -1170,8 +1209,7 @@ public class AutomatonModel {
 
                                 } else//DOWN turning traffic does not crosses an UP road (CORNER/T-JUNCT)
                                 //doesn't need to wait for the remenants of previous traffic to pass before moving
-                                {
-                                    if (nextCarPt == null) {// There isn't a car in this car's path
+                                 if (nextCarPt == null) {// There isn't a car in this car's path
                                         crossWithNoBlockAhead(currentRoad, nextRoad, direction, x, y,
                                                 currentCell, newCell, currentCar, currentV);
                                     } else {// car in the way
@@ -1179,7 +1217,6 @@ public class AutomatonModel {
                                                 x, y, currentCell, newCell, currentCar,
                                                 currentV, nextCarCell);
                                     }
-                                }
                                 break;
                             case RoadEnvironment.DOWN:// cars turning DOWN from LEFT never cross moving traffic on a left-hand side traffic netowrk
                                 if (nextCarPt == null) {// There isn't a car in this car's path
@@ -1224,8 +1261,7 @@ public class AutomatonModel {
 
                                 } else//DOWN turning traffic does not crosses an UP road (CORNER/T-JUNCT)
                                 //doesn't need to wait for the remenants of previous traffic to pass before moving
-                                {
-                                    if (nextCarPt == null) {// There isn't a car in this car's path
+                                 if (nextCarPt == null) {// There isn't a car in this car's path
                                         crossWithNoBlockAhead(currentRoad, nextRoad, direction, x, y,
                                                 currentCell, newCell, currentCar, currentV);
                                     } else {// car in the way
@@ -1233,7 +1269,6 @@ public class AutomatonModel {
                                                 x, y, currentCell, newCell, currentCar,
                                                 currentV, nextCarCell);
                                     }
-                                }
                                 break;
 
                         }
@@ -1278,7 +1313,7 @@ public class AutomatonModel {
                             exitYCoOrd = exitRoad.getRoadYLen() - 1;
                         }
                         turningPt = new Point(exitYCoOrd, exitXCoOrd);
-                break;
+                        break;
                     case RoadEnvironment.LEFT:
                         if (currentLane < exitRoad.getRoadYLen()) {//current road and exit road have the same no of lanes
                             exitYCoOrd = (exitRoad.getRoadYLen() - currentLane - 1);
