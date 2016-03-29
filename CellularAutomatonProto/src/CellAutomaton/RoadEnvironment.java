@@ -21,31 +21,39 @@ import java.util.Random;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-public class RoadEnvironment implements ActionListener, KeyListener {
+public class RoadEnvironment implements ActionListener {
 
     public static RoadEnvironment re;
     public JFrame mainFrame;
     public DisplayWindow dw;
-    public Timer timer = new Timer(50, this);
-
-    public ArrayList<Point> carSet = new ArrayList<Point>();
-    public ArrayList<Point> carSet2 = new ArrayList<Point>();
-
-    public Point skyline, veyron, ferrari;
+//    private Timer timer = new Timer(100, this);//50
+    private Timer timer = new Timer(50, this);//
 
     public boolean paused = false;
-    public static final int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3, SCALE = 5;
-    public int direction;
-    public int carLength = 2;
+    public static final int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3;// do not alter
+    public static final int SCALE = 5;
 
-    OneWayRoad westRoad = new OneWayRoad(50, 3, 0, 50);
-    OneWayRoad[] roadArray = new OneWayRoad[1];
-    AutomatonModel model = new AutomatonModel();
+    private RoadNetworkInt roadNet;
+    private ArrayList<OneWayRoad> roadArray;//list of all the roads in the network
+    private ArrayList<Junction> junctArray;//list of all the junctions in the network
+    private ArrayList<OneWayRoad> networkEntr;//list of roads where cars spawn into the network
+    private ArrayList<OneWayRoad> networkExit;//list of roads where cars exit from the network
+
+    AutomatonModel model;
     private int stopCounter;
+    private int inputCounter;
 
-    public RoadEnvironment() {
-        roadArray[0] = westRoad;
+    public RoadEnvironment(RoadNetworkInt roadNet) {
+        this.roadNet = roadNet;
+        roadArray = roadNet.getRoadArray();//list of all the roads in the network
+        junctArray = roadNet.getJunctArray();//list of all the junctions in the network
+        networkEntr = roadNet.getEntrLst();//list of roads where cars spawn into the network
+        networkExit = roadNet.getExitLst();//list of roads where cars exit from the network
+
+        model = new AutomatonModel(networkExit);
+//        
         stopCounter = 0;
+        inputCounter = 0;
 
         mainFrame = new JFrame("Traffic Simulation App.");
         mainFrame.setVisible(true);
@@ -53,41 +61,82 @@ public class RoadEnvironment implements ActionListener, KeyListener {
         mainFrame.setResizable(false);
         mainFrame.add(dw = new DisplayWindow());
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.addKeyListener(this);
         start();
     }
+    
+    public RoadNetworkInt getRoadNetwork(){
+        return roadNet;
+    } 
 
     public void updateRoads() {
         // To demonstrate stoplights, will be removed later
+
         boolean stopSwitch = false;
         if (stopCounter > 50) {
             stopSwitch = true;
             stopCounter = 0;
         }
 
-        for (OneWayRoad road : roadArray) {
+//        for (OneWayRoad road : roadArray) {
 
             if (stopSwitch) {
-                if (road.getStopLight()) {
-                    model.greenLightRoad(road);
-                } else {
-                    model.redLightRoad(road);
+//                model.switchLightRoad(road);
+                for (Junction junct: junctArray){
+                    junct.switchStopLights();
                 }
-            }
-
-            model.addCar(road);
-            model.updateRoad(road);
+//            }
         }
-        
-        
+
+        for (OneWayRoad road : roadArray) {
+            int direction = road.getDirection();
+            model.resetCarsChk(road);
+
+            switch (direction) {
+                case RIGHT:
+                    model.updateRightRoad(road);
+                    break;
+
+                case LEFT:
+                    model.updateCarsLeft(road);
+                    break;
+
+                case UP:
+                    model.updateCarsUp(road);
+                    break;
+
+                case DOWN:
+                    model.updateCarsDown(road);
+                    break;
+            }
+            model.resetCarsChk(road);
+        }
+
+        for (OneWayRoad road : networkEntr) {
+            if (inputCounter > 3){
+                model.addCarToRoad(road);
+                              
+            }
+//            model.addCarToRoad(road);
+
+//            model.addCarJ(crossroad, new Point(1,1), UP);
+//            model.addCarJ(crossroad, new Point(1,0), UP);
+//            model.addCarJ(crossroad, new Point(4, 3), DOWN);
+//            model.addCarJ(crossroad, new Point(4, 4), DOWN);
+//            model.addCarJ(crossroad, new Point(4, 2), RIGHT);
+//            model.addCarJ(crossroad, new Point(5, 2), RIGHT);
+//            model.addCarJ(crossroad, new Point(2, 4), LEFT);
+//            model.addCarJ(crossroad, new Point(1, 4), LEFT);
+        }
+        if (inputCounter > 3){
+            inputCounter = 0;
+        }
+
+        for (Junction junct : junctArray) {
+            model.updateJunct(junct);
+        }
     }
 
     public void start() {
-        direction = DOWN;
-        skyline = new Point(0, -1);
-        veyron = new Point(2, -1);
-        ferrari = new Point(3, -1);
-        carSet.clear();
         timer.start();
     }
 
@@ -96,78 +145,12 @@ public class RoadEnvironment implements ActionListener, KeyListener {
         updateRoads();
         dw.repaint();
         stopCounter++;
-        
-        if (skyline != null && veyron != null && !paused) {
-            carSet.add(new Point(skyline.x, skyline.y));
-            carSet2.add(new Point(veyron.x, veyron.y));
+        inputCounter++;
 
-            if (direction == UP) {
-                skyline = new Point(skyline.x, skyline.y - 1);
-                veyron = new Point(veyron.x, veyron.y - 1);
-
-            }
-            if (direction == DOWN) {
-                skyline = new Point(skyline.x, skyline.y + 1);
-                veyron = new Point(veyron.x, veyron.y + 1);
-            }
-            if (direction == LEFT) {
-                skyline = new Point(skyline.x - 1, skyline.y);
-                veyron = new Point(veyron.x - 1, veyron.y);
-            }
-            if (direction == RIGHT) {
-                skyline = new Point(skyline.x + 1, skyline.y);
-                veyron = new Point(veyron.x + 1, veyron.y);
-            }
-            if (carSet.size() > carLength) {
-                carSet.remove(0);
-            }
-            if (carSet2.size() > carLength) {
-                carSet2.remove(0);
-            }
-        }
-    }
-
-    public boolean noTailAt(int x, int y) {
-        for (Point point : carSet) {
-            if (point.equals(new Point(x, y))) {
-                return false;
-            }
-        }
-        for (Point point : carSet2) {
-            if (point.equals(new Point(x, y))) {
-                return false;
-            }
-        }
-        return true;
     }
 
     public static void main(String[] args) {
-        re = new RoadEnvironment();
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-//		int i = e.getKeyCode();
-//
-//		if ((i == KeyEvent.VK_A || i == KeyEvent.VK_LEFT) && direction != RIGHT)
-//			direction = LEFT;
-//		if ((i == KeyEvent.VK_D || i == KeyEvent.VK_RIGHT) && direction != LEFT)
-//			direction = RIGHT;
-//		if ((i == KeyEvent.VK_W || i == KeyEvent.VK_UP) && direction != DOWN)
-//			direction = UP;
-//		if ((i == KeyEvent.VK_S || i == KeyEvent.VK_DOWN) && direction != UP)
-//			direction = DOWN;
-//		if (i == KeyEvent.VK_SPACE)
-//			start();
-//		if(i== KeyEvent.VK_ENTER)
-//			paused = !paused;
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
+        CrossroadNetwork demo = new CrossroadNetwork();
+        re = new RoadEnvironment(demo);
     }
 }

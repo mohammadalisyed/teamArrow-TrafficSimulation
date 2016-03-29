@@ -18,52 +18,89 @@ public class DisplayWindow extends JPanel {
     public DisplayWindow() {
     }
 
+    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         RoadEnvironment re = RoadEnvironment.re;
-        OneWayRoad[] roadArray = re.roadArray;
-        
+//        ArrayList<OneWayRoad> roadArray = re.roadArray;
+//        ArrayList<Junction> junctArray = re.junctArray;
+
+        ArrayList<OneWayRoad> roadArray = re.getRoadNetwork().getRoadArray();
+        ArrayList<Junction> junctArray = re.getRoadNetwork().getJunctArray();
+
         Graphics2D g2 = (Graphics2D) g.create();
         g2.scale(RoadEnvironment.SCALE, RoadEnvironment.SCALE);
         g2.setStroke(new BasicStroke(0.01f));
 
         for (OneWayRoad road : roadArray) {
-//                    System.out.println("x"+road.getX()+" y"+road.getY()+" w"+road.getRoadLen()*RoadEnvironment.SCALE+" h"+road.getNoOfLanes()*RoadEnvironment.SCALE);
-//                    System.out.println("w:"+road.getNoOfLanes());
-            g2.setColor(Color.BLACK);
-            g2.drawRect(road.getX(), road.getY(), road.getRoadLen(), road.getNoOfLanes());
-//            g.drawRect(road.getX(), road.getY(), road.getRoadLen() * RoadEnvironment.SCALE, road.getNoOfLanes() * RoadEnvironment.SCALE);
 
-            ArrayList<Point> ptLst = road.getPointList();
-            for (Point car : ptLst) {
-                
-                if (road.getStopLight()){
-                g2.setColor(Color.RED);    
-                }else{
-                g2.setColor(Color.BLUE);    
+            g2.setColor(Color.BLACK);
+
+            g2.drawRect(road.getX(), road.getY(), road.getRoadXLen(), road.getRoadYLen());
+
+            ArrayList<Vehicle> carLst = road.getVehicleLst();
+            for (Vehicle car : carLst) {
+                int x = car.getLocation().x;
+                int y = car.getLocation().y;
+                switch (car.getDirection()) {
+
+                    case RoadEnvironment.LEFT:
+                        g2.setColor(Color.BLUE);
+                        break;
+                    case RoadEnvironment.RIGHT:
+                        g2.setColor(Color.CYAN);
+                        break;
+                    case RoadEnvironment.UP:
+                        g2.setColor(Color.MAGENTA);
+                        break;
+                    case RoadEnvironment.DOWN:
+                        g2.setColor(Color.black);
+                        break;
                 }
-                
-                g2.fillRect(car.x, car.y, 1, 1);
+
+                if (car.getTurning()) {
+                    g2.fillRect(x, y, 1, 1);
+                } else {
+                    g2.drawRect(x, y, 1, 1);
+                }
+            }
+        }
+
+        for (Junction junct : junctArray) {
+            g2.setColor(Color.BLACK);
+            g2.drawRect(junct.getX(), junct.getY(), junct.getRoadXLen(), junct.getRoadYLen());
+
+            ArrayList<Vehicle> carLst = junct.getVehicleLst();
+            for (Vehicle car : carLst) {
+                int x = car.getLocation().x;
+                int y = car.getLocation().y;
+                switch (car.getDirection()) {
+
+                    case RoadEnvironment.LEFT:
+                        g2.setColor(Color.BLUE);
+                        break;
+                    case RoadEnvironment.RIGHT:
+                        g2.setColor(Color.CYAN);
+                        break;
+                    case RoadEnvironment.UP:
+                        g2.setColor(Color.MAGENTA);
+                        break;
+                    case RoadEnvironment.DOWN:
+                        g2.setColor(Color.black);
+                        break;
+                }
+
+                if (car.getTurning()) {
+                    g2.fillRect(x, y, 1, 1);
+                } else {
+                    g2.drawRect(x, y, 1, 1);
+                }
 
             }
 
         }
-        
-        g2.dispose();
 
-//        g.setColor(Color.WHITE);
-//        g.setColor(Color.BLUE);
-//
-//        for (Point point : re.carSet) {
-//            for (int x = 0; x <= 250; x++) {
-//                g.fillRect(point.x + RoadEnvironment.SCALE, point.y + RoadEnvironment.SCALE, RoadEnvironment.SCALE, RoadEnvironment.SCALE);
-//            }
-//        }
-//        for (Point point : re.carSet2) {
-//            g.fillRect(point.x * RoadEnvironment.SCALE, point.y * RoadEnvironment.SCALE, RoadEnvironment.SCALE, RoadEnvironment.SCALE);
-//        }
-//        g.fillRect(re.skyline.x + RoadEnvironment.SCALE, re.skyline.y + RoadEnvironment.SCALE, RoadEnvironment.SCALE, RoadEnvironment.SCALE);
-//        g.fillRect(re.veyron.x * RoadEnvironment.SCALE, re.veyron.y * RoadEnvironment.SCALE, RoadEnvironment.SCALE, RoadEnvironment.SCALE);
+        g2.dispose();
     }
 }

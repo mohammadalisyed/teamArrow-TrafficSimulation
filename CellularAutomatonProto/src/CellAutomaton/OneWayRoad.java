@@ -12,46 +12,84 @@ import java.util.ArrayList;
  *
  * @author Alexander
  */
-public class OneWayRoad {
+public class OneWayRoad implements RoadInt {
 
     private int maxV = 5;
-    private int roadLength;
-    private int noOfLanes;
-    private int roadX = 0;
-    private int roadY = 0;
+    private int roadXLen;
+    private int roadYLen;
+    private int roadX;
+    private int roadY;
+    private int direction = RoadEnvironment.LEFT;
+    private Junction exit;
+    private Junction entr;
+
     private Vehicle[][] road;
     private boolean stopLight = false;
 
-    public OneWayRoad(int roadLength, int noOfLanes) {
-        this.roadLength = roadLength;
-        this.noOfLanes = noOfLanes;
-        road = new Vehicle[roadLength][noOfLanes];
-        resetRoad();
-    }
+    public OneWayRoad(int roadXLen, int roadYLen, int roadX, int roadY, int direction) {
+        this.roadXLen = roadXLen;
+        this.roadYLen = roadYLen;
+        this.roadX = roadX;
+        this.roadY = roadY;
 
-    public OneWayRoad(int roadLength, int noOfLanes, int x, int y) {
-        this.roadLength = roadLength;
-        this.noOfLanes = noOfLanes;
-        roadX = x;
-        roadY = y;
-        road = new Vehicle[roadLength][noOfLanes];
-        resetRoad();
+        this.direction = direction;
+        road = new Vehicle[roadXLen][roadYLen];
+//        this.exit = exit;
     }
 
     public void resetRoad() {
-        for (int y = 0; y < noOfLanes; y++) {
-            for (int x = 0; x < roadLength; x++) {
+
+        for (int y = 0; y < roadYLen; y++) {
+            for (int x = 0; x < roadXLen; x++) {
                 road[x][y] = null;
+
             }
         }
     }
 
+    public Junction getExit(int direction) {
+        return exit;
+    }
+
+    public RoadInt getEntr(int direction) {
+        return entr;
+    }
+
+    public void setExit(Junction newExit) {
+        exit = newExit;
+    }
+
+    public void setEntr(Junction newEntr) {
+        entr = newEntr;
+    }
+
+    public int getDirection() {
+        return direction;
+    }
+
+    public ArrayList<Vehicle> getVehicleLst() {
+        ArrayList<Vehicle> carLst = new ArrayList<Vehicle>();
+
+
+        for (int y = 0; y < roadYLen; y++) {
+            for (int x = 0; x < roadXLen; x++) {
+                if (road[x][y] != null) {
+                    Vehicle newCar = getRoadCell(x, y);
+                    newCar.setLocation(new Point(x + roadX, y + roadY));
+                    carLst.add(newCar);
+                }
+            }
+        }
+        return carLst;
+    }
+
     public ArrayList<Point> getPointList() {
         ArrayList<Point> ptLst = new ArrayList<Point>();
-        for (int y = 0; y < noOfLanes; y++) {
-            for (int x = 0; x < roadLength; x++) {
+
+        for (int y = 0; y < roadYLen; y++) {
+            for (int x = 0; x < roadXLen; x++) {
                 if (road[x][y] != null) {
-                    ptLst.add(new Point(roadX + x, roadY + y));
+                    ptLst.add(new Point(x + roadX, y + roadY));
                 }
             }
         }
@@ -74,15 +112,23 @@ public class OneWayRoad {
         stopLight = stop;
     }
 
-    public int getRoadLen() {
-        return roadLength;
+    public void switchLightRoad() {
+        if (getStopLight()) {
+            setStopLight(false);
+        } else {
+            setStopLight(true);
+        }
     }
 
-    public int getNoOfLanes() {
-        return noOfLanes;
+    public int getRoadXLen() {
+        return roadXLen;
     }
 
-    public int getMaxV() {
+    public int getRoadYLen() {
+        return roadYLen;
+    }
+
+    public int getMaxV(int direction) {
         return maxV;
     }
 
@@ -103,8 +149,8 @@ public class OneWayRoad {
     }
 
     public void displayRoad() {
-        for (int y = 0; y < noOfLanes; y++) {
-            for (int x = 0; x < roadLength; x++) {
+        for (int y = 0; y < roadYLen; y++) {
+            for (int x = 0; x < roadXLen; x++) {
                 if (road[x][y] == null) {
                     System.out.print("-");
                 } else {
