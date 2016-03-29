@@ -72,7 +72,7 @@ public class RoadEnvironment implements ActionListener {
         // To demonstrate stoplights, will be removed later
 
         boolean stopSwitch = false;
-        if (stopCounter > 120) {
+        if (stopCounter > 100) {
             stopSwitch = true;
             stopCounter = 0;
         }
@@ -113,9 +113,9 @@ public class RoadEnvironment implements ActionListener {
 
         for (OneWayRoad road : networkEntr) {
             if (inputCounter > 3){
-//                if (road.getDirection()!= LEFT){
+                if (road.getDirection()== DOWN){
                 model.addCarToRoad(road);
-//                }
+                }
             }
 //            model.addCarToRoad(road);
 
