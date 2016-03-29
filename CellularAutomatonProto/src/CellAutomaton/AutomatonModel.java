@@ -166,7 +166,7 @@ public class AutomatonModel {
                                         junctionTurning(direction, junct, x, y, turningPt);
                                     } else if (currentCar.getPreviousDirect() == RoadEnvironment.LEFT) {//LEFT to DOWN
                                         driveCar(RoadEnvironment.DOWN, junct, x, y);
-                                    } 
+                                    } else 
 //                                    else {
 //                                    } else (currentCar.getPreviousDirect() == RoadEnvironment.DOWN){
 //                                        System.out.println("came from DOWN");
@@ -725,7 +725,7 @@ public class AutomatonModel {
 
                     currentV = braking(currentV, dToTurnPt);
                     newCell = driving(currentCell, currentV, direction);
-                    newCell += nextRoad.getRoadXLen();
+                    newCell += nextRoad.getRoadYLen();
 
                     currentCar.setSpeed(currentV);
                     currentCar.setTurning(true);
