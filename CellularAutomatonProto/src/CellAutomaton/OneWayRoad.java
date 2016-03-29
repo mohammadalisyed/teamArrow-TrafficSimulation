@@ -40,13 +40,19 @@ public class OneWayRoad implements RoadInt {
             case RoadEnvironment.UP:
             case RoadEnvironment.DOWN:
                 laneDirect = new int[roadXLen];
+                for (int i = 0; i < roadXLen; i++){
+                    laneDirect[i] = direction;
+                }
                 break;
             case RoadEnvironment.LEFT:
             case RoadEnvironment.RIGHT:
                 laneDirect = new int[roadYLen];
-                break;               
+                for (int i = 0; i < roadYLen; i++){
+                    laneDirect[i] = direction;
+                }
+                break;
+                
         }
-//        this.exit = exit;
     }
 
     public void resetRoad() {
@@ -57,6 +63,9 @@ public class OneWayRoad implements RoadInt {
 
             }
         }
+    }
+    public int getLaneDirect(int i){
+        return laneDirect[i];
     }
     
     public int[] getLaneDirect(){

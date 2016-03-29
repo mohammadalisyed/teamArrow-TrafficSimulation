@@ -30,7 +30,24 @@ public class CrossroadNetwork extends RoadNetworkTemplate {
 
     Junction crossroad;
 
-    public CrossroadNetwork() {       
+    public CrossroadNetwork() {
+        //set lanes
+        northRoadD.setLaneDirect(0, LEFT);
+//        northRoadD.setLaneDirect(1, DOWN);
+        northRoadD.setLaneDirect(2, RIGHT);
+
+        southRoadU.setLaneDirect(0, LEFT);
+//        southRoadU.setLaneDirect(1, DOWN);
+        southRoadU.setLaneDirect(2, RIGHT);
+        
+        westRoadR.setLaneDirect(0,UP);
+//        westRoadR.setLaneDirect(1,RIGHT);
+        westRoadR.setLaneDirect(2,DOWN);
+        
+        eastRoadL.setLaneDirect(0,UP);
+//        eastRoadL.setLaneDirect(1,LEFT);
+        eastRoadL.setLaneDirect(2,DOWN);
+
         //set junction exits
         crossroadExit[UP] = northRoadU;
         crossroadExit[DOWN] = southRoadD;
@@ -42,7 +59,7 @@ public class CrossroadNetwork extends RoadNetworkTemplate {
         crossroadEntr[DOWN] = northRoadD;
         crossroadEntr[LEFT] = eastRoadL;
         crossroadEntr[RIGHT] = westRoadR;
-        
+
         //create junctions
         crossroad = new Junction(50, 50, crossroadExit, crossroadEntr, 6, 6);
 
@@ -64,7 +81,6 @@ public class CrossroadNetwork extends RoadNetworkTemplate {
 //        westRoadR.setStopLight(true);
 
 //        crossroad.setXTravel(true);
-
         //populate road list
         roadArray.add(northRoadU);
         roadArray.add(northRoadD);
