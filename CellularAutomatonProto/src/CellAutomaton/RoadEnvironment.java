@@ -152,6 +152,7 @@ public class RoadEnvironment implements ActionListener {
 
     public static void main(String[] args) {
         CrossroadNetwork demo = new CrossroadNetwork();
-        re = new RoadEnvironment(demo);
+        Roundabout demo2 = new Roundabout();
+        re = new RoadEnvironment(demo2);
     }
 }
