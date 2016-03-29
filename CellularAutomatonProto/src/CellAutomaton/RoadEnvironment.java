@@ -113,7 +113,7 @@ public class RoadEnvironment implements ActionListener {
 
         for (OneWayRoad road : networkEntr) {
             if (inputCounter > 1){
-//                if (road.getDirection()== DOWN){
+//                if (road.getDirection()!= UP){
                 model.addCarToRoad(road);
 //                }
             }
