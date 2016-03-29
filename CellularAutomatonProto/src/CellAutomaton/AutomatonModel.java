@@ -59,11 +59,11 @@ public class AutomatonModel {
                     car.setExit(RoadEnvironment.LEFT);
                 } else {
                     car.setExit(RoadEnvironment.DOWN);
-//                    car.setExit(RoadEnvironment.RIGHT);
                 }
 //                car.setExit(RoadEnvironment.DOWN);
 
-//                car.setExit(RoadEnvironment.LEFT);
+//                car.setExit(RoadEnvironment.UP);
+                
                 road.setRoadCell(roadXLen - 1, lane, car);
                 break;
 
@@ -470,14 +470,17 @@ public class AutomatonModel {
 
             switch (direction) {
                 case RoadEnvironment.UP:
+                    currentCell = y;
+                    dToTurnPt = y + 1;
+                    break;
                 case RoadEnvironment.DOWN:
                     currentCell = y;
                     dToTurnPt = turningPt.y;
                     break;
                 case RoadEnvironment.LEFT:
-//                    currentCell = x;
-//                    dToTurnPt = turningPt.x;
-//                    break;
+                    currentCell = x;
+                    dToTurnPt = x + 1;
+                    break;
                 case RoadEnvironment.RIGHT:
                     currentCell = x;
                     dToTurnPt = turningPt.x;
@@ -696,7 +699,6 @@ public class AutomatonModel {
                 break;
             case RoadEnvironment.RIGHT:
                 if (direction == exitDirect) {// not making a turn
-//                    currentCar.setTurning(false);
 
                     if (newCell >= nextRoad.getRoadXLen() + roadXLen) {
                         // TO ADD: add car to next road over because crossed junction
