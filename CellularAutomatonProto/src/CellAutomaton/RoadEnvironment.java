@@ -26,7 +26,7 @@ public class RoadEnvironment implements ActionListener {
     public static RoadEnvironment re;
     public JFrame mainFrame;
     public DisplayWindow dw;
-//    private Timer timer = new Timer(100, this);//50
+//    private Timer timer = new Timer(75, this);//50
     private Timer timer = new Timer(50, this);//
 
     public boolean paused = false;
@@ -72,7 +72,7 @@ public class RoadEnvironment implements ActionListener {
         // To demonstrate stoplights, will be removed later
 
         boolean stopSwitch = false;
-        if (stopCounter > 50) {
+        if (stopCounter > 100) {
             stopSwitch = true;
             stopCounter = 0;
         }
@@ -112,9 +112,10 @@ public class RoadEnvironment implements ActionListener {
         }
 
         for (OneWayRoad road : networkEntr) {
-            if (inputCounter > 3){
+            if (inputCounter > 1){
+//                if (road.getDirection()== UP){
                 model.addCarToRoad(road);
-                              
+//                }
             }
 //            model.addCarToRoad(road);
 
@@ -127,7 +128,7 @@ public class RoadEnvironment implements ActionListener {
 //            model.addCarJ(crossroad, new Point(2, 4), LEFT);
 //            model.addCarJ(crossroad, new Point(1, 4), LEFT);
         }
-        if (inputCounter > 3){
+        if (inputCounter > 1){
             inputCounter = 0;
         }
 
