@@ -78,7 +78,15 @@ public class AutomatonModel {
                 lane = new Random().nextInt(roadXLen);
 //                car.setLocation(new Point(lane, 0));
                 car.setDirection(road.getDirection());
-                car.setExit(RoadEnvironment.LEFT);
+
+                if (lane == 0) {
+                    car.setExit(RoadEnvironment.LEFT);
+                } else if (lane < roadXLen - 1) {
+                    car.setExit(RoadEnvironment.DOWN);
+                } else {
+                    car.setExit(RoadEnvironment.RIGHT);
+                }
+//                car.setExit(RoadEnvironment.DOWN);
                 road.setRoadCell(lane, 0, car);
                 break;
         }
@@ -160,12 +168,18 @@ public class AutomatonModel {
                                         driveCar(RoadEnvironment.LEFT, junct, x, y);
                                     } else if (currentCar.getPreviousDirect() == RoadEnvironment.DOWN) {
                                         junctionTurning(direction, junct, x, y, turningPt);
+                                    } else if (currentCar.getPreviousDirect() == RoadEnvironment.UP) {
+
                                     }
                                     break;
                                 case RoadEnvironment.RIGHT:
                                     if (turning == false) {
                                         driveCar(RoadEnvironment.RIGHT, junct, x, y);
-                                    } else {
+                                    } else if (currentCar.getPreviousDirect() == RoadEnvironment.UP) {
+                                        
+                                    } else if (currentCar.getPreviousDirect() == RoadEnvironment.DOWN) {
+                                        System.out.println("/FROM RIGHT");
+                                        driveCar(RoadEnvironment.RIGHT, junct, x, y);
                                     }
                                     break;
 
@@ -1038,8 +1052,8 @@ public class AutomatonModel {
 //                        System.out.println(turningPt);
                         switch (exitDirect) {
                             case RoadEnvironment.LEFT:// cars turning left from down may have to cross moving traffic
-                                System.out.println("");
-                                System.out.print("/" + turningPt + "/exitNextRoad/LEFT/");
+//                                System.out.println("");
+//                                System.out.print("/" + turningPt + "/exitNextRoad/LEFT/");
                                 if (nextRoad.getEntr(RoadEnvironment.RIGHT) != null) {
                                     turningPt = getTurningPt(direction, exitDirect, x, nextRoad);
                                     Vehicle turningCell = nextRoad.getRoadCell(turningPt.x, turningPt.y);
@@ -1065,6 +1079,15 @@ public class AutomatonModel {
 
                             case RoadEnvironment.RIGHT:
                                 System.out.print("exitNextRoad/RIGHT/");
+                                if (nextCarPt == null) {// There isn't a car in this car's path
+                                    crossWithNoBlockAhead(currentRoad, nextRoad, direction, x, y,
+                                            currentCell, newCell, currentCar, currentV);
+                                } else {// car in the way
+                                    crossWithBlockAhead(currentRoad, nextRoad, direction,
+                                            x, y, currentCell, newCell, currentCar,
+                                            currentV, nextCarCell);
+                                }
+//                                currentCar.setTurning(false);
                                 break;
 
                         }
@@ -1089,7 +1112,8 @@ public class AutomatonModel {
 
                                 } else//DOWN turning traffic does not crosses an UP road (CORNER/T-JUNCT)
                                 //doesn't need to wait for the remenants of previous traffic to pass before moving
-                                 if (nextCarPt == null) {// There isn't a car in this car's path
+                                {
+                                    if (nextCarPt == null) {// There isn't a car in this car's path
                                         crossWithNoBlockAhead(currentRoad, nextRoad, direction, x, y,
                                                 currentCell, newCell, currentCar, currentV);
                                     } else {// car in the way
@@ -1097,6 +1121,7 @@ public class AutomatonModel {
                                                 x, y, currentCell, newCell, currentCar,
                                                 currentV, nextCarCell);
                                     }
+                                }
                                 break;
                             case RoadEnvironment.DOWN:// cars turning DOWN from LEFT never cross moving traffic on a left-hand side traffic netowrk
                                 if (nextCarPt == null) {// There isn't a car in this car's path
@@ -1141,7 +1166,8 @@ public class AutomatonModel {
 
                                 } else//DOWN turning traffic does not crosses an UP road (CORNER/T-JUNCT)
                                 //doesn't need to wait for the remenants of previous traffic to pass before moving
-                                 if (nextCarPt == null) {// There isn't a car in this car's path
+                                {
+                                    if (nextCarPt == null) {// There isn't a car in this car's path
                                         crossWithNoBlockAhead(currentRoad, nextRoad, direction, x, y,
                                                 currentCell, newCell, currentCar, currentV);
                                     } else {// car in the way
@@ -1149,6 +1175,7 @@ public class AutomatonModel {
                                                 x, y, currentCell, newCell, currentCar,
                                                 currentV, nextCarCell);
                                     }
+                                }
                                 break;
 
                         }

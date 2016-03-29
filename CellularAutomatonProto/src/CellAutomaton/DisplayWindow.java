@@ -58,6 +58,10 @@ public class DisplayWindow extends JPanel {
                         g2.setColor(Color.black);
                         break;
                 }
+                
+                if(road.getStopLight()){
+                    g2.setColor(Color.RED);
+                }
 
                 if (car.getTurning()) {
                     g2.fillRect(x, y, 1, 1);

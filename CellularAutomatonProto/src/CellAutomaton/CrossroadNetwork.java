@@ -57,7 +57,7 @@ public class CrossroadNetwork extends RoadNetworkTemplate {
 
         //set traffic light switches
 //        northRoadU.setStopLight(true);
-//        northRoadD.setStopLight(true);
+        northRoadD.setStopLight(true);
         southRoadU.setStopLight(true);
 //        southRoadD.setStopLight(true);
 //        eastRoadL.setStopLight(true);

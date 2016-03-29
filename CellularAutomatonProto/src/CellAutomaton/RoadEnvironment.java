@@ -112,10 +112,10 @@ public class RoadEnvironment implements ActionListener {
         }
 
         for (OneWayRoad road : networkEntr) {
-            if (inputCounter > 3){
-                if (road.getDirection()== DOWN){
+            if (inputCounter > 1){
+//                if (road.getDirection()== DOWN){
                 model.addCarToRoad(road);
-                }
+//                }
             }
 //            model.addCarToRoad(road);
 
@@ -128,7 +128,7 @@ public class RoadEnvironment implements ActionListener {
 //            model.addCarJ(crossroad, new Point(2, 4), LEFT);
 //            model.addCarJ(crossroad, new Point(1, 4), LEFT);
         }
-        if (inputCounter > 3){
+        if (inputCounter > 1){
             inputCounter = 0;
         }
 
