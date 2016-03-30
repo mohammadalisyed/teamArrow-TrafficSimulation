@@ -14,8 +14,9 @@ public class Demo {
     public static void main(String[] args) {
 
         CrossroadNetwork demo = new CrossroadNetwork();
-        Roundabout demo2 = new Roundabout();
-        RoadEnvironment re = new RoadEnvironment(demo);
+        ExampleNetwork demo2 = new ExampleNetwork();
+        RoadEnvironment re3 = new RoadEnvironment(demo2);
+        
     }
 
 }
