@@ -42,8 +42,7 @@ public class RoadEnvironment implements ActionListener {
     AutomatonModel model;
     private int stopCounter;
     private int inputCounter;
-    private int carColourScheme;
-    private int roadColourScheme;
+
 
     public RoadEnvironment(RoadNetworkInt roadNet) {
         this.roadNet = roadNet;
