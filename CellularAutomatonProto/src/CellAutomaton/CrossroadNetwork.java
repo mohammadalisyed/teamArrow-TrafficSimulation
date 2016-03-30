@@ -61,7 +61,7 @@ public class CrossroadNetwork extends RoadNetworkTemplate {
         crossroadEntr[RIGHT] = westRoadR;
 
         //create junctions
-        crossroad = new Junction(50, 50, crossroadExit, crossroadEntr, 6, 6);
+        crossroad = new Junction(50, 50, crossroadExit, crossroadEntr, 6, 6, "Crossroad intersection");
 
         //populate junction list
         junctArray.add(crossroad);
