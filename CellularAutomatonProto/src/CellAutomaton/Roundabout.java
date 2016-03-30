@@ -55,14 +55,14 @@ public class Roundabout extends RoadNetworkTemplate {
     OneWayRoad[] cornerSWEntr = new OneWayRoad[4];
     OneWayRoad[] cornerSWExit = new OneWayRoad[4];
 
-    OneWayRoad westToNorthWest = new OneWayRoad(4, 10, 26, 54, UP);
-    OneWayRoad northWestToWest = new OneWayRoad(4, 10, 26, 68, UP);
-    OneWayRoad southToNorthWest = new OneWayRoad(10, 4, 30, 78, LEFT);
-    OneWayRoad southEastToSouth = new OneWayRoad(10, 4, 44, 78, LEFT);
-    OneWayRoad eastToSouthEast = new OneWayRoad(4, 10, 54, 68, DOWN);
-    OneWayRoad northEastToEast = new OneWayRoad(4, 10, 54, 54, DOWN);
-    OneWayRoad northToNorthEast = new OneWayRoad(10, 4, 44, 50, RIGHT);
-    OneWayRoad northWestToNorth = new OneWayRoad(10, 4, 30, 50, RIGHT);
+    OneWayRoad westToNorthWest = new OneWayRoad(4, 10, 26, 54, UP, "W to NW");
+    OneWayRoad northWestToWest = new OneWayRoad(4, 10, 26, 68, UP, "NW to W");
+    OneWayRoad southToNorthWest = new OneWayRoad(10, 4, 30, 78, LEFT, "S to NW");
+    OneWayRoad southEastToSouth = new OneWayRoad(10, 4, 44, 78, LEFT, "SE to S");
+    OneWayRoad eastToSouthEast = new OneWayRoad(4, 10, 54, 68, DOWN, "E to SE");
+    OneWayRoad northEastToEast = new OneWayRoad(4, 10, 54, 54, DOWN, "NE to E");
+    OneWayRoad northToNorthEast = new OneWayRoad(10, 4, 44, 50, RIGHT, "N to NE");
+    OneWayRoad northWestToNorth = new OneWayRoad(10, 4, 30, 50, RIGHT, "NW to N");
 
     public Roundabout() {
 
@@ -86,7 +86,15 @@ public class Roundabout extends RoadNetworkTemplate {
 //
 //    Junction junctS;
 //    OneWayRoad[] junctSEntr = new OneWayRoad[4];
-//    OneWayRoad[] junctSExit = new OneWayRoad[4];
+        junctSEntr[UP] = southRoadU;
+        junctSEntr[DOWN] = null;
+        junctSEntr[LEFT] = southEastToSouth;
+        junctSEntr[RIGHT] = null;
+//    OneWayRoad[] junctSExit = new OneWayRoad[4
+        junctSExit[UP] = null;
+        junctSExit[DOWN] = southRoadD;
+        junctSExit[LEFT] = southToNorthWest;
+        junctSExit[RIGHT] = null;
 //
 //    Junction junctE;
 //    OneWayRoad[] junctEEntr = new OneWayRoad[4];
