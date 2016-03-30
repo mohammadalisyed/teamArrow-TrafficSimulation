@@ -26,6 +26,8 @@ public class OneWayRoad implements RoadInt {
     private Vehicle[][] road;
     private boolean stopLight = false;
     private int[] laneDirect;
+    
+    private String roadName;
 
     public OneWayRoad(int roadXLen, int roadYLen, int roadX, int roadY, int direction) {
         this.roadXLen = roadXLen;
@@ -53,6 +55,15 @@ public class OneWayRoad implements RoadInt {
                 break;
                 
         }
+    }
+    
+    public OneWayRoad(int roadXLen, int roadYLen, int roadX, int roadY, int direction, String roadName) {
+        this(roadXLen,roadYLen,roadX,roadY,direction);
+        this.roadName = roadName;
+    }
+    
+    public String getRoadName(){
+        return roadName;
     }
 
     public void resetRoad() {

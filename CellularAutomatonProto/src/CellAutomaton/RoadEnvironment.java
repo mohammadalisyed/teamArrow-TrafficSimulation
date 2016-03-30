@@ -23,7 +23,7 @@ import javax.swing.Timer;
 
 public class RoadEnvironment implements ActionListener {
 
-    public static RoadEnvironment re;
+//    public static RoadEnvironment re;
     public JFrame mainFrame;
     public DisplayWindow dw;
 //    private Timer timer = new Timer(75, this);//50
@@ -59,7 +59,7 @@ public class RoadEnvironment implements ActionListener {
         mainFrame.setVisible(true);
         mainFrame.setSize(800, 800);
         mainFrame.setResizable(false);
-        mainFrame.add(dw = new DisplayWindow());
+        mainFrame.add(dw = new DisplayWindow(this));
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         start();
     }
@@ -117,16 +117,7 @@ public class RoadEnvironment implements ActionListener {
                 model.addCarToRoad(road);
 //                }
             }
-//            model.addCarToRoad(road);
 
-//            model.addCarJ(crossroad, new Point(1,1), UP);
-//            model.addCarJ(crossroad, new Point(1,0), UP);
-//            model.addCarJ(crossroad, new Point(4, 3), DOWN);
-//            model.addCarJ(crossroad, new Point(4, 4), DOWN);
-//            model.addCarJ(crossroad, new Point(4, 2), RIGHT);
-//            model.addCarJ(crossroad, new Point(5, 2), RIGHT);
-//            model.addCarJ(crossroad, new Point(2, 4), LEFT);
-//            model.addCarJ(crossroad, new Point(1, 4), LEFT);
         }
         if (inputCounter > 1){
             inputCounter = 0;
@@ -150,8 +141,9 @@ public class RoadEnvironment implements ActionListener {
 
     }
 
-    public static void main(String[] args) {
-        CrossroadNetwork demo = new CrossroadNetwork();
-        re = new RoadEnvironment(demo);
-    }
+//    public static void main(String[] args) {
+//        CrossroadNetwork demo = new CrossroadNetwork();
+//        Roundabout demo2 = new Roundabout();
+//        re = new RoadEnvironment(demo);
+//    }
 }
