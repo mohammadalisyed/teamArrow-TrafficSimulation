@@ -26,8 +26,8 @@ public class RoadEnvironment implements ActionListener{
 //    public static RoadEnvironment re;
     public JFrame mainFrame;
     public DisplayWindow dw;
-//    private Timer timer = new Timer(75, this);//50
-    private Timer timer = new Timer(50, this);//
+    public Timer timer = new Timer(50, this);//50 75
+//    private Timer timer = new Timer(getTimer(), this);//
 
     public boolean paused = false;
     public static final int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3;// do not alter
@@ -43,7 +43,7 @@ public class RoadEnvironment implements ActionListener{
     private int stopCounter;
     private int inputCounter;
     
-  
+
 
     public RoadEnvironment(RoadNetworkInt roadNet) {
         this.roadNet = roadNet;
@@ -65,6 +65,16 @@ public class RoadEnvironment implements ActionListener{
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         start();
     }
+    
+   
+    public void setTimerDelay(int timerSec){
+        //timer.setDelay(timerSec);
+        timer.setDelay(timerSec);
+    }
+    
+    /*public int getTimer(){
+        return timerInput;
+    }*/
     
     public RoadNetworkInt getRoadNetwork(){
         return roadNet;

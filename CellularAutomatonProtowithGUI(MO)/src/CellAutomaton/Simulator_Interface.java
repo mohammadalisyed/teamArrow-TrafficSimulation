@@ -20,6 +20,8 @@ public class Simulator_Interface extends JFrame {
 	public JTextField fov_textfield, lst_textfield;
 
 	public JSlider slider_inflow;
+        
+        public RoadEnvironment re;
 
 	public Simulator_Interface() {
 		super("Traffic Simulator");
@@ -38,6 +40,33 @@ public class Simulator_Interface extends JFrame {
 		simulation_speed_comboBox.addItem("Normal");
 		simulation_speed_comboBox.addItem("Fast");
 		simulation_speed_comboBox.setSelectedIndex(1);
+                
+                simulation_speed_comboBox.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+
+				int numSelected = simulation_speed_comboBox.getSelectedIndex();
+
+                            switch (numSelected) {
+                            // slow timer
+                                case 0:
+                                    re.setTimerDelay(100);    
+                                    break;
+                            //normal timer
+                                case 1:
+                                    re.setTimerDelay(50);
+                                    break;
+                            //fast timer    
+                                case 2:
+                                   re.setTimerDelay(10);
+                                    break;
+                            }
+			}
+            
+		});
+                       
 
 		// /////////////Road Network
 		road_network = new JLabel("Road Network:");
@@ -62,8 +91,9 @@ public class Simulator_Interface extends JFrame {
 
 				if (num == 1 || num == 2) {
 
-					network_entrances_comboBox.setEnabled(true);
+                                        network_entrances_comboBox.setEnabled(true);
 					junctions_comboBox.setEnabled(true);
+                                        
 
 				} else if (num == 0) {
 					network_entrances_comboBox.setEnabled(false);
@@ -215,8 +245,9 @@ public class Simulator_Interface extends JFrame {
 		add(optionsPanel, BorderLayout.WEST);
                 
                 //Road Environment add to Center of Panel
+                
                 CrossroadNetwork demo = new CrossroadNetwork();
-                RoadEnvironment re = new RoadEnvironment(demo);
+                re = new RoadEnvironment(demo);
                 
                 add(re.dw, BorderLayout.CENTER);
 
