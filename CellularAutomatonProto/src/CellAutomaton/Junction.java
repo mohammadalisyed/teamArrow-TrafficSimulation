@@ -12,18 +12,19 @@ import java.util.ArrayList;
  *
  * @author Alexander
  */
-public class Junction {
+public class Junction implements RoadInt {
 
     private Vehicle[][] junct;
     private OneWayRoad[] entrRoads;
     private OneWayRoad[] exitRoads;
 
-    private Boolean xTravel;// junction is open to cars entering from horizontally
+//    private Boolean xTravel;// junction is open to cars entering from horizontally
     private int x;
     private int y;
     private int width;
     private int height;
 
+//    private int clearanceTime;
     public Junction(int x, int y,
             OneWayRoad[] exitRoads, OneWayRoad[] entrRoads, int width, int height) {
         this.x = x;
@@ -38,15 +39,16 @@ public class Junction {
 
     }
 
-    public OneWayRoad getExt(int extDirection) {
-        return exitRoads[extDirection];
+    public OneWayRoad getExit(int exitDirect) {
+        return exitRoads[exitDirect];
     }
 
-    public OneWayRoad getEntr(int entrDirection) {
-        return entrRoads[entrDirection];
+    public OneWayRoad getEntr(int entrDirect) {
+        return entrRoads[entrDirect];
     }
 
-    public void resetJunct() {
+    @Override
+    public void resetRoad() {
 
         for (int h = 0; h < height; h++) {
             for (int w = 0; w < width; w++) {
@@ -56,6 +58,7 @@ public class Junction {
         }
     }
 
+    @Override
     public ArrayList<Point> getPointList() {
         ArrayList<Point> ptLst = new ArrayList<Point>();
 
@@ -84,56 +87,77 @@ public class Junction {
         return carLst;
     }
 
-//    public OneWayRoad getEntr(int entrN){
-//        return entrRoads[entrN];
-//    }
-//    
-//    public OneWayRoad getExit(int exitN){
-//        return entrRoads[exitN];
-//    }
+    public int getMaxV(int direction) {
+        int maxV = 1;
+        RoadInt entRoad = getEntr(direction);
+        if (entRoad != null) {
+            maxV = entRoad.getMaxV(direction);
+        }
+        return maxV;
+    }
+
+    @Override
     public int getX() {
         return x;
     }
 
+    @Override
     public int getY() {
         return y;
     }
 
-    public int getWidth() {
+    @Override
+    public int getRoadXLen() {
         return width;
     }
 
-    public int getHeight() {
+    @Override
+    public int getRoadYLen() {
         return height;
     }
 
+    @Override
     public Vehicle getRoadCell(int x, int y) {
         return junct[x][y];
 
     }
 
+    @Override
     public void clearRoadCell(int x, int y) {
         junct[x][y] = null;
     }
 
+    @Override
     public void setRoadCell(int x, int y, Vehicle newV) {
         junct[x][y] = newV;
     }
 
-    public boolean getXTravel() {
-        return xTravel;
-    }
+//    public boolean getXTravel() {
+//        return xTravel;
+//    }
+//
+//    public void setXTravel(boolean newBool) {
+//        xTravel = newBool;
+//    }
 
-    public void setXTravel(boolean newBool) {
-        xTravel = newBool;
+    @Override
+    public boolean getStopLight() {
+        return false;
     }
-
-    public void switchXTravel() {
-        if (xTravel) {
-            xTravel = false;
-        } else {
-            xTravel = true;
+    
+    public void switchStopLights(){
+        for (OneWayRoad road : entrRoads) {
+            road.switchLightRoad();
         }
+        
     }
+
+//    public void switchXTravel() {
+//        if (xTravel) {
+//            xTravel = false;
+//        } else {
+//            xTravel = true;
+//        }
+//    }
 
 }

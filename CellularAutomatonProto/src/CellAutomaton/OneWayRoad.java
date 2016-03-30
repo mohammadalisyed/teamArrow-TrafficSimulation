@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author Alexander
  */
-public class OneWayRoad {
+public class OneWayRoad implements RoadInt {
 
     private int maxV = 5;
     private int roadXLen;
@@ -21,11 +21,15 @@ public class OneWayRoad {
     private int roadY;
     private int direction = RoadEnvironment.LEFT;
     private Junction exit;
+    private Junction entr;
 
     private Vehicle[][] road;
     private boolean stopLight = false;
+    private int[] laneDirect;
+    
+    private String roadName;
 
-    public OneWayRoad(int roadXLen, int roadYLen, int roadX, int roadY, int direction, Junction exit) {
+    public OneWayRoad(int roadXLen, int roadYLen, int roadX, int roadY, int direction) {
         this.roadXLen = roadXLen;
         this.roadYLen = roadYLen;
         this.roadX = roadX;
@@ -33,7 +37,33 @@ public class OneWayRoad {
 
         this.direction = direction;
         road = new Vehicle[roadXLen][roadYLen];
-        this.exit = exit;
+
+        switch (direction) {
+            case RoadEnvironment.UP:
+            case RoadEnvironment.DOWN:
+                laneDirect = new int[roadXLen];
+                for (int i = 0; i < roadXLen; i++){
+                    laneDirect[i] = direction;
+                }
+                break;
+            case RoadEnvironment.LEFT:
+            case RoadEnvironment.RIGHT:
+                laneDirect = new int[roadYLen];
+                for (int i = 0; i < roadYLen; i++){
+                    laneDirect[i] = direction;
+                }
+                break;
+                
+        }
+    }
+    
+    public OneWayRoad(int roadXLen, int roadYLen, int roadX, int roadY, int direction, String roadName) {
+        this(roadXLen,roadYLen,roadX,roadY,direction);
+        this.roadName = roadName;
+    }
+    
+    public String getRoadName(){
+        return roadName;
     }
 
     public void resetRoad() {
@@ -45,17 +75,51 @@ public class OneWayRoad {
             }
         }
     }
-    
-    public Junction getExit(){
-        return exit;
+    public int getLaneDirect(int i){
+        return laneDirect[i];
     }
     
-    public void setExit(Junction newExit){
+    public int[] getLaneDirect(){
+        return laneDirect;
+    }
+   
+    public void setLaneDirect(int laneNo, int direction){
+        laneDirect[laneNo] = direction;
+    } 
+
+    public Junction getExit(int direction) {
+        return exit;
+    }
+
+    public RoadInt getEntr(int direction) {
+        return entr;
+    }
+
+    public void setExit(Junction newExit) {
         exit = newExit;
+    }
+
+    public void setEntr(Junction newEntr) {
+        entr = newEntr;
     }
 
     public int getDirection() {
         return direction;
+    }
+
+    public ArrayList<Vehicle> getVehicleLst() {
+        ArrayList<Vehicle> carLst = new ArrayList<Vehicle>();
+
+        for (int y = 0; y < roadYLen; y++) {
+            for (int x = 0; x < roadXLen; x++) {
+                if (road[x][y] != null) {
+                    Vehicle newCar = getRoadCell(x, y);
+                    newCar.setLocation(new Point(x + roadX, y + roadY));
+                    carLst.add(newCar);
+                }
+            }
+        }
+        return carLst;
     }
 
     public ArrayList<Point> getPointList() {
@@ -87,6 +151,14 @@ public class OneWayRoad {
         stopLight = stop;
     }
 
+    public void switchLightRoad() {
+        if (getStopLight()) {
+            setStopLight(false);
+        } else {
+            setStopLight(true);
+        }
+    }
+
     public int getRoadXLen() {
         return roadXLen;
     }
@@ -95,7 +167,7 @@ public class OneWayRoad {
         return roadYLen;
     }
 
-    public int getMaxV() {
+    public int getMaxV(int direction) {
         return maxV;
     }
 

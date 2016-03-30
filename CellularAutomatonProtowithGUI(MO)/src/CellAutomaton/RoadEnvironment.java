@@ -21,7 +21,7 @@ import java.util.Random;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-public class RoadEnvironment implements ActionListener {
+public class RoadEnvironment implements ActionListener{
 
 //    public static RoadEnvironment re;
     public JFrame mainFrame;
@@ -42,6 +42,8 @@ public class RoadEnvironment implements ActionListener {
     AutomatonModel model;
     private int stopCounter;
     private int inputCounter;
+    
+  
 
     public RoadEnvironment(RoadNetworkInt roadNet) {
         this.roadNet = roadNet;

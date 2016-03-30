@@ -16,25 +16,52 @@ public class Vehicle {
     private int length;
     private int speed;
     private boolean isChecked;
-    private int direction;
-    private int exitD;
+    private int direction;// direction the car is currently travelling in 
+    private int exit;// exit the car wants to take at the next junction
+    private int previousDirect;// direction the cars was travelling in before turning
+    private boolean turning;
     private Point location;
+    private Point exitTurningPt;
     // behaviour? 
     // type? normal car/van or bus/taxi or emergency services?
 
     public Vehicle(int length, int speed) {
         this.length = length;
         this.speed = speed;
-//        this.direction = direction;
         isChecked = false;
+        turning = false;
     }
     
-    public int getExitD(){
-        return exitD;
+    public Point getExitTurningPt(){
+        return exitTurningPt;
     }
     
-    public int setExitD(){
-        return exitD;
+    public void setExitTuringPt(Point newPt){
+        exitTurningPt = newPt;
+    }
+    
+    public int getPreviousDirect(){
+        return previousDirect;
+    }
+    
+    public void setPreviousDirect(int newDirect){
+        previousDirect = newDirect;
+    }
+    
+    public boolean getTurning(){
+        return turning; 
+    }
+    
+    public void setTurning(boolean newBool){
+        turning = newBool;
+    }
+    
+    public int getExit() {
+        return exit;
+    }
+
+    public void setExit(int exit) {
+        this.exit = exit;
     }
     
     public Point getLocation(){
@@ -51,7 +78,7 @@ public class Vehicle {
     
     public void setDirection(int newD){
         direction = newD;
-        exitD = newD;
+//        exit = newD;
     }
     
     public int getSpeed() {
