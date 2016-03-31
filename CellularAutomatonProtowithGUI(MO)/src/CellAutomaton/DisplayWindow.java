@@ -24,7 +24,7 @@ public class DisplayWindow extends JPanel {
     private final Color FORWARDRED = new Color(204, 0, 0);
     private final Color BACKWARDRED = new Color(51, 0, 0);
 
-    private final int STOPLIGHTCOLOUR = 0, LANECOLOUR = 1;
+    public static final int STOPLIGHTCOLOUR = 0, LANECOLOUR = 1;
     
     private int colourScheme;
     private RoadEnvironment re;
@@ -36,6 +36,11 @@ public class DisplayWindow extends JPanel {
     
     public void setRoadEnvironment(RoadEnvironment re){
         this.re = re; 
+    }
+    
+    public void setColourScheme(int colourScheme){
+        this.colourScheme = colourScheme;
+        
     }
 
     public void colourPicker(Vehicle car, RoadInt road, Graphics2D g2) {
