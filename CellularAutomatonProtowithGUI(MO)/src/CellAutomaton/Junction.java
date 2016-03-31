@@ -62,7 +62,7 @@ public class Junction implements RoadInt {
             try {
                 switchStopLights();
             } catch (NullPointerException e) {
-                System.out.println("no lights");
+//                System.out.println("no lights");
             }
             lightTimer = 0;
         }

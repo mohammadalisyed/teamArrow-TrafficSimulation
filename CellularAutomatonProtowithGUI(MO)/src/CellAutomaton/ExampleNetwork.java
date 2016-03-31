@@ -13,20 +13,20 @@ import java.util.ArrayList;
  */
 public class ExampleNetwork extends RoadNetworkTemplate {
 
-    OneWayRoad northRoadU = new OneWayRoad(3, 50, 50, 0, UP);
-    OneWayRoad northRoadD = new OneWayRoad(3, 50, 53, 0, DOWN);
+    OneWayRoad northRoadU = new OneWayRoad(3, 50, 50, 0, UP, "North-Road UP");
+    OneWayRoad northRoadD = new OneWayRoad(3, 50, 53, 0, DOWN, "North-Road DOWN");
 
-    OneWayRoad eastRoadR = new OneWayRoad(50, 3, 56, 50, RIGHT);
-    OneWayRoad eastRoadL = new OneWayRoad(50, 3, 56, 53, LEFT);
+    OneWayRoad eastRoadR = new OneWayRoad(50, 3, 56, 50, RIGHT, "East-Road RIGHT");
+    OneWayRoad eastRoadL = new OneWayRoad(50, 3, 56, 53, LEFT, "East-Road LEFT");
 
-    OneWayRoad southRoadU = new OneWayRoad(3, 50, 50, 56, UP);
-    OneWayRoad southRoadD = new OneWayRoad(3, 50, 53, 56, DOWN);
+    OneWayRoad southRoadU = new OneWayRoad(3, 50, 50, 56, UP, "South-Road UP");
+    OneWayRoad southRoadD = new OneWayRoad(3, 50, 53, 56, DOWN, "South-Road DOWN");
 
-    OneWayRoad westRoadR = new OneWayRoad(50, 3, 0, 50, RIGHT);
-    OneWayRoad westRoadL = new OneWayRoad(50, 3, 0, 53, LEFT);
+    OneWayRoad westRoadR = new OneWayRoad(50, 3, 0, 50, RIGHT, "West-Road RIGHT");
+    OneWayRoad westRoadL = new OneWayRoad(50, 3, 0, 53, LEFT, "West-Road LEFT");
     
-    OneWayRoad aNorthUp = new OneWayRoad(3, 25, 106, 25, UP);
-    OneWayRoad aNorthDown = new OneWayRoad(3, 25, 109, 25, DOWN);
+    OneWayRoad aNorthUp = new OneWayRoad(3, 25, 106, 25, UP, "A-NORTH UP");
+    OneWayRoad aNorthDown = new OneWayRoad(3, 25, 109, 25, DOWN,"A-NORTH DOWN");
 
     OneWayRoad[] crossroadEntr = new OneWayRoad[4];
     OneWayRoad[] crossroadExit = new OneWayRoad[4];

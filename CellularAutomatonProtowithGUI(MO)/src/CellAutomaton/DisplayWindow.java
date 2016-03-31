@@ -29,9 +29,13 @@ public class DisplayWindow extends JPanel {
     private int colourScheme;
     private RoadEnvironment re;
 
-    public DisplayWindow(RoadEnvironment re) {
-        this.re = re;
+    public DisplayWindow() {
+//        this.re = re;
         colourScheme = 0;
+    }
+    
+    public void setRoadEnvironment(RoadEnvironment re){
+        this.re = re; 
     }
 
     public void colourPicker(Vehicle car, RoadInt road, Graphics2D g2) {
@@ -81,7 +85,7 @@ public class DisplayWindow extends JPanel {
                     }
                     break;
                 } catch (NullPointerException e) {
-                    System.out.println("null");
+//                    System.out.println("null");
                     switch (car.getDirection()) {
                         case RoadEnvironment.RIGHT:
                         case RoadEnvironment.UP:
