@@ -134,15 +134,15 @@ public class Roundabout extends RoadNetworkTemplate {
         // cornerSE
         // cornerSW
         //create junctions
-        junctW = new Junction(26, 64, junctWExit, junctWEntr, 4, 4);
-        junctS = new Junction(40, 78, junctSExit, junctSEntr, 4, 4);
-        junctE = new Junction(54, 64, junctEExit, junctEEntr, 4, 4);
-        junctN = new Junction(40, 50, junctNExit, junctNExit, 4, 4);
+        //junctW = new Junction(26, 64, junctWExit, junctWEntr, 4, 4);
+        //junctS = new Junction(40, 78, junctSExit, junctSEntr, 4, 4);
+        //junctE = new Junction(54, 64, junctEExit, junctEEntr, 4, 4);
+        //junctN = new Junction(40, 50, junctNExit, junctNExit, 4, 4);
 
-        cornerNW = new Junction(26, 50, cornerNWExit, cornerNWEntr, 4, 4);
-        cornerSW = new Junction(26, 78, cornerSWExit, cornerSWEntr, 4, 4);
-        cornerSE = new Junction(54, 78, cornerSEExit, cornerSEEntr, 4, 4);
-        cornerNE = new Junction(54, 50, cornerNEExit, cornerNEEntr, 4, 4);
+        //cornerNW = new Junction(26, 50, cornerNWExit, cornerNWEntr, 4, 4);
+        //cornerSW = new Junction(26, 78, cornerSWExit, cornerSWEntr, 4, 4);
+        //cornerSE = new Junction(54, 78, cornerSEExit, cornerSEEntr, 4, 4);
+        //cornerNE = new Junction(54, 50, cornerNEExit, cornerNEEntr, 4, 4);
         //populate junction list
         junctArray.add(junctW);
         junctArray.add(junctS);

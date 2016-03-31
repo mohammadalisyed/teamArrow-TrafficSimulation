@@ -3,6 +3,7 @@ package CellAutomaton;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -22,7 +23,8 @@ public class Simulator_Interface extends JFrame {
 	public JSlider slider_inflow;
         
         public RoadEnvironment re;
-
+        
+        
 	public Simulator_Interface() {
 		super("Traffic Simulator");
 
@@ -40,6 +42,9 @@ public class Simulator_Interface extends JFrame {
 		simulation_speed_comboBox.addItem("Normal");
 		simulation_speed_comboBox.addItem("Fast");
 		simulation_speed_comboBox.setSelectedIndex(1);
+                
+                ExampleNetwork demo = new ExampleNetwork();
+                re = new RoadEnvironment(demo);
                 
                 simulation_speed_comboBox.addActionListener(new ActionListener() {
 
@@ -112,11 +117,19 @@ public class Simulator_Interface extends JFrame {
 		network_entrances = new JLabel("Network Entrances:");
 		network_entrances_comboBox = new JComboBox();
 		network_entrances_comboBox.setBackground(Color.white);
-		network_entrances_comboBox.setEnabled(false);
+		network_entrances_comboBox.setEnabled(true);
+                
+                
+                ArrayList <OneWayRoad> networkEntArray = re.getNetworkEntArray();
 
 		// add the different entrant items here
-		network_entrances_comboBox.addItem("Select...");
-		network_entrances_comboBox.addItem("hello");
+                
+                for(OneWayRoad netEntrItem: networkEntArray ){
+                  network_entrances_comboBox.addItem(netEntrItem.getRoadName());
+                }
+                
+		
+		//network_entrances_comboBox.addItem("hello");
 
 		// constraint
 		// disabling the inflow slider and frequency of vehicles text field if
@@ -175,9 +188,14 @@ public class Simulator_Interface extends JFrame {
 		junctions = new JLabel("Junctions:");
 		junctions_comboBox = new JComboBox();
 		junctions_comboBox.setBackground(Color.white);
-
-		junctions_comboBox.addItem("Select...");
-		junctions_comboBox.addItem("Hello");
+                
+                ArrayList<Junction> junctArray = re.getJunctArray();
+                
+		for(Junction junctItem: junctArray){
+                    junctions_comboBox.addItem(junctItem.getJunctName());		
+                }
+                
+                //junctions_comboBox.addItem("Hello");
 
 		junctions_comboBox.addActionListener(new ActionListener() {
 
@@ -193,13 +211,13 @@ public class Simulator_Interface extends JFrame {
 
 				} else if (num == 0) {
 
-					lst_textfield.setEnabled(false);
+					lst_textfield.setEnabled(true);
 				}
 			}
 
 		});
 
-		junctions_comboBox.setEnabled(false);
+		junctions_comboBox.setEnabled(true);
 
 		// Traffic Light Options
 		traffic_light_options = new JLabel("Traffic Light Options");
@@ -246,8 +264,8 @@ public class Simulator_Interface extends JFrame {
                 
                 //Road Environment add to Center of Panel
                 
-                CrossroadNetwork demo = new CrossroadNetwork();
-                re = new RoadEnvironment(demo);
+               
+                
                 
                 add(re.dw, BorderLayout.CENTER);
 
