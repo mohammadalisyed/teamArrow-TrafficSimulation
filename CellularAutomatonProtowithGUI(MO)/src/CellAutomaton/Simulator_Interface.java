@@ -550,6 +550,7 @@ public class Simulator_Interface extends JFrame {
 
             }
             re.setTimerDelay(currentSpeed);
+            
             setNetworkEntrComboBox();
             setJunctionComboBox();
             setInflowSlider();

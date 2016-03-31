@@ -124,6 +124,12 @@ public class OneWayRoad implements RoadInt {
     public void setLaneDirect(int laneNo, int direction) {
         laneDirect[laneNo] = direction;
     }
+    
+    public void setLaneDirect(int direction){
+        for (int i = 0; i < laneDirect.length; i++){
+            laneDirect[i] = direction;
+        }
+    }
 
     public Junction getExit(int direction) {
         return exit;
