@@ -40,7 +40,7 @@ public class Junction implements RoadInt {
         this.height = height;
 
         lightTimer = 0;
-        switchTime = 100;
+        switchTime = 50;
         junctName = name;
     }
     

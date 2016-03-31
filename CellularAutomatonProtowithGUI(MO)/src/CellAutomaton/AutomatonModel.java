@@ -161,17 +161,6 @@ public class AutomatonModel {
                             }
                         } else {
                             driveCarToTurningPt(direction, junct, x, y, turningPt);
-//                            switch (direction) {
-//                                
-//
-//                                case RoadEnvironment.UP:
-//                                case RoadEnvironment.DOWN:
-//                                case RoadEnvironment.LEFT:
-//                                case RoadEnvironment.RIGHT:
-//                                    driveCarToTurningPt(direction, junct, x, y, turningPt);
-//                                    break;
-//                            }
-
                         }
                     }
                 }
@@ -193,7 +182,16 @@ public class AutomatonModel {
 
                     if (y == (turningPt.y)) {//waiting to cross RIGHT traffic
                         if (rightStopped == false) {
-                            rightIncoming = !rightRoad.getPointList().isEmpty();
+                            int xBound = rightRoad.getMaxV(direction);
+                            if (xBound * (junct.getRoadYLen()-y)<rightRoad.getRoadXLen()){
+                                xBound *= (junct.getRoadYLen()-y);
+                            }
+                            for (Point car : rightRoad.getPointList()) {
+                                if (car.x > xBound) {
+                                    rightIncoming = true;
+                                }
+                            }
+//                            rightIncoming = (!rightRoad.getPointList().isEmpty());
                         }
                     }
                 }
@@ -212,7 +210,16 @@ public class AutomatonModel {
 
                     if (y == (turningPt.y)) {//waiting to cross LEFT traffic
                         if (leftStopped == false) {
-                            leftIncoming = !leftRoad.getPointList().isEmpty();
+                            int xBound = leftRoad.getMaxV(direction);
+                            if (xBound * (junct.getRoadYLen()-y)<leftRoad.getRoadXLen()){
+                                xBound *= (junct.getRoadYLen()-y);
+                            }
+                            for (Point car : leftRoad.getPointList()) {
+                                if (car.x < xBound) {
+                                    leftIncoming = true;
+                                }
+                            }
+//                            leftIncoming = !leftRoad.getPointList().isEmpty();
                         }
                     }
                 }
@@ -231,7 +238,16 @@ public class AutomatonModel {
                     if (x == (turningPt.x)) {//waiting to cross UP traffic
 
                         if (upStopped == false) {
-                            upIncoming = !upRoad.getPointList().isEmpty();
+                            int yBound = upRoad.getMaxV(direction);
+                            if (yBound * (junct.getRoadXLen()-x)<upRoad.getRoadYLen()){
+                                yBound *= (junct.getRoadXLen()-x);
+                            }
+                            for (Point car : upRoad.getPointList()) {
+                                if (car.y < yBound) {
+                                    upIncoming = true;
+                                }
+                            }
+//                            upIncoming = !upRoad.getPointList().isEmpty();
                         }
                     }
                 }
@@ -250,7 +266,16 @@ public class AutomatonModel {
                     if (x == (turningPt.x)) {//waiting to cross UP traffic
 
                         if (downStopped == false) {
-                            downIncoming = !downRoad.getPointList().isEmpty();
+                            int yBound = downRoad.getMaxV(direction);
+                            if (yBound * (junct.getRoadXLen()-x)<downRoad.getRoadYLen()){
+                                yBound *= (junct.getRoadXLen()-x);
+                            }
+                            for (Point car : downRoad.getPointList()) {
+                                if (car.y > yBound) {
+                                    downIncoming = true;
+                                }
+                            }
+//                            downIncoming = !downRoad.getPointList().isEmpty();
                         }
                     }
                 }
@@ -283,6 +308,8 @@ public class AutomatonModel {
                 driveCar(RoadEnvironment.UP, road, x, y);
             }
         }
+        
+        resetCarsChk(road);
     }
     //-
 
@@ -296,6 +323,8 @@ public class AutomatonModel {
                 driveCar(RoadEnvironment.DOWN, road, x, y);
             }
         }
+        
+        resetCarsChk(road);
     }
     //-
 
@@ -310,6 +339,8 @@ public class AutomatonModel {
                 driveCar(RoadEnvironment.LEFT, road, x, y);
             }
         }
+        
+        resetCarsChk(road);
     }
     //-
 
@@ -324,10 +355,13 @@ public class AutomatonModel {
                 driveCar(RoadEnvironment.RIGHT, road, x, y);
             }
         }
+        
+        resetCarsChk(road);
     }
     //-
 
     public void driveCar(int direction, RoadInt road, int x, int y) {
+
         int roadYLen = road.getRoadYLen();
         int roadXLen = road.getRoadXLen();
 
@@ -1332,10 +1366,10 @@ public class AutomatonModel {
 //                        System.out.print("/xBound:" + xBound);
                         // need if != null for junct.getEntr
                         if (currentLane < exitRoad.getRoadXLen()) {//current road and exit road have the same no of lanes
-                            if (junct.getEntr(RoadEnvironment.UP)!=null){
-                            exitXCoOrd = junct.getEntr(RoadEnvironment.UP).getRoadXLen() + (exitRoad.getRoadXLen() - currentLane - 1);
+                            if (junct.getEntr(RoadEnvironment.UP) != null) {
+                                exitXCoOrd = junct.getEntr(RoadEnvironment.UP).getRoadXLen() + (exitRoad.getRoadXLen() - currentLane - 1);
                             } else {
-                            exitXCoOrd = (exitRoad.getRoadXLen() - currentLane - 1);
+                                exitXCoOrd = (exitRoad.getRoadXLen() - currentLane - 1);
                             }
                         } else {//current road and exit road have a different no of lanes
                             exitXCoOrd = xBound;

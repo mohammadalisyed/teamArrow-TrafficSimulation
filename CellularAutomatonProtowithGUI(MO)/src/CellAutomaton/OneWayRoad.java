@@ -26,11 +26,11 @@ public class OneWayRoad implements RoadInt {
     private Vehicle[][] road;
     private boolean stopLight = false;
     private int[] laneDirect;
-    
+
     private String roadName;
-    
+
     private int inputTimer = 0;
-    private int inputRefresh = 0;
+    private int inputRefresh = 10;
     private boolean inputBool = true;
 
     public OneWayRoad(int roadXLen, int roadYLen, int roadX, int roadY, int direction) {
@@ -46,55 +46,60 @@ public class OneWayRoad implements RoadInt {
             case RoadEnvironment.UP:
             case RoadEnvironment.DOWN:
                 laneDirect = new int[roadXLen];
-                for (int i = 0; i < roadXLen; i++){
+                for (int i = 0; i < roadXLen; i++) {
                     laneDirect[i] = direction;
                 }
                 break;
             case RoadEnvironment.LEFT:
             case RoadEnvironment.RIGHT:
                 laneDirect = new int[roadYLen];
-                for (int i = 0; i < roadYLen; i++){
+                for (int i = 0; i < roadYLen; i++) {
                     laneDirect[i] = direction;
                 }
                 break;
-                
+
         }
     }
-    
+
     public OneWayRoad(int roadXLen, int roadYLen, int roadX, int roadY, int direction, String roadName) {
-        this(roadXLen,roadYLen,roadX,roadY,direction);
+        this(roadXLen, roadYLen, roadX, roadY, direction);
         this.roadName = roadName;
     }
-    
-    public boolean getInputBool(){
+
+    public boolean getInputBool() {
         return inputBool;
     }
-    
-    public void setInputBool(boolean newBool){
+
+    public void setInputBool(boolean newBool) {
         inputBool = newBool;
     }
-    
-    public int getInputRefresh(){
+
+    public int getInputRefresh() {
         return inputRefresh;
     }
-    
-    public void setInputRefresh(int newInt){
+
+    public void setInputRefresh(int newInt) {
         inputRefresh = newInt;
+        if (inputRefresh < 0) {
+            setInputBool(false);
+        } else {
+            setInputBool(true);
+        }
     }
-    
-    public int getInputTimer(){
+
+    public int getInputTimer() {
         return inputTimer;
     }
-    
-    public void inputTimerIncrement(){
-        inputTimer ++;
+
+    public void inputTimerIncrement() {
+        inputTimer++;
     }
-    
-    public void resetInputTimer(){
+
+    public void resetInputTimer() {
         inputTimer = 0;
     }
-    
-    public String getRoadName(){
+
+    public String getRoadName() {
         return roadName;
     }
 
@@ -107,17 +112,18 @@ public class OneWayRoad implements RoadInt {
             }
         }
     }
-    public int getLaneDirect(int i){
+
+    public int getLaneDirect(int i) {
         return laneDirect[i];
     }
-    
-    public int[] getLaneDirect(){
+
+    public int[] getLaneDirect() {
         return laneDirect;
     }
-   
-    public void setLaneDirect(int laneNo, int direction){
+
+    public void setLaneDirect(int laneNo, int direction) {
         laneDirect[laneNo] = direction;
-    } 
+    }
 
     public Junction getExit(int direction) {
         return exit;

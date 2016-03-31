@@ -40,8 +40,8 @@ public class RoadEnvironment implements ActionListener {
     private ArrayList<OneWayRoad> networkExit;//list of roads where cars exit from the network
 
     AutomatonModel model;
-    private int inputCounter;
-    private int inputRefresh;
+//    private int inputCounter;
+//    private int inputRefresh;
 
     public RoadEnvironment(RoadNetworkInt roadNet, DisplayWindow dw) {
         this.roadNet = roadNet;
@@ -65,8 +65,8 @@ public class RoadEnvironment implements ActionListener {
     public int getEntrInputRefresh(int i) {
         return networkEntr.get(i).getInputRefresh();
     }
-    
-    public void setEntrInputRefresh(int i,int newRefresh) {
+
+    public void setEntrInputRefresh(int i, int newRefresh) {
         networkEntr.get(i).setInputRefresh(newRefresh);
     }
 
@@ -119,12 +119,15 @@ public class RoadEnvironment implements ActionListener {
         }
 
         for (OneWayRoad road : networkEntr) {
+            boolean inputBool = road.getInputBool();
+            if (inputBool) {
 
-            road.inputTimerIncrement();
+                road.inputTimerIncrement();
 //            System.out.println(road.getInputTimer());
-            if (road.getInputTimer() >= road.getInputRefresh()) {
-                model.addCarToRoad(road);
-                road.resetInputTimer();
+                if (road.getInputTimer() >= road.getInputRefresh()) {
+                    model.addCarToRoad(road);
+                    road.resetInputTimer();
+                }
             }
         }
 
