@@ -21,23 +21,25 @@ public interface RoadInt {
     int getRoadXLen();
 
     int getRoadYLen();
-    
+
     int getMaxV(int direction);
-    
+
     boolean getStopLight();
 
     void resetRoad();
-    
+
     void clearRoadCell(int x, int y);
-    
+
     void setRoadCell(int x, int y, Vehicle newVehicle);
 
     Vehicle getRoadCell(int x, int y);
 
     RoadInt getExit(int direction);
-    
+
     RoadInt getEntr(int direction);
 
     ArrayList<Point> getPointList();
+
+    int getLaneDirect(int i); 
 
 }

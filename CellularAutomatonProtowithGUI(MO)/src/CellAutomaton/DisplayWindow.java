@@ -122,7 +122,8 @@ public class DisplayWindow extends JPanel {
         g2D.setStroke(new BasicStroke(0.01f));
 
         for (OneWayRoad road : roadArray) {
-
+            
+            
             g2D.setColor(Color.BLACK);
             g2D.drawRect(road.getX(), road.getY(), road.getRoadXLen(), road.getRoadYLen());
             

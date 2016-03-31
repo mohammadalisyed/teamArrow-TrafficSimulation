@@ -183,8 +183,8 @@ public class AutomatonModel {
                     if (y == (turningPt.y)) {//waiting to cross RIGHT traffic
                         if (rightStopped == false) {
                             int xBound = rightRoad.getMaxV(direction);
-                            if (xBound * (junct.getRoadYLen()-y)<rightRoad.getRoadXLen()){
-                                xBound *= (junct.getRoadYLen()-y);
+                            if (xBound * (junct.getRoadYLen() - y) < rightRoad.getRoadXLen()) {
+                                xBound *= (junct.getRoadYLen() - y);
                             }
                             for (Point car : rightRoad.getPointList()) {
                                 if (car.x > xBound) {
@@ -211,8 +211,8 @@ public class AutomatonModel {
                     if (y == (turningPt.y)) {//waiting to cross LEFT traffic
                         if (leftStopped == false) {
                             int xBound = leftRoad.getMaxV(direction);
-                            if (xBound * (junct.getRoadYLen()-y)<leftRoad.getRoadXLen()){
-                                xBound *= (junct.getRoadYLen()-y);
+                            if (xBound * (junct.getRoadYLen() - y) < leftRoad.getRoadXLen()) {
+                                xBound *= (junct.getRoadYLen() - y);
                             }
                             for (Point car : leftRoad.getPointList()) {
                                 if (car.x < xBound) {
@@ -239,8 +239,8 @@ public class AutomatonModel {
 
                         if (upStopped == false) {
                             int yBound = upRoad.getMaxV(direction);
-                            if (yBound * (junct.getRoadXLen()-x)<upRoad.getRoadYLen()){
-                                yBound *= (junct.getRoadXLen()-x);
+                            if (yBound * (junct.getRoadXLen() - x) < upRoad.getRoadYLen()) {
+                                yBound *= (junct.getRoadXLen() - x);
                             }
                             for (Point car : upRoad.getPointList()) {
                                 if (car.y < yBound) {
@@ -267,8 +267,8 @@ public class AutomatonModel {
 
                         if (downStopped == false) {
                             int yBound = downRoad.getMaxV(direction);
-                            if (yBound * (junct.getRoadXLen()-x)<downRoad.getRoadYLen()){
-                                yBound *= (junct.getRoadXLen()-x);
+                            if (yBound * (junct.getRoadXLen() - x) < downRoad.getRoadYLen()) {
+                                yBound *= (junct.getRoadXLen() - x);
                             }
                             for (Point car : downRoad.getPointList()) {
                                 if (car.y > yBound) {
@@ -298,6 +298,30 @@ public class AutomatonModel {
         }
     }
 
+    public void resetTurningCar(RoadInt road, int x, int y, int direct) {
+
+        int laneDirect = RoadEnvironment.RIGHT;
+        switch (direct) {
+            case RoadEnvironment.UP:
+            case RoadEnvironment.DOWN:
+                laneDirect = road.getLaneDirect(x);
+                break;
+            case RoadEnvironment.LEFT:
+            case RoadEnvironment.RIGHT:
+                laneDirect = road.getLaneDirect(y);
+                break;
+        }
+
+        Vehicle car = road.getRoadCell(x, y);
+        if (car != null) {
+            car.setDirection(direct);
+            car.setExit(laneDirect);
+            car.setPreviousDirect(direct);
+            car.setTurning(false);
+            road.setRoadCell(x, y, car);
+        }
+    }
+
     //UP-
     public void updateCarsUp(RoadInt road) {
         int roadYLen = road.getRoadYLen();
@@ -305,10 +329,12 @@ public class AutomatonModel {
 
         for (int x = roadXLen - 1; x > -1; x--) {
             for (int y = roadYLen - 1; y > -1; y--) {
+                resetTurningCar(road, x, y, RoadEnvironment.UP);
                 driveCar(RoadEnvironment.UP, road, x, y);
+
             }
         }
-        
+
         resetCarsChk(road);
     }
     //-
@@ -320,10 +346,11 @@ public class AutomatonModel {
 
         for (int x = 0; x < roadXLen; x++) {
             for (int y = 0; y < roadYLen; y++) {
+                resetTurningCar(road, x, y, RoadEnvironment.DOWN);
                 driveCar(RoadEnvironment.DOWN, road, x, y);
             }
         }
-        
+
         resetCarsChk(road);
     }
     //-
@@ -336,10 +363,12 @@ public class AutomatonModel {
 
         for (int y = roadYLen - 1; y > -1; y--) {
             for (int x = roadXLen - 1; x > -1; x--) {
+                resetTurningCar(road, x, y, RoadEnvironment.LEFT);
                 driveCar(RoadEnvironment.LEFT, road, x, y);
+
             }
         }
-        
+
         resetCarsChk(road);
     }
     //-
@@ -352,10 +381,11 @@ public class AutomatonModel {
 
         for (int y = 0; y < roadYLen; y++) {
             for (int x = 0; x < roadXLen; x++) {
+                resetTurningCar(road, x, y, RoadEnvironment.RIGHT);
                 driveCar(RoadEnvironment.RIGHT, road, x, y);
             }
         }
-        
+
         resetCarsChk(road);
     }
     //-
