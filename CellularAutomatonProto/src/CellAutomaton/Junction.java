@@ -23,13 +23,15 @@ public class Junction implements RoadInt {
     private int y;
     private int width;
     private int height;
+    private int lightTimer;
+    private int switchTime;
+    private String junctName;
 
-//    private int clearanceTime;
     public Junction(int x, int y,
-            OneWayRoad[] exitRoads, OneWayRoad[] entrRoads, int width, int height) {
+            OneWayRoad[] exitRoads, OneWayRoad[] entrRoads, int width, 
+            int height, String name) {
         this.x = x;
         this.y = y;
-//        this.entrRoads = entrRoads;
         this.exitRoads = exitRoads;
         this.entrRoads = entrRoads;
 
@@ -37,6 +39,33 @@ public class Junction implements RoadInt {
         this.width = width;
         this.height = height;
 
+        lightTimer = 0;
+        switchTime = 100;
+        junctName = name;
+    }
+    
+    public String getJunctName(){
+        return junctName;
+    }
+    
+    public int getSwitchTime() {
+        return switchTime;
+    }
+
+    public void setSwitchTime(int newT) {
+        switchTime = newT;
+    }
+
+    public void addToLightTimer() {
+        lightTimer++;
+        if (lightTimer >= switchTime) {
+            try {
+                switchStopLights();
+            } catch (NullPointerException e) {
+                System.out.println("no lights");
+            }
+            lightTimer = 0;
+        }
     }
 
     public OneWayRoad getExit(int exitDirect) {
@@ -132,32 +161,20 @@ public class Junction implements RoadInt {
         junct[x][y] = newV;
     }
 
-//    public boolean getXTravel() {
-//        return xTravel;
-//    }
-//
-//    public void setXTravel(boolean newBool) {
-//        xTravel = newBool;
-//    }
-
     @Override
     public boolean getStopLight() {
         return false;
     }
-    
-    public void switchStopLights(){
+
+    public void switchStopLights() {
         for (OneWayRoad road : entrRoads) {
             road.switchLightRoad();
         }
-        
+
     }
 
-//    public void switchXTravel() {
-//        if (xTravel) {
-//            xTravel = false;
-//        } else {
-//            xTravel = true;
-//        }
-//    }
+    public int getLaneDirect(int i) {
+        return -1;
+    }
 
 }

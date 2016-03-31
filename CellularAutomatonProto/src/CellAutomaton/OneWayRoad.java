@@ -25,6 +25,9 @@ public class OneWayRoad implements RoadInt {
 
     private Vehicle[][] road;
     private boolean stopLight = false;
+    private int[] laneDirect;
+    
+    private String roadName;
 
     public OneWayRoad(int roadXLen, int roadYLen, int roadX, int roadY, int direction) {
         this.roadXLen = roadXLen;
@@ -34,7 +37,33 @@ public class OneWayRoad implements RoadInt {
 
         this.direction = direction;
         road = new Vehicle[roadXLen][roadYLen];
-//        this.exit = exit;
+
+        switch (direction) {
+            case RoadEnvironment.UP:
+            case RoadEnvironment.DOWN:
+                laneDirect = new int[roadXLen];
+                for (int i = 0; i < roadXLen; i++){
+                    laneDirect[i] = direction;
+                }
+                break;
+            case RoadEnvironment.LEFT:
+            case RoadEnvironment.RIGHT:
+                laneDirect = new int[roadYLen];
+                for (int i = 0; i < roadYLen; i++){
+                    laneDirect[i] = direction;
+                }
+                break;
+                
+        }
+    }
+    
+    public OneWayRoad(int roadXLen, int roadYLen, int roadX, int roadY, int direction, String roadName) {
+        this(roadXLen,roadYLen,roadX,roadY,direction);
+        this.roadName = roadName;
+    }
+    
+    public String getRoadName(){
+        return roadName;
     }
 
     public void resetRoad() {
@@ -46,6 +75,24 @@ public class OneWayRoad implements RoadInt {
             }
         }
     }
+    public int getLaneDirect(int i){
+        return laneDirect[i];
+    }
+    
+    public int[] getLaneDirect(){
+        return laneDirect;
+    }
+    
+    
+    public void setLaneDirect(int direction){
+        for (int i = 0; i < laneDirect.length;i++){
+        laneDirect[i] = direction;                
+        }
+    } 
+   
+    public void setLaneDirect(int laneNo, int direction){
+        laneDirect[laneNo] = direction;
+    } 
 
     public Junction getExit(int direction) {
         return exit;
@@ -69,7 +116,6 @@ public class OneWayRoad implements RoadInt {
 
     public ArrayList<Vehicle> getVehicleLst() {
         ArrayList<Vehicle> carLst = new ArrayList<Vehicle>();
-
 
         for (int y = 0; y < roadYLen; y++) {
             for (int x = 0; x < roadXLen; x++) {
