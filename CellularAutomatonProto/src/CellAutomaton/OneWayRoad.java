@@ -82,6 +82,13 @@ public class OneWayRoad implements RoadInt {
     public int[] getLaneDirect(){
         return laneDirect;
     }
+    
+    
+    public void setLaneDirect(int direction){
+        for (int i = 0; i < laneDirect.length;i++){
+        laneDirect[i] = direction;                
+        }
+    } 
    
     public void setLaneDirect(int laneNo, int direction){
         laneDirect[laneNo] = direction;

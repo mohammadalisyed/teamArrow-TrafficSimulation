@@ -39,5 +39,7 @@ public interface RoadInt {
     RoadInt getEntr(int direction);
 
     ArrayList<Point> getPointList();
+    
+    int getLaneDirect(int i);
 
 }

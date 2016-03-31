@@ -28,6 +28,10 @@ public class OneWayRoad implements RoadInt {
     private int[] laneDirect;
     
     private String roadName;
+    
+    private int inputTimer = 0;
+    private int inputRefresh = 0;
+    private boolean inputBool = true;
 
     public OneWayRoad(int roadXLen, int roadYLen, int roadX, int roadY, int direction) {
         this.roadXLen = roadXLen;
@@ -60,6 +64,34 @@ public class OneWayRoad implements RoadInt {
     public OneWayRoad(int roadXLen, int roadYLen, int roadX, int roadY, int direction, String roadName) {
         this(roadXLen,roadYLen,roadX,roadY,direction);
         this.roadName = roadName;
+    }
+    
+    public boolean getInputBool(){
+        return inputBool;
+    }
+    
+    public void setInputBool(boolean newBool){
+        inputBool = newBool;
+    }
+    
+    public int getInputRefresh(){
+        return inputRefresh;
+    }
+    
+    public void setInputRefresh(int newInt){
+        inputRefresh = newInt;
+    }
+    
+    public int getInputTimer(){
+        return inputTimer;
+    }
+    
+    public void inputTimerIncrement(){
+        inputTimer ++;
+    }
+    
+    public void resetInputTimer(){
+        inputTimer = 0;
     }
     
     public String getRoadName(){

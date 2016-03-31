@@ -41,9 +41,9 @@ public class RoadEnvironment implements ActionListener {
 
     AutomatonModel model;
     private int inputCounter;
+    private int inputRefresh;
 
-
-    public RoadEnvironment(RoadNetworkInt roadNet) {
+    public RoadEnvironment(RoadNetworkInt roadNet, DisplayWindow dw) {
         this.roadNet = roadNet;
         roadArray = roadNet.getRoadArray();//list of all the roads in the network
         junctArray = roadNet.getJunctArray();//list of all the junctions in the network
@@ -51,9 +51,7 @@ public class RoadEnvironment implements ActionListener {
         networkExit = roadNet.getExitLst();//list of roads where cars exit from the network
 
         model = new AutomatonModel(networkExit);
-        dw = new DisplayWindow(this);
-//        
-        inputCounter = 0;
+        this.dw = dw;
 
 //        mainFrame = new JFrame("Traffic Simulation App.");
 //        mainFrame.setVisible(true);
@@ -63,32 +61,39 @@ public class RoadEnvironment implements ActionListener {
 //        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         start();
     }
+
+    public int getEntrInputRefresh(int i) {
+        return networkEntr.get(i).getInputRefresh();
+    }
     
-       public  ArrayList<OneWayRoad> getNetworkEntArray(){
+    public void setEntrInputRefresh(int i,int newRefresh) {
+        networkEntr.get(i).setInputRefresh(newRefresh);
+    }
+
+    public ArrayList<OneWayRoad> getNetworkEntArray() {
         return networkEntr;
-        }
-       
-       public  ArrayList<Junction> getJunctArray(){
+    }
+
+    public ArrayList<Junction> getJunctArray() {
         return junctArray;
-        }
-    
-    
-    public void setTimerDelay(int timerSec){
+    }
+
+    public void setTimerDelay(int timerSec) {
         //timer.setDelay(timerSec);
         timer.setDelay(timerSec);
     }
-    
-    public RoadNetworkInt getRoadNetwork(){
+
+    public RoadNetworkInt getRoadNetwork() {
         return roadNet;
-    } 
+    }
 
     public void updateRoads() {
         // To demonstrate stoplights, will be removed later
-        
+
         for (Junction junct : junctArray) {
             junct.addToLightTimer();
         }
-        
+
         for (OneWayRoad road : roadArray) {
             int direction = road.getDirection();
             model.resetCarsChk(road);
@@ -114,15 +119,13 @@ public class RoadEnvironment implements ActionListener {
         }
 
         for (OneWayRoad road : networkEntr) {
-            if (inputCounter > 1){
-//                if (road.getDirection()== UP){
-                model.addCarToRoad(road);
-//                }
-            }
 
-        }
-        if (inputCounter > 1){
-            inputCounter = 0;
+            road.inputTimerIncrement();
+//            System.out.println(road.getInputTimer());
+            if (road.getInputTimer() >= road.getInputRefresh()) {
+                model.addCarToRoad(road);
+                road.resetInputTimer();
+            }
         }
 
         for (Junction junct : junctArray) {
@@ -138,7 +141,7 @@ public class RoadEnvironment implements ActionListener {
     public void actionPerformed(ActionEvent arg0) {
         updateRoads();
         dw.repaint();
-        inputCounter++;
+//        inputCounter++;
 
     }
 

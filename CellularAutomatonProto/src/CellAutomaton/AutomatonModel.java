@@ -76,6 +76,7 @@ public class AutomatonModel {
         Vehicle car = new Vehicle(1, 1);
         car.setDirection(direct);
         road.setRoadCell(location.x, location.y, car);
+        
     }
 //--------------
 
@@ -92,6 +93,30 @@ public class AutomatonModel {
             road.setStopLight(false);
         } else {
             road.setStopLight(true);
+        }
+    }
+//-
+
+    public void resetTurningCar(RoadInt road, int x, int y, int direct) {
+        
+        int laneDirect = RoadEnvironment.RIGHT; 
+        switch(direct){
+            case RoadEnvironment.UP:
+            case RoadEnvironment.DOWN:
+                laneDirect = road.getLaneDirect(x);
+                break;
+            case RoadEnvironment.LEFT:
+            case RoadEnvironment.RIGHT:
+                laneDirect = road.getLaneDirect(y);
+                break;
+        }
+        
+        Vehicle car = road.getRoadCell(x, y);
+        if (car != null) {
+            car.setExit(laneDirect);
+            car.setPreviousDirect(direct);
+            car.setTurning(false);
+            road.setRoadCell(x, y, car);
         }
     }
 
@@ -281,6 +306,7 @@ public class AutomatonModel {
         for (int x = roadXLen - 1; x > -1; x--) {
             for (int y = roadYLen - 1; y > -1; y--) {
                 driveCar(RoadEnvironment.UP, road, x, y);
+                resetTurningCar(road,x,y,RoadEnvironment.UP);
             }
         }
     }
@@ -294,6 +320,7 @@ public class AutomatonModel {
         for (int x = 0; x < roadXLen; x++) {
             for (int y = 0; y < roadYLen; y++) {
                 driveCar(RoadEnvironment.DOWN, road, x, y);
+                resetTurningCar(road,x,y,RoadEnvironment.DOWN);
             }
         }
     }
@@ -308,6 +335,7 @@ public class AutomatonModel {
         for (int y = roadYLen - 1; y > -1; y--) {
             for (int x = roadXLen - 1; x > -1; x--) {
                 driveCar(RoadEnvironment.LEFT, road, x, y);
+                resetTurningCar(road,x,y,RoadEnvironment.LEFT);
             }
         }
     }
@@ -322,6 +350,7 @@ public class AutomatonModel {
         for (int y = 0; y < roadYLen; y++) {
             for (int x = 0; x < roadXLen; x++) {
                 driveCar(RoadEnvironment.RIGHT, road, x, y);
+                resetTurningCar(road,x,y,RoadEnvironment.RIGHT);
             }
         }
     }
@@ -1223,6 +1252,7 @@ public class AutomatonModel {
 
         RoadInt exitRoad = junct.getExit(exitDirect);
         RoadInt entrRoad = junct.getEntr(currentDirect);
+        System.out.println(entrRoad);
 //        int exitRoadXLen = exitRoad.getRoadXLen();
 //        int exitRoadYLen = exitRoad.getRoadYLen();
         int exitXCoOrd;
@@ -1332,10 +1362,10 @@ public class AutomatonModel {
 //                        System.out.print("/xBound:" + xBound);
                         // need if != null for junct.getEntr
                         if (currentLane < exitRoad.getRoadXLen()) {//current road and exit road have the same no of lanes
-                            if (junct.getEntr(RoadEnvironment.UP)!=null){
-                            exitXCoOrd = junct.getEntr(RoadEnvironment.UP).getRoadXLen() + (exitRoad.getRoadXLen() - currentLane - 1);
+                            if (junct.getEntr(RoadEnvironment.UP) != null) {
+                                exitXCoOrd = junct.getEntr(RoadEnvironment.UP).getRoadXLen() + (exitRoad.getRoadXLen() - currentLane - 1);
                             } else {
-                            exitXCoOrd = (exitRoad.getRoadXLen() - currentLane - 1);
+                                exitXCoOrd = (exitRoad.getRoadXLen() - currentLane - 1);
                             }
                         } else {//current road and exit road have a different no of lanes
                             exitXCoOrd = xBound;

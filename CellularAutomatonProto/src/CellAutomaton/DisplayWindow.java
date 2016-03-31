@@ -26,16 +26,17 @@ public class DisplayWindow extends JPanel {
 
     private final int STOPLIGHTCOLOUR = 0, LANECOLOUR = 1;
     
-    private int colourScheme;
+    private int carColourScheme;
+    
     private RoadEnvironment re;
 
     public DisplayWindow(RoadEnvironment re) {
         this.re = re;
-        colourScheme = 0;
+        carColourScheme = 0;
     }
 
-    public void colourPicker(Vehicle car, RoadInt road, Graphics2D g2) {
-        switch (colourScheme) {
+    public void colourPickerCar(Vehicle car, RoadInt road, Graphics2D g2) {
+        switch (carColourScheme) {
             case LANECOLOUR:
                 switch (car.getDirection()) {
                     case RoadEnvironment.LEFT:
@@ -96,7 +97,7 @@ public class DisplayWindow extends JPanel {
                 break;
         }
     }
-    
+       
     public void paintFrame(Graphics g){
 //        RoadEnvironment re = RoadEnvironment;
 
@@ -104,9 +105,6 @@ public class DisplayWindow extends JPanel {
         ArrayList<Junction> junctArray = re.getRoadNetwork().getJunctArray();
 
         Graphics2D g2D = (Graphics2D) g.create();
-        
-//        AffineTransform t = new AffineTransform();
-//        t.scale(RoadEnvironment.SCALE, RoadEnvironment.SCALE);
         
         g2D.scale(RoadEnvironment.SCALE, RoadEnvironment.SCALE);
         
@@ -116,21 +114,13 @@ public class DisplayWindow extends JPanel {
 
             g2D.setColor(Color.BLACK);
             g2D.drawRect(road.getX(), road.getY(), road.getRoadXLen(), road.getRoadYLen());
-            
-//            String roadLabel = road.getRoadName();
-            
-//            if (roadLabel != null){                
-//                AttributedString label = new AttributedString(roadLabel);
-//                label.addAttribute(TextAttribute.SIZE, 2);
-//                g2D.drawString(label.getIterator(), road.getX()+2, road.getY());
-//            }
 
             ArrayList<Vehicle> carLst = road.getVehicleLst();
             for (Vehicle car : carLst) {
                 int x = car.getLocation().x;
                 int y = car.getLocation().y;
 
-                colourPicker(car, road, g2D);
+                colourPickerCar(car, road, g2D);
 
                 if (car.getTurning()) {
                     g2D.fillRect(x, y, 1, 1);
@@ -160,7 +150,7 @@ public class DisplayWindow extends JPanel {
                         break;
                 }
 
-                colourPicker(car, junct, g2D);
+                colourPickerCar(car, junct, g2D);
 
                 if (car.getTurning()) {
                     g2D.fillRect(x, y, 1, 1);

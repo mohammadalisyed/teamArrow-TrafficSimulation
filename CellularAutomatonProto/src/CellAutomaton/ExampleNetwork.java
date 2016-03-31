@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author Alexander
  */
-public class CrossroadNetwork extends RoadNetworkTemplate {
+public class ExampleNetwork extends RoadNetworkTemplate {
 
     OneWayRoad northRoadU = new OneWayRoad(3, 50, 50, 0, UP);
     OneWayRoad northRoadD = new OneWayRoad(3, 50, 53, 0, DOWN);
@@ -24,13 +24,22 @@ public class CrossroadNetwork extends RoadNetworkTemplate {
 
     OneWayRoad westRoadR = new OneWayRoad(50, 3, 0, 50, RIGHT);
     OneWayRoad westRoadL = new OneWayRoad(50, 3, 0, 53, LEFT);
+    
+    OneWayRoad aNorthUp = new OneWayRoad(3, 25, 106, 25, UP);
+    OneWayRoad aNorthDown = new OneWayRoad(3, 25, 109, 25, DOWN);
 
     OneWayRoad[] crossroadEntr = new OneWayRoad[4];
     OneWayRoad[] crossroadExit = new OneWayRoad[4];
+    
+    OneWayRoad[] junctAEntr = new OneWayRoad[4];
+    OneWayRoad[] junctAExit = new OneWayRoad[4];
 
     Junction crossroad;
+    Junction junctA;
+    
+    
 
-    public CrossroadNetwork() {
+    public ExampleNetwork() {
         //set lanes
         northRoadD.setLaneDirect(0, LEFT);
 //        northRoadD.setLaneDirect(1, DOWN);
@@ -46,31 +55,47 @@ public class CrossroadNetwork extends RoadNetworkTemplate {
         
         eastRoadL.setLaneDirect(0,UP);
 //        eastRoadL.setLaneDirect(1,LEFT);
-        eastRoadL.setLaneDirect(2,DOWN);
-
+        eastRoadL.setLaneDirect(2,DOWN); 
+        
+        aNorthDown.setLaneDirect(LEFT);
+        
         //set junction exits
         crossroadExit[UP] = northRoadU;
         crossroadExit[DOWN] = southRoadD;
         crossroadExit[LEFT] = westRoadL;
         crossroadExit[RIGHT] = eastRoadR;
-
+        
+        junctAExit[UP] = null;
+        junctAExit[DOWN] = null;
+        junctAExit[LEFT] = eastRoadL;
+        junctAExit[RIGHT] = null;
+        
         //set junction entrances
         crossroadEntr[UP] = southRoadU;
         crossroadEntr[DOWN] = northRoadD;
         crossroadEntr[LEFT] = eastRoadL;
         crossroadEntr[RIGHT] = westRoadR;
+        
+        junctAEntr[UP] = null;
+        junctAEntr[DOWN] = aNorthDown;
+        junctAEntr[LEFT] = null;
+        junctAEntr[RIGHT] = null;
 
         //create junctions
         crossroad = new Junction(50, 50, crossroadExit, crossroadEntr, 6, 6, "Crossroad intersection");
+        junctA = new Junction(106,50, junctAExit, junctAEntr,6,6, "Junction A");
 
         //populate junction list
         junctArray.add(crossroad);
+        junctArray.add(junctA);
+        
 
         //set road-junction connections
         westRoadR.setExit(crossroad);
         eastRoadL.setExit(crossroad);
         northRoadD.setExit(crossroad);
         southRoadU.setExit(crossroad);
+        aNorthDown.setExit(junctA);
 
         //set traffic light switches
 //        northRoadU.setStopLight(true);
@@ -90,12 +115,15 @@ public class CrossroadNetwork extends RoadNetworkTemplate {
         roadArray.add(southRoadD);
         roadArray.add(westRoadR);
         roadArray.add(westRoadL);
+        roadArray.add(aNorthUp);
+        roadArray.add(aNorthDown);
 
         //populate network entrance list
         networkEntr.add(northRoadD);
-        networkEntr.add(eastRoadL);
+//        networkEntr.add(eastRoadL);
         networkEntr.add(southRoadU);
         networkEntr.add(westRoadR);
+        networkEntr.add(aNorthDown);
 
         //populate network exit list
         networkExit.add(northRoadU);

@@ -43,6 +43,7 @@ public class RoadEnvironment implements ActionListener {
     private int stopCounter;
     private int inputCounter;
 
+
     public RoadEnvironment(RoadNetworkInt roadNet) {
         this.roadNet = roadNet;
         roadArray = roadNet.getRoadArray();//list of all the roads in the network
@@ -70,23 +71,11 @@ public class RoadEnvironment implements ActionListener {
 
     public void updateRoads() {
         // To demonstrate stoplights, will be removed later
-
-        boolean stopSwitch = false;
-        if (stopCounter > 100) {
-            stopSwitch = true;
-            stopCounter = 0;
+        
+        for (Junction junct : junctArray) {
+            junct.addToLightTimer();
         }
-
-//        for (OneWayRoad road : roadArray) {
-
-            if (stopSwitch) {
-//                model.switchLightRoad(road);
-                for (Junction junct: junctArray){
-                    junct.switchStopLights();
-                }
-//            }
-        }
-
+        
         for (OneWayRoad road : roadArray) {
             int direction = road.getDirection();
             model.resetCarsChk(road);
